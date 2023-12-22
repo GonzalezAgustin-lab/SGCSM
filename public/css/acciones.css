@@ -1,0 +1,64 @@
+.botones{
+   margin: 0;
+}
+
+.botones a{
+    padding: 0 10px;
+    /*color: rgb(230, 2, 2);*/
+}
+
+.botones a:hover{
+    color: rgb(63, 139, 238);
+}
+
+.botones button{
+    border: 0;
+    background-color: transparent;
+}
+
+.botones button:hover{
+    color: rgb(63, 139, 238) !important;
+    text-decoration: underline rgb(63, 139, 238);
+}
+
+.agregar{
+    color:rgb(21, 185, 29);
+}
+
+.default{
+    color:rgb(0, 0, 0);
+}
+
+.eliminar{
+    color:rgb(216, 13, 13);
+}
+
+
+.circle_green {
+    background: rgb(30, 197, 47);
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+.circle_grey {
+    background: rgb(169, 169, 169);
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+.modal-full {
+    min-width: 100%;
+    min-height: 100%;
+    margin: 0;
+}
+
+.modal-full .modal-content {
+    min-height: 100%;
+    border-radius: 0;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f5f5f5;
+}
