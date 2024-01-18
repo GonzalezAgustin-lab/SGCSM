@@ -40,6 +40,22 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'administrador' => [
+            'driver' => 'session',
+            'provider' => 'administrador',
+        ],
+        'Jefe-Mantenimiento' => [
+            'driver' => 'session',
+            'provider' => 'Jefe-Mantenimiento',
+        ],
+        'Jefe-GarantiaDeCalidad' => [
+            'driver' => 'session',
+            'provider' => 'Jefe-GarantiaDeCalidad',
+        ],
+        'Empleado-Mantenimiento' => [
+            'driver' => 'session',
+            'provider' => 'Empleado-Mantenimiento',
+        ],
     ],
 
     /*

@@ -37,6 +37,7 @@ use App\Http\Controllers\EstadoController;
 use App\Http\Controllers\FallaController;
 use App\Http\Controllers\TipoEquipoController;
 use App\Http\Controllers\MantenimientoController;
+use App\Http\Controllers\Equipo_mantController;
 
 //****************Rutas de Autenticación**********************
 Auth::routes();
@@ -82,11 +83,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('destroy_puesto/{id}', [PuestoController::class, 'destroy_puesto'])->name('destroy_puesto');
 });
 
-//****************Rutas de Equipamiento**********************
+// **************** EQUIPAMIENTO **********************
 Route::middleware(['auth'])->group(function () {
-    Route::resource('equipamiento', EquipamientoController::class)->middleware('role:administrador|jefe|mantenimiento|compras');
-    Route::get('destroy_equipamiento/{id}', [EquipamientoController::class, 'destroy_equipamiento'])->name('destroy_equipamiento');
-    Route::get('select_area', [EquipamientoController::class, 'select_area'])->name('select_area');
+    Route::get('/sistemas', [HomeController::class, 'sistemas'])->middleware('role:administrador|ingenieria');
+    Route::resource('equipamiento', EquipamientoController::class)->middleware('role:administrador|ingenieria');
+    Route::get('listado_ip', [EquipamientoController::class, 'listado_ip'])->middleware('role:administrador|ingenieria');
+    Route::get('select_puesto', [EquipamientoController::class, 'select_puesto'])->name('select_puesto');
+    Route::post('/store_relacion', [EquipamientoController::class, 'store_relacion'])->middleware('role:administrador');
+    Route::get('destroy_relacion/{relacion}', [EquipamientoController::class, 'destroy_relacion'])->middleware('role:administrador');
+    Route::get('select_tipo_equipamiento', [EquipamientoController::class, 'select_tipo_equipamiento'])->name('select_tipo_equipamiento');
+    Route::get('select_ips', [EquipamientoController::class, 'select_ips'])->name('select_ips');
+    Route::get('modal_editar_equipamiento/{id}', [EquipamientoController::class, 'modal_editar_equipamiento'])
+        ->name('modal_editar_equipamiento')
+        ->middleware('role:administrador');
 });
 
 //****************Rutas de Incidentes**********************
@@ -239,10 +248,12 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/frecuencias', [FrecuenciasController::class, 'index']);
 
 //****************Mantenimiento**********************
-Route::get('mantenimiento', 'HomeController@mantenimiento');
+Route::get('mantenimiento', [HomeController::class, 'mantenimiento']);
 Route::middleware(['auth'])->group(function () {
-    Route::resource('solicitudes', SolicitudController::class);
-    Route::resource('historico_solicitudes', SolicitudController::class);
+    Route::resources([
+        'solicitudes' => SolicitudController::class,
+        'historico_solicitudes' => SolicitudController::class
+    ]);
 
     Route::get('show_store_solicitud', [SolicitudController::class, 'show_store_solicitud'])->name('show_store_solicitud');
     Route::post('store_solicitud', [SolicitudController::class, 'store_solicitud'])->name('store_solicitud');
@@ -259,7 +270,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('show_update_solicitud');
     Route::post('update_solicitud', [SolicitudController::class, 'update_solicitud'])->name('update_solicitud');
 
-    Route::get('show_edit_solicitud/{solicitud}', [SolicitudController::class, 'show_edit_solicitud'])->name('show_edit_solicitud');
+         Route::get('show_edit_solicitud/{solicitud}', [SolicitudController::class, 'show_edit_solicitud'])->name('show_edit_solicitud');
     Route::post('edit_solicitud', [SolicitudController::class, 'edit_solicitud'])->name('edit_solicitud');
 
     Route::get('show_reclamar_solicitud/{solicitud}', [SolicitudController::class, 'show_reclamar_solicitud'])->name('show_reclamar_solicitud');
@@ -281,13 +292,13 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('equipos_mant', Equipo_mantController::class)->middleware('role:administrador|Jefe-GarantiaDeCalidad|Jefe-Mantenimiento|Empleado-Mantenimiento');
+    Route::resource('equipos_mant', Equipo_mantController::class)->middleware('role:administrador,Jefe-GarantiaDeCalidad,Jefe-Mantenimiento,Empleado-Mantenimiento');
 
-    Route::get('show_store_equipo_mant', [Equipo_mantController::class, 'show_store_equipo_mant'])->middleware('role:administrador|Jefe-GarantiaDeCalidad')->name('show_store_equipo_mant');
-    Route::post('store_equipo_mant', [Equipo_mantController::class, 'store_equipo_mant'])->middleware('role:administrador|Jefe-GarantiaDeCalidad')->name('store_equipo_mant');
+    Route::get('show_store_equipo_mant', [Equipo_mantController::class, 'show_store_equipo_mant'])->middleware('role:administrador,Jefe-GarantiaDeCalidad')->name('show_store_equipo_mant');
+    Route::post('store_equipo_mant', [Equipo_mantController::class, 'store_equipo_mant'])->middleware('role:administrador,Jefe-GarantiaDeCalidad')->name('store_equipo_mant');
 
-    Route::get('show_update_equipo_mant/{equipo_mant}', [Equipo_mantController::class, 'show_update_equipo_mant'])->middleware('role:administrador|Jefe-GarantiaDeCalidad')->name('show_update_equipo_mant');
-    Route::post('update_equipo_mant', [Equipo_mantController::class, 'update_equipo_mant'])->middleware('role:administrador|Jefe-GarantiaDeCalidad')->name('update_equipo_mant');
+    Route::get('show_update_equipo_mant/{equipo_mant}', [Equipo_mantController::class, 'show_update_equipo_mant'])->middleware('role:administrador,Jefe-GarantiaDeCalidad')->name('show_update_equipo_mant');
+    Route::post('update_equipo_mant', [Equipo_mantController::class, 'update_equipo_mant'])->middleware('role:administrador,Jefe-GarantiaDeCalidad')->name('update_equipo_mant');
 
     Route::get('select_tipo_equipo', [Equipo_mantController::class, 'select_tipo_equipo'])->name('select_tipo_equipo');
     Route::get('select_area_localizacion', [Equipo_mantController::class, 'select_area_localizacion'])->name('select_area_localizacion');

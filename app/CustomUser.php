@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\CustomUser as Authenticatable;
 use App\Notifications\MyResetPassword;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements MustVerifyEmail
+class CustomUser extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
