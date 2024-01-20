@@ -209,7 +209,10 @@
         @endforeach
     </tbody>
   </table>
-  
+
+  {{ $solicitudes->appends($_GET)->links() }}
+  <br>
+
   <div class="modal fade" id="show2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog estilo" role="document">
       <div class="modal-content">
@@ -241,8 +244,6 @@
       </div>
     </div>
   </div>
-
-  {{ $solicitudes->appends($_GET)->links() }}
 </div>
 
 <!-- Incluir archivos CSS de Select2 -->
