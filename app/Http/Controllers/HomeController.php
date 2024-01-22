@@ -29,7 +29,7 @@ class HomeController extends Controller
         return view('home.mantenimiento');
     }
 
-    public function parametrosMantenimiento()
+    public function parametros_mantenimiento()
     {
         return view('home.parametros_mantenimiento');
     }
