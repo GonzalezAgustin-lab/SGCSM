@@ -40,9 +40,9 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'administrador' => [
+        'Administrador' => [
             'driver' => 'session',
-            'provider' => 'administrador',
+            'provider' => 'Administrador',
         ],
         'Jefe-Mantenimiento' => [
             'driver' => 'session',
@@ -80,11 +80,22 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'Administrador' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+        'Jefe-Mantenimiento' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+        'Jefe-GarantiaDeCalidad' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+        'Empleado-Mantenimiento' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
     ],
 
     /*

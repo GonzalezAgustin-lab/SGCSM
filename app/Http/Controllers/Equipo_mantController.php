@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Equipo_mant;
-use App\User;
+use App\Models\User;
 Use Session;
 use DB;
 
 
 class Equipo_mantController extends Controller{
+
     public function index(Request $request){
         $equipos_mant = Equipo_mant::ID($request->get('id_e'))
         ->Relaciones_index($request->get('tipo'), $request->get('id_area'), $request->get('id_localizacion'))
@@ -29,7 +30,8 @@ class Equipo_mantController extends Controller{
             'tiposEquipos' => $tiposEquipos,
             'areas' => $areas,
             'localizaciones' => $localizaciones,
-            'equipos_mant' => $equipos_mant]);
+            'equipos_mant' => $equipos_mant
+        ]);
     }
 
     public function show_store_equipo_mant(){
