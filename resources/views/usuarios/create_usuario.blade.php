@@ -3,8 +3,8 @@
   <div class="modal-dialog">
    <div class="modal-content"> 
     <p class="statusMsg"></p>          
-      <form action="{{action('UsuarioController@store_usuario')}}" method="POST">
-        {{csrf_field()}}
+      <form action="{{ url('store_usuario') }}" method="POST">
+        @csrf
         <div class="modal-body">
           <div class="row">
             <div class="col-md-12">

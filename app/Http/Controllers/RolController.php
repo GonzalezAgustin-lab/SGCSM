@@ -18,7 +18,7 @@ use Spatie\Permission\Models\Permission;
 
 class RolController extends Controller
 {
-    public function roles (Request $request){
+    public function index (Request $request){
 
     $roles = DB::table('roles')
     ->select('roles.name as nombre_rol','roles.id as id_rol')

@@ -1,8 +1,8 @@
   <div class="modal fade" id="asignar_permiso" role="dialog" align="center">
     <div class="modal-dialog">
      <div class="modal-content">           
-      <form action="{{action('RolController@asignar_permiso', '')}}" method="POST" >
-        {{csrf_field()}}
+      <form action="{{ url('asignar_permiso') }}" method="POST" >
+        @csrf
         <div class="modal-body">
          <div class="row">
            <div class="col-md-12">

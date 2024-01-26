@@ -65,7 +65,6 @@
 </div>
 
 @include('roles.modal_asignar')
-
 @include('roles.modal_revocar')
 
 <script> 
@@ -157,5 +156,30 @@
 
   });
 </script>
- 
+
+ <script>
+  $('#agregar_usuario').on('show.bs.modal', function (event) 
+  {
+    $.get('select_personas/',function(data)
+    {
+      var html_select = '<option value="">Seleccione </option>'
+      var html_select2 = '<option value="">Seleccione </option>'
+      for(var i = 0; i<data.length; i ++)
+      {
+        html_select += '<option value ="'+data[i].id_p+'"selected">'+data[i].nombre_p+' '+data[i].apellido+'</option>';
+        html_select2 += '<option value ="'+data[i].id_p+'"selected">'+data[i].correo+'</option>';
+      }
+      $("#nombre_p").on("change", () => {
+      $("#correo").val($("#nombre_p").val());
+      });
+
+      $("#correo").on("change", () => {
+      $("#nombre_p").val($("#correo").val());
+      });
+
+      $('#nombre_p').html(html_select);
+      $('#correo').html(html_select2);
+  });
+});
+</script>
 @stop

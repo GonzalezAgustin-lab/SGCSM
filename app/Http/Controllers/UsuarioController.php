@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Routing\Controller;
+use Spatie\Permission\Models\Role;
 use Illuminate\Database\Seeder;
+use Illuminate\Http\Request;
+use App\Models\User;
+use Carbon\Carbon;
 use App\Persona;
-use App\User;
+Use Redirect;
+Use Session;
 use Auth;
 use DB;
-Use Redirect;
-use Illuminate\Support\Facades\Input;
-Use Session;
-use Illuminate\Routing\Controller;
-use Carbon\Carbon;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller
 {
-    public function usuarios (Request $request){
+    public function index (Request $request){
 
         $usuarios = DB::table('users')
         ->select('users.id as id', 'users.name as nombre_usuario','users.email as email_usuario')

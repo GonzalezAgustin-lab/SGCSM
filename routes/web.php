@@ -112,19 +112,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('select_area_visita', [VisitaController::class, 'select_area_visita'])->name('select_area_visita');
 });
 
-//****************Rutas de Usuarios**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('usuario', UsuarioController::class)->middleware('role:Administrador');
-    Route::get('destroy_usuario/{id}', [UsuarioController::class, 'destroy_usuario'])->name('destroy_usuario');
-    Route::get('select_roles', [UsuarioController::class, 'select_roles'])->name('select_roles');
-});
-
-//****************Rutas de Roles**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('rol', RolController::class)->middleware('role:Administrador');
-    Route::get('destroy_rol/{id}', [RolController::class, 'destroy_rol'])->name('destroy_rol');
-});
-
 //****************Rutas de Médicos**********************
 Route::middleware(['auth'])->group(function () {
     Route::resource('medico', MedicoController::class)->middleware('role:Administrador|jefe|rrhh');
@@ -353,10 +340,36 @@ Route::middleware(['auth'])->group(function () {
     Route::get('select_fallas', [Tipo_EquipoController::class, 'select_fallas'])->name('select_fallas');
 });
 
+//****************Tipo de soliciudes****************
 Route::middleware(['auth'])->group(function () {
     Route::resource('tipos_solicitudes', Tipo_SolicitudController::class)->middleware('role:Administrador|Jefe-Mantenimiento');
     Route::get('show_store_tipo_solicitud', [Tipo_SolicitudController::class, 'show_store_tipo_solicitud'])->middleware('role:Administrador|Jefe-Mantenimiento')->name('show_store_tipo_solicitud');
     Route::post('store_tipo_solicitud', [Tipo_SolicitudController::class, 'store_tipo_solicitud'])->name('store_tipo_solicitud');
     Route::get('show_update_tipo_solicitud/{tipo_solicitud}', [Tipo_SolicitudController::class, 'show_update_tipo_solicitud'])->name('show_update_tipo_solicitud');
     Route::post('update_tipo_solicitud', [Tipo_SolicitudController::class, 'update_tipo_solicitud'])->name('update_tipo_solicitud');
+});
+
+//****************Usuarios**********************
+Route::middleware(['auth'])->group(function () {
+    Route::resource('usuarios', UsuarioController::class)->middleware('role:Administrador');
+    Route::get('create_usuario', [UsuarioController::class, 'create_usuario'])->middleware('role:Administrador');
+    Route::get('destroy_usuario/{id}',[UsuarioController::class, 'destroy_usuario'])->name('destroy_usuario');
+    Route::post('asignar_rol', [UsuarioController::class, 'asignar_rol'])->middleware('role:Administrador');
+    Route::post('revocar_rol', [UsuarioController::class, 'revocar_rol'])->middleware('role:Administrador');
+    Route::get('select_roles/{id}', [UsuarioController::class, 'select_roles'])->name('select_roles');
+    Route::get('select_revocar_roles/{id}',[UsuarioController::class, 'select_revocar_roles'])->name('select_revocar_roles');
+    Route::get('select_personas', [UsuarioController::class, 'select_personas'])->name('select_personas');
+    Route::post('store_usuario', [UsuarioController::class, 'store_usuario'])->middleware('role:Administrador');
+});
+  
+//****************Roles**********************
+Route::middleware(['auth'])->group(function () {
+    Route::resource('roles', RolController::class)->middleware('role:Administrador');
+    Route::get('destroy_rol/{id}',[RolController::class, 'destroy_rol'])->name('destroy_rol');
+    Route::post('store_rol', [RolController::class, 'store_rol'])->middleware('role:Administrador');
+    Route::post('store_permiso', [RolController::class, 'store_permiso'])->middleware('role:Administrador');
+    Route::post('asignar_permiso', [RolController::class, 'asignar_permiso'])->middleware('role:Administrador');
+    Route::post('revocar_permiso', [RolController::class, 'revocar_permiso'])->middleware('role:Administrador');
+    Route::get('select_permiso/{id}', [RolController::class, 'select_permiso'])->name('select_permiso');
+    Route::get('select_revocar_permiso/{id}',[RolController::class, 'select_revocar_permiso'])->name('select_revocar_permiso');
 });
