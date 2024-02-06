@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Equipo_mant;
+use Illuminate\Http\Request;
 use App\Models\User;
+use App\Equipo_mant;
 Use Session;
 use DB;
-
 
 class Equipo_mantController extends Controller{
 

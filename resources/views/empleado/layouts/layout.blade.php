@@ -22,7 +22,6 @@
       </button>
       <div class="collapse navbar-collapse" id="navbar1">
         <ul class="navbar-nav ml-auto"> &nbsp   
-          <button class="btn btn-secondary" data-toggle="modal" data-target="#novedad">Novedades</button>&nbsp
           <a href="#" class="btn btn-info"  data-toggle="modal" data-target="#agregar_empleado" type="submit">Nuevo</a>
           &nbsp
           <form action="{{ url('/logout') }}" method="POST" >

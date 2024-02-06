@@ -2,7 +2,7 @@
 <div class="modal fade" id="novedad" role="dialog" align="center">
   <div class="modal-dialog">
    <div class="modal-content">           
-    <form action="{{ action('HomeController@store_novedades') }}" method="POST">
+    <form action="{{ url('store_novedades') }}" method="POST">
       {{csrf_field()}}
       <div class="modal-body">
        <div class="row">

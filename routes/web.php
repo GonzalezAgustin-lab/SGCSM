@@ -1,42 +1,16 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PermisosController;
-use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\EmpleadoController;
-use App\Http\Controllers\PuestoController;
-use App\Http\Controllers\EquipamientoController;
-use App\Http\Controllers\IncidenteController;
-use App\Http\Controllers\VisitaController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\RolController;
-use App\Http\Controllers\MedicoController;
-use App\Http\Controllers\PlanoController;
-use App\Http\Controllers\ProyectoController;
-use App\Http\Controllers\PoliticaController;
-use App\Http\Controllers\InstructivoController;
-use App\Http\Controllers\QADController;
-use App\Http\Controllers\CalendarioController;
-use App\Http\Controllers\EventController;
-use App\Http\Controllers\SoftwareController;
-use App\Http\Controllers\EventosController;
-use App\Http\Controllers\AlmuerzoController;
-use App\Http\Controllers\PowerBIController;
-use App\Http\Controllers\VentaController;
-use App\Http\Controllers\CompraController;
-use App\Http\Controllers\CalidadController;
-use App\Http\Controllers\CostoController;
-use App\Http\Controllers\ProduccionController;
-use App\Http\Controllers\RrhhController;
-use App\Http\Controllers\FrecuenciasController;
 use App\Http\Controllers\SolicitudController;
-use App\Http\Controllers\EquipoMantController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\LocalizacionController;
 use App\Http\Controllers\EstadoController;
 use App\Http\Controllers\FallaController;
-use App\Http\Controllers\TipoEquipoController;
-use App\Http\Controllers\MantenimientoController;
+use App\Http\Controllers\Tipo_EquipoController;
+use App\Http\Controllers\Tipo_SolicitudController;
 use App\Http\Controllers\Equipo_mantController;
 
 //****************Rutas de Autenticación**********************
@@ -45,196 +19,8 @@ Auth::routes();
 //****************Rutas del Menú Inicial**********************
 Route::get('/home', [HomeController::class, 'index']);
 Route::get('/', [HomeController::class, 'index']);
-Route::get('/internos', [HomeController::class, 'internos']);
-Route::get('notificaciones', [HomeController::class, 'notificaciones'])->name('notificaciones');
 
-Route::middleware(['auth'])->group(function () {
-    //****************Rutas de Permisos**********************
-    Route::resource('permisos', PermisosController::class)->middleware('role:Administrador|jefe|rrhh');
-    Route::get('destroy_permiso/{id}', [PermisosController::class, 'destroy_permiso'])->name('destroy_permiso');
-    Route::get('select_autorizado', [PermisosController::class, 'select_autorizado'])->name('select_autorizado');
-    Route::get('select_tipo_permiso', [PermisosController::class, 'select_tipo_permiso'])->name('select_tipo_permiso');
-});
-
-//****************Rutas de Recepción**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('persona', PersonaController::class)->middleware('role:Administrador|recepcion|rrhh');
-    Route::get('destroy_contacto/{id}', [PersonaController::class, 'destroy_contacto'])->name('destroy_contacto');
-});
-
-//****************Rutas de Empleados**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('empleado', EmpleadoController::class)->middleware('role:Administrador|rrhh');
-    Route::get('showUpdateAreaXJefe/{id_ja}', [EmpleadoController::class, 'showUpdateAreaXJefe'])->name('showUpdateAreaXJefe');
-    Route::get('deleteAreaXJefe/{id_ja}', [EmpleadoController::class, 'deleteAreaXJefe'])->name('deleteAreaXJefe');
-    Route::get('obtenerNuevoListadoAreaXJefe/{idJefe}', [EmpleadoController::class, 'obtenerNuevoListadoAreaXJefe'])->name('obtenerNuevoListadoAreaXJefe');
-    Route::get('showStoreAreaXJefe/{id_ja}', [EmpleadoController::class, 'showStoreAreaXJefe'])->name('showStoreAreaXJefe');
-    Route::get('storeRelacionJefeXArea/{jefeId}/{areaId}/{turnoId}', [EmpleadoController::class, 'storeRelacionJefeXArea'])->name('storeRelacionJefeXArea');
-    Route::get('/novedades', [HomeController::class, 'novedades'])->middleware('role:Administrador|rrhh');
-    Route::post('/store_novedades', [HomeController::class, 'store_novedades'])->middleware('role:Administrador|rrhh');
-    Route::get('destroy_empleado/{id}', [EmpleadoController::class, 'destroy_empleado'])->name('destroy_empleado');
-    Route::get('selectAreasTurnos', [EmpleadoController::class, 'selectAreasTurnos']);
-    Route::get('selectAreaEmpleados', [EmpleadoController::class, 'selectAreaEmpleados']);
-});
-
-//****************Rutas de Puestos**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('puesto', PuestoController::class)->middleware('role:Administrador|jefe|rrhh');
-    Route::get('destroy_puesto/{id}', [PuestoController::class, 'destroy_puesto'])->name('destroy_puesto');
-});
-
-// **************** EQUIPAMIENTO **********************
-Route::middleware(['auth'])->group(function () {
-    Route::get('/sistemas', [HomeController::class, 'sistemas'])->middleware('role:Administrador|ingenieria');
-    Route::resource('equipamiento', EquipamientoController::class)->middleware('role:Administrador|ingenieria');
-    Route::get('listado_ip', [EquipamientoController::class, 'listado_ip'])->middleware('role:Administrador|ingenieria');
-    Route::get('select_puesto', [EquipamientoController::class, 'select_puesto'])->name('select_puesto');
-    Route::post('/store_relacion', [EquipamientoController::class, 'store_relacion'])->middleware('role:Administrador');
-    Route::get('destroy_relacion/{relacion}', [EquipamientoController::class, 'destroy_relacion'])->middleware('role:Administrador');
-    Route::get('select_tipo_equipamiento', [EquipamientoController::class, 'select_tipo_equipamiento'])->name('select_tipo_equipamiento');
-    Route::get('select_ips', [EquipamientoController::class, 'select_ips'])->name('select_ips');
-    Route::get('modal_editar_equipamiento/{id}', [EquipamientoController::class, 'modal_editar_equipamiento'])
-        ->name('modal_editar_equipamiento')
-        ->middleware('role:Administrador');
-});
-
-//****************Rutas de Incidentes**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('incidente', IncidenteController::class)->middleware('role:Administrador|jefe|mantenimiento|seguridad');
-    Route::get('destroy_incidente/{id}', [IncidenteController::class, 'destroy_incidente'])->name('destroy_incidente');
-    Route::get('select_area_incidente', [IncidenteController::class, 'select_area_incidente'])->name('select_area_incidente');
-});
-
-//****************Rutas de Visitas**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('visita', VisitaController::class)->middleware('role:Administrador|jefe|seguridad');
-    Route::get('destroy_visita/{id}', [VisitaController::class, 'destroy_visita'])->name('destroy_visita');
-    Route::get('select_area_visita', [VisitaController::class, 'select_area_visita'])->name('select_area_visita');
-});
-
-//****************Rutas de Médicos**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('medico', MedicoController::class)->middleware('role:Administrador|jefe|rrhh');
-    Route::get('destroy_medico/{id}', [MedicoController::class, 'destroy_medico'])->name('destroy_medico');
-    Route::get('select_especialidades', [MedicoController::class, 'select_especialidades'])->name('select_especialidades');
-});
-
-//****************Rutas de Planos**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('plano', PlanoController::class)->middleware('role:Administrador|jefe|proyectos|rrhh');
-    Route::get('destroy_plano/{id}', [PlanoController::class, 'destroy_plano'])->name('destroy_plano');
-});
-
-//****************Rutas de Proyectos**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('proyecto', ProyectoController::class)->middleware('role:Administrador|jefe|proyectos|rrhh');
-    Route::get('destroy_proyecto/{id}', [ProyectoController::class, 'destroy_proyecto'])->name('destroy_proyecto');
-    Route::get('select_responsable_proyecto', [ProyectoController::class, 'select_responsable_proyecto'])->name('select_responsable_proyecto');
-});
-
-//****************Rutas de Políticas**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('politica', PoliticaController::class)->middleware('role:Administrador|jefe|calidad|rrhh');
-    Route::get('destroy_politica/{id}', [PoliticaController::class, 'destroy_politica'])->name('destroy_politica');
-});
-
-//****************Rutas de Instructivos**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('instructivo', InstructivoController::class)->middleware('role:Administrador|jefe|calidad|rrhh');
-    Route::get('destroy_instructivo/{id}', [InstructivoController::class, 'destroy_instructivo'])->name('destroy_instructivo');
-});
-
-//****************Rutas de QAD**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('qad', QADController::class)->middleware('role:Administrador|jefe|calidad|rrhh');
-    Route::get('destroy_qad/{id}', [QADController::class, 'destroy_qad'])->name('destroy_qad');
-});
-
-//****************Rutas de Calendario**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('calendario', CalendarioController::class)->middleware('role:Administrador|jefe|rrhh');
-    Route::get('destroy_calendario/{id}', [CalendarioController::class, 'destroy_calendario'])->name('destroy_calendario');
-});
-
-//****************Rutas de Eventos**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('eventos', EventController::class)->middleware('role:Administrador|jefe|rrhh');
-    Route::get('destroy_evento/{id}', [EventController::class, 'destroy_evento'])->name('destroy_evento');
-});
-
-//****************Rutas de Software**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('software', SoftwareController::class)->middleware('role:Administrador|jefe|rrhh');
-    Route::get('destroy_software/{id}', [SoftwareController::class, 'destroy_software'])->name('destroy_software');
-});
-
-//****************Rutas de Eventos**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('eventos', EventosController::class)->middleware('role:Administrador|jefe|rrhh');
-    Route::get('destroy_evento/{id}', [EventosController::class, 'destroy_evento'])->name('destroy_evento');
-});
-
-//****************Rutas de Almuerzos**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('almuerzos', AlmuerzoController::class)->middleware('role:Administrador|jefe|rrhh');
-    Route::get('destroy_almuerzo/{id}', [AlmuerzoController::class, 'destroy_almuerzo'])->name('destroy_almuerzo');
-});
-
-//***********************************Power BI*************************************
-Route::get('powerbis', 'HomeController@powerbis');
-
-//****************Ventas**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('ventas', VentaController::class)->middleware('role:Administrador|venta');
-    Route::post('store_venta', [VentaController::class, 'store_venta'])->name('agregar-powerbi')->middleware('role:Administrador|venta');
-    Route::get('destroy_venta/{venta}', [VentaController::class, 'destroy_venta'])->middleware('role:Administrador|venta');
-    Route::post('update_venta', [VentaController::class, 'update_venta'])->middleware('role:Administrador|venta')->name('update_ventas');
-});
-
-//****************Compras**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('compras', CompraController::class)->middleware('role:Administrador|compra');
-    Route::post('store_compra', [CompraController::class, 'store_compra'])->name('agregar-powerbi')->middleware('role:Administrador|compra');
-    Route::get('destroy_compra/{compra}', [CompraController::class, 'destroy_compra'])->middleware('role:Administrador|compra');
-    Route::post('update_compra', [CompraController::class, 'update_compra'])->middleware('role:Administrador|compra')->name('update_compras');
-});
-
-//****************Calidad**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('calidades', CalidadController::class)->middleware('role:Administrador|calidad');
-    Route::post('store_calidad', [CalidadController::class, 'store_calidad'])->name('agregar-powerbi')->middleware('role:Administrador|calidad');
-    Route::get('destroy_calidad/{calidad}', [CalidadController::class, 'destroy_calidad'])->middleware('role:Administrador|calidad');
-    Route::post('update_calidad', [CalidadController::class, 'update_calidad'])->middleware('role:Administrador|calidad')->name('update_calidades');
-});
-
-//****************Costos***********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('costos', CostoController::class)->middleware('role:Administrador|costo');
-    Route::post('store_costo', [CostoController::class, 'store_costo'])->name('agregar-powerbi')->middleware('role:Administrador|costo');
-    Route::get('destroy_costo/{costo}', [CostoController::class, 'destroy_costo'])->middleware('role:Administrador|costo');
-    Route::post('update_costo', [CostoController::class, 'update_costo'])->middleware('role:Administrador|costo')->name('update_costos');
-});
-
-//****************Produccion***********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('producciones', ProduccionController::class)->middleware('role:Administrador|produccion');
-    Route::post('store_produccion', [ProduccionController::class, 'store_produccion'])->name('agregar-powerbi')->middleware('role:Administrador|produccion');
-    Route::get('destroy_produccion/{produccion}', [ProduccionController::class, 'destroy_produccion'])->middleware('role:Administrador|produccion');
-    Route::post('update_produccion', [ProduccionController::class, 'update_produccion'])->middleware('role:Administrador|produccion')->name('update_producciones');
-});
-
-//****************Rrhhs***********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('rrhhs', RrhhController::class)->middleware('role:Administrador|rrhh');
-    Route::post('store_rrhh', [RrhhController::class, 'store_rrhh'])->name('agregar-powerbi')->middleware('role:Administrador|rrhh');
-    Route::get('destroy_rrhh/{rrhh}', [RrhhController::class, 'destroy_rrhh'])->middleware('role:Administrador|rrhh');
-    Route::post('update_rrhh', [RrhhController::class, 'update_rrhh'])->middleware('role:Administrador|rrhh')->name('update_rrhhs');
-});
-
-//***********************************Frecuencias*************************************
-Route::get('/frecuencias', [FrecuenciasController::class, 'index']);
-
-//****************Mantenimiento**********************
+//****************Solicitudes**********************
 Route::get('mantenimiento', [HomeController::class, 'mantenimiento']);
 Route::middleware(['auth'])->group(function () {
     Route::resources([
@@ -257,7 +43,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('show_update_solicitud');
     Route::post('update_solicitud', [SolicitudController::class, 'update_solicitud'])->name('update_solicitud');
 
-         Route::get('show_edit_solicitud/{solicitud}', [SolicitudController::class, 'show_edit_solicitud'])->name('show_edit_solicitud');
+    Route::get('show_edit_solicitud/{solicitud}', [SolicitudController::class, 'show_edit_solicitud'])->name('show_edit_solicitud');
     Route::post('edit_solicitud', [SolicitudController::class, 'edit_solicitud'])->name('edit_solicitud');
 
     Route::get('show_reclamar_solicitud/{solicitud}', [SolicitudController::class, 'show_reclamar_solicitud'])->name('show_reclamar_solicitud');
@@ -278,6 +64,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('getSolicitud/{idSolicitud}', [SolicitudController::class, 'getSolicitud'])->name('getSolicitud');
 });
 
+//****************Equipos**********************
 Route::middleware(['auth'])->group(function () {
     Route::resource('equipos_mant', Equipo_mantController::class)->middleware('role:Administrador|Jefe-GarantiaDeCalidad|Jefe-Mantenimiento|Empleado-Mantenimiento');
 
@@ -291,6 +78,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('select_area_localizacion', [Equipo_mantController::class, 'select_area_localizacion'])->name('select_area_localizacion');
 });
 
+//****************Parametros**********************
 Route::get('parametros_mantenimiento', [HomeController::class, 'parametros_mantenimiento']);
 Route::middleware(['auth'])->group(function () {
     Route::resource('areas', AreaController::class)->middleware('role:Administrador|Jefe-Mantenimiento');
@@ -300,6 +88,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('update_area', [AreaController::class, 'update_area'])->name('update_area');
 });
 
+//****************Localizaciones**********************
 Route::middleware(['auth'])->group(function () {
     Route::resource('localizaciones', LocalizacionController::class)->middleware('role:Administrador|Jefe-Mantenimiento');
     Route::get('show_store_localizacion', [LocalizacionController::class, 'show_store_localizacion'])->middleware('role:Administrador|Jefe-Mantenimiento')->name('show_store_localizacion');
@@ -310,6 +99,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('select_area', [LocalizacionController::class, 'select_area'])->name('select_area');
 });
 
+//****************Estados**********************
 Route::middleware(['auth'])->group(function () {
     Route::resource('estados', EstadoController::class)->middleware('role:Administrador|Jefe-Mantenimiento');
     Route::get('show_store_estado', [EstadoController::class, 'show_store_estado'])->middleware('role:Administrador|Jefe-Mantenimiento')->name('show_store_estado');
@@ -318,6 +108,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('update_estado', [EstadoController::class, 'update_estado'])->name('update_estado');
 });
 
+//****************Fallas**********************
 Route::middleware(['auth'])->group(function () {
     Route::resource('fallas', FallaController::class)->middleware('role:Administrador|Jefe-Mantenimiento');
     Route::get('show_store_falla', [FallaController::class, 'show_store_falla'])->middleware('role:Administrador|Jefe-Mantenimiento')->name('show_store_falla');
@@ -326,6 +117,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('update_falla', [FallaController::class, 'update_falla'])->name('update_falla');
 });
 
+//****************Tipo de equipamientos****************
 Route::middleware(['auth'])->group(function () {
     Route::resource('tipos_equipos', Tipo_EquipoController::class)->middleware('role:Administrador|Jefe-Mantenimiento');
     Route::get('show_store_tipo_equipo', [Tipo_EquipoController::class, 'show_store_tipo_equipo'])->middleware('role:Administrador|Jefe-Mantenimiento')->name('show_store_tipo_equipo');
@@ -336,7 +128,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('delete_falla_te', [Tipo_EquipoController::class, 'delete_falla_te'])->name('delete_falla_te');
     Route::get('show_assing_tipo_equipo/{tipo_equipo}', [Tipo_EquipoController::class, 'show_assing_tipo_equipo'])->middleware('role:Administrador|Jefe-Mantenimiento')->name('show_assing_tipo_equipo');
     Route::post('assing_tipo_equipo', [Tipo_EquipoController::class, 'assing_tipo_equipo'])->middleware('role:Administrador|Jefe-Mantenimiento')->name('assing_tipo_equipo');
-
     Route::get('select_fallas', [Tipo_EquipoController::class, 'select_fallas'])->name('select_fallas');
 });
 
@@ -348,6 +139,22 @@ Route::middleware(['auth'])->group(function () {
     Route::get('show_update_tipo_solicitud/{tipo_solicitud}', [Tipo_SolicitudController::class, 'show_update_tipo_solicitud'])->name('show_update_tipo_solicitud');
     Route::post('update_tipo_solicitud', [Tipo_SolicitudController::class, 'update_tipo_solicitud'])->name('update_tipo_solicitud');
 });
+
+//****************Empleados**********************
+Route::middleware(['auth'])->group(function () {
+    Route::resource('empleado', EmpleadoController::class)->middleware('role:Administrador');
+    Route::get('showUpdateAreaXJefe/{id_ja}',[EmpleadoController::class, 'showUpdateAreaXJefe'])->name('showUpdateAreaXJefe');
+    Route::get('deleteAreaXJefe/{id_ja}', [EmpleadoController::class, 'deleteAreaXJefe'])->name('deleteAreaXJefe');
+    Route::get('obtenerNuevoListadoAreaXJefe/{idJefe}', [EmpleadoController::class, 'obtenerNuevoListadoAreaXJefe'])->name('obtenerNuevoListadoAreaXJefe');
+    Route::get('showStoreAreaXJefe/{id_ja}', [EmpleadoController::class, 'showStoreAreaXJefe'])->name('showStoreAreaXJefe');
+    Route::get('storeRelacionJefeXArea/{jefeId}/{areaId}/{turnoId}', [EmpleadoController::class, 'storeRelacionJefeXArea'])->name('storeRelacionJefeXArea');
+    Route::get('/novedades', [HomeController::class, 'novedades'])->middleware('role:Administrador');
+    Route::post('/store_novedades', [HomeController::class, 'store_novedades'])->middleware('role:Administrador');
+    Route::get('destroy_empleado/{id}', [EmpleadoController::class, 'destroy_empleado'])->name('destroy_empleado');
+    Route::get('selectAreasTurnos', [EmpleadoController::class, 'selectAreasTurnos']);
+    Route::get('selectAreaEmpleados', [EmpleadoController::class, 'selectAreaEmpleados']);
+    Route::get('selectTurnosEmpleados', [EmpleadoController::class, 'selectTurnosEmpleados']);
+  });
 
 //****************Usuarios**********************
 Route::middleware(['auth'])->group(function () {
