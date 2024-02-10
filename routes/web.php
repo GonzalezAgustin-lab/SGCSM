@@ -95,7 +95,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('store_localizacion', [LocalizacionController::class, 'store_localizacion'])->name('store_localizacion');
     Route::get('show_update_localizacion/{localizacion}', [LocalizacionController::class, 'show_update_localizacion'])->name('show_update_localizacion');
     Route::post('update_localizacion', [LocalizacionController::class, 'update_localizacion'])->name('update_localizacion');
-
     Route::get('select_area', [LocalizacionController::class, 'select_area'])->name('select_area');
 });
 
@@ -148,8 +147,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('obtenerNuevoListadoAreaXJefe/{idJefe}', [EmpleadoController::class, 'obtenerNuevoListadoAreaXJefe'])->name('obtenerNuevoListadoAreaXJefe');
     Route::get('showStoreAreaXJefe/{id_ja}', [EmpleadoController::class, 'showStoreAreaXJefe'])->name('showStoreAreaXJefe');
     Route::get('storeRelacionJefeXArea/{jefeId}/{areaId}/{turnoId}', [EmpleadoController::class, 'storeRelacionJefeXArea'])->name('storeRelacionJefeXArea');
-    Route::get('/novedades', [HomeController::class, 'novedades'])->middleware('role:Administrador');
-    Route::post('/store_novedades', [HomeController::class, 'store_novedades'])->middleware('role:Administrador');
     Route::get('destroy_empleado/{id}', [EmpleadoController::class, 'destroy_empleado'])->name('destroy_empleado');
     Route::get('selectAreasTurnos', [EmpleadoController::class, 'selectAreasTurnos']);
     Route::get('selectAreaEmpleados', [EmpleadoController::class, 'selectAreaEmpleados']);
