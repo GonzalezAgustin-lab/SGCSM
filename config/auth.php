@@ -39,23 +39,7 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
-        ],
-        'Administrador' => [
-            'driver' => 'session',
-            'provider' => 'Administrador',
-        ],
-        'Jefe-Mantenimiento' => [
-            'driver' => 'session',
-            'provider' => 'Jefe-Mantenimiento',
-        ],
-        'Jefe-GarantiaDeCalidad' => [
-            'driver' => 'session',
-            'provider' => 'Jefe-GarantiaDeCalidad',
-        ],
-        'Empleado-Mantenimiento' => [
-            'driver' => 'session',
-            'provider' => 'Empleado-Mantenimiento',
-        ],
+        ]
     ],
 
     /*
@@ -79,23 +63,7 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
-        ],
-        'Administrador' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-        ],
-        'Jefe-Mantenimiento' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-        ],
-        'Jefe-GarantiaDeCalidad' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-        ],
-        'Empleado-Mantenimiento' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-        ],
+        ]
     ],
 
     /*

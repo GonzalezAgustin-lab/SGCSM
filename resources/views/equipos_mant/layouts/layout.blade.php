@@ -22,9 +22,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbar1">
         <ul class="navbar-nav ml-auto">
-          @can('agregar-equiposmant')
-            <button class="btn btn-info" onclick='fnOpenModalStore()' data-toggle="modal" data-target="#agregar_equipo_mant">Agregar Equipo</button>
-          @endcan  
+          <button class="btn btn-info" onclick='fnOpenModalStore()' data-toggle="modal" data-target="#agregar_equipo_mant">Agregar Equipo</button>
           &nbsp
           <form action="{{ url('/logout') }}" method="POST" >
             {{ csrf_field() }}

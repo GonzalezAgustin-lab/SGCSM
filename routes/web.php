@@ -32,14 +32,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('store_solicitud', [SolicitudController::class, 'store_solicitud'])->name('store_solicitud');
 
     Route::get('show_assing_solicitud/{solicitud}', [SolicitudController::class, 'show_assing_solicitud'])
-        ->middleware('role:Administrador|Jefe-Mantenimiento|Empleado-Mantenimiento-Asigna-Solicitudes|Empleado-Mantenimiento-Ve-Proyectos|Empleado-Mantenimiento-Ve-Proyectos-Asigna')
         ->name('show_assing_solicitud');
     Route::post('assing_solicitud', [SolicitudController::class, 'assing_solicitud'])
-        ->middleware('role:Administrador|Jefe-Mantenimiento|Empleado-Mantenimiento-Asigna-Solicitudes|Empleado-Mantenimiento-Ve-Proyectos|Empleado-Mantenimiento-Ve-Proyectos-Asigna')
         ->name('assing_solicitud');
 
     Route::get('show_update_solicitud/{solicitud}', [SolicitudController::class, 'show_update_solicitud'])
-        ->middleware('role:Administrador|Jefe-Mantenimiento|Empleado-Mantenimiento|Empleado-Mantenimiento-Asigna-Solicitudes|Empleado-Mantenimiento-Ve-Solicitudes|Empleado-Mantenimiento-Ve-Proyectos|Ver-Todas-Las-Solicitudes-Y-Proyectos|Empleado-Mantenimiento-Ve-Proyectos-Asigna')
         ->name('show_update_solicitud');
     Route::post('update_solicitud', [SolicitudController::class, 'update_solicitud'])->name('update_solicitud');
 
@@ -66,13 +63,13 @@ Route::middleware(['auth'])->group(function () {
 
 //****************Equipos**********************
 Route::middleware(['auth'])->group(function () {
-    Route::resource('equipos_mant', Equipo_mantController::class)->middleware('role:Administrador|Jefe-GarantiaDeCalidad|Jefe-Mantenimiento|Empleado-Mantenimiento');
+    Route::resource('equipos_mant', Equipo_mantController::class);
 
-    Route::get('show_store_equipo_mant', [Equipo_mantController::class, 'show_store_equipo_mant'])->middleware('role:Administrador|Jefe-GarantiaDeCalidad')->name('show_store_equipo_mant');
-    Route::post('store_equipo_mant', [Equipo_mantController::class, 'store_equipo_mant'])->middleware('role:Administrador|Jefe-GarantiaDeCalidad')->name('store_equipo_mant');
+    Route::get('show_store_equipo_mant', [Equipo_mantController::class, 'show_store_equipo_mant'])->name('show_store_equipo_mant');
+    Route::post('store_equipo_mant', [Equipo_mantController::class, 'store_equipo_mant'])->name('store_equipo_mant');
 
-    Route::get('show_update_equipo_mant/{equipo_mant}', [Equipo_mantController::class, 'show_update_equipo_mant'])->middleware('role:Administrador|Jefe-GarantiaDeCalidad')->name('show_update_equipo_mant');
-    Route::post('update_equipo_mant', [Equipo_mantController::class, 'update_equipo_mant'])->middleware('role:Administrador|Jefe-GarantiaDeCalidad')->name('update_equipo_mant');
+    Route::get('show_update_equipo_mant/{equipo_mant}', [Equipo_mantController::class, 'show_update_equipo_mant'])->name('show_update_equipo_mant');
+    Route::post('update_equipo_mant', [Equipo_mantController::class, 'update_equipo_mant'])->name('update_equipo_mant');
 
     Route::get('select_tipo_equipo', [Equipo_mantController::class, 'select_tipo_equipo'])->name('select_tipo_equipo');
     Route::get('select_area_localizacion', [Equipo_mantController::class, 'select_area_localizacion'])->name('select_area_localizacion');
@@ -81,8 +78,8 @@ Route::middleware(['auth'])->group(function () {
 //****************Parametros**********************
 Route::get('parametros_mantenimiento', [HomeController::class, 'parametros_mantenimiento']);
 Route::middleware(['auth'])->group(function () {
-    Route::resource('areas', AreaController::class)->middleware('role:Administrador|Jefe-Mantenimiento');
-    Route::get('show_store_area', [AreaController::class, 'show_store_area'])->middleware('role:Administrador|Jefe-Mantenimiento')->name('show_store_area');
+    Route::resource('areas', AreaController::class);
+    Route::get('show_store_area', [AreaController::class, 'show_store_area'])->name('show_store_area');
     Route::post('store_area', [AreaController::class, 'store_area'])->name('store_area');
     Route::get('show_update_area/{area}', [AreaController::class, 'show_update_area'])->name('show_update_area');
     Route::post('update_area', [AreaController::class, 'update_area'])->name('update_area');
@@ -90,8 +87,8 @@ Route::middleware(['auth'])->group(function () {
 
 //****************Localizaciones**********************
 Route::middleware(['auth'])->group(function () {
-    Route::resource('localizaciones', LocalizacionController::class)->middleware('role:Administrador|Jefe-Mantenimiento');
-    Route::get('show_store_localizacion', [LocalizacionController::class, 'show_store_localizacion'])->middleware('role:Administrador|Jefe-Mantenimiento')->name('show_store_localizacion');
+    Route::resource('localizaciones', LocalizacionController::class);
+    Route::get('show_store_localizacion', [LocalizacionController::class, 'show_store_localizacion'])->name('show_store_localizacion');
     Route::post('store_localizacion', [LocalizacionController::class, 'store_localizacion'])->name('store_localizacion');
     Route::get('show_update_localizacion/{localizacion}', [LocalizacionController::class, 'show_update_localizacion'])->name('show_update_localizacion');
     Route::post('update_localizacion', [LocalizacionController::class, 'update_localizacion'])->name('update_localizacion');
@@ -100,8 +97,8 @@ Route::middleware(['auth'])->group(function () {
 
 //****************Estados**********************
 Route::middleware(['auth'])->group(function () {
-    Route::resource('estados', EstadoController::class)->middleware('role:Administrador|Jefe-Mantenimiento');
-    Route::get('show_store_estado', [EstadoController::class, 'show_store_estado'])->middleware('role:Administrador|Jefe-Mantenimiento')->name('show_store_estado');
+    Route::resource('estados', EstadoController::class);
+    Route::get('show_store_estado', [EstadoController::class, 'show_store_estado'])->name('show_store_estado');
     Route::post('store_estado', [EstadoController::class, 'store_estado'])->name('store_estado');
     Route::get('show_update_estado/{estado}', [EstadoController::class, 'show_update_estado'])->name('show_update_estado');
     Route::post('update_estado', [EstadoController::class, 'update_estado'])->name('update_estado');
@@ -109,8 +106,8 @@ Route::middleware(['auth'])->group(function () {
 
 //****************Fallas**********************
 Route::middleware(['auth'])->group(function () {
-    Route::resource('fallas', FallaController::class)->middleware('role:Administrador|Jefe-Mantenimiento');
-    Route::get('show_store_falla', [FallaController::class, 'show_store_falla'])->middleware('role:Administrador|Jefe-Mantenimiento')->name('show_store_falla');
+    Route::resource('fallas', FallaController::class);
+    Route::get('show_store_falla', [FallaController::class, 'show_store_falla'])->name('show_store_falla');
     Route::post('store_falla', [FallaController::class, 'store_falla'])->name('store_falla');
     Route::get('show_update_falla/{falla}', [FallaController::class, 'show_update_falla'])->name('show_update_falla');
     Route::post('update_falla', [FallaController::class, 'update_falla'])->name('update_falla');
@@ -118,22 +115,22 @@ Route::middleware(['auth'])->group(function () {
 
 //****************Tipo de equipamientos****************
 Route::middleware(['auth'])->group(function () {
-    Route::resource('tipos_equipos', Tipo_EquipoController::class)->middleware('role:Administrador|Jefe-Mantenimiento');
-    Route::get('show_store_tipo_equipo', [Tipo_EquipoController::class, 'show_store_tipo_equipo'])->middleware('role:Administrador|Jefe-Mantenimiento')->name('show_store_tipo_equipo');
+    Route::resource('tipos_equipos', Tipo_EquipoController::class);
+    Route::get('show_store_tipo_equipo', [Tipo_EquipoController::class, 'show_store_tipo_equipo'])->name('show_store_tipo_equipo');
     Route::post('store_tipo_equipo', [Tipo_EquipoController::class, 'store_tipo_equipo'])->name('store_tipo_equipo');
     Route::get('show_update_tipo_equipo/{tipo_equipo}', [Tipo_EquipoController::class, 'show_update_tipo_equipo'])->name('show_update_tipo_equipo');
     Route::post('update_tipo_equipo', [Tipo_EquipoController::class, 'update_tipo_equipo'])->name('update_tipo_equipo');
     Route::get('show_delete_falla_te/{falla}', [Tipo_EquipoController::class, 'show_delete_falla_te'])->name('show_delete_falla_te');
     Route::post('delete_falla_te', [Tipo_EquipoController::class, 'delete_falla_te'])->name('delete_falla_te');
-    Route::get('show_assing_tipo_equipo/{tipo_equipo}', [Tipo_EquipoController::class, 'show_assing_tipo_equipo'])->middleware('role:Administrador|Jefe-Mantenimiento')->name('show_assing_tipo_equipo');
-    Route::post('assing_tipo_equipo', [Tipo_EquipoController::class, 'assing_tipo_equipo'])->middleware('role:Administrador|Jefe-Mantenimiento')->name('assing_tipo_equipo');
+    Route::get('show_assing_tipo_equipo/{tipo_equipo}', [Tipo_EquipoController::class, 'show_assing_tipo_equipo'])->name('show_assing_tipo_equipo');
+    Route::post('assing_tipo_equipo', [Tipo_EquipoController::class, 'assing_tipo_equipo'])->name('assing_tipo_equipo');
     Route::get('select_fallas', [Tipo_EquipoController::class, 'select_fallas'])->name('select_fallas');
 });
 
 //****************Tipo de soliciudes****************
 Route::middleware(['auth'])->group(function () {
-    Route::resource('tipos_solicitudes', Tipo_SolicitudController::class)->middleware('role:Administrador|Jefe-Mantenimiento');
-    Route::get('show_store_tipo_solicitud', [Tipo_SolicitudController::class, 'show_store_tipo_solicitud'])->middleware('role:Administrador|Jefe-Mantenimiento')->name('show_store_tipo_solicitud');
+    Route::resource('tipos_solicitudes', Tipo_SolicitudController::class);
+    Route::get('show_store_tipo_solicitud', [Tipo_SolicitudController::class, 'show_store_tipo_solicitud'])->name('show_store_tipo_solicitud');
     Route::post('store_tipo_solicitud', [Tipo_SolicitudController::class, 'store_tipo_solicitud'])->name('store_tipo_solicitud');
     Route::get('show_update_tipo_solicitud/{tipo_solicitud}', [Tipo_SolicitudController::class, 'show_update_tipo_solicitud'])->name('show_update_tipo_solicitud');
     Route::post('update_tipo_solicitud', [Tipo_SolicitudController::class, 'update_tipo_solicitud'])->name('update_tipo_solicitud');
@@ -141,7 +138,7 @@ Route::middleware(['auth'])->group(function () {
 
 //****************Empleados**********************
 Route::middleware(['auth'])->group(function () {
-    Route::resource('empleado', EmpleadoController::class)->middleware('role:Administrador');
+    Route::resource('empleado', EmpleadoController::class);
     Route::get('showUpdateAreaXJefe/{id_ja}',[EmpleadoController::class, 'showUpdateAreaXJefe'])->name('showUpdateAreaXJefe');
     Route::get('deleteAreaXJefe/{id_ja}', [EmpleadoController::class, 'deleteAreaXJefe'])->name('deleteAreaXJefe');
     Route::get('obtenerNuevoListadoAreaXJefe/{idJefe}', [EmpleadoController::class, 'obtenerNuevoListadoAreaXJefe'])->name('obtenerNuevoListadoAreaXJefe');
@@ -152,28 +149,3 @@ Route::middleware(['auth'])->group(function () {
     Route::get('selectAreaEmpleados', [EmpleadoController::class, 'selectAreaEmpleados']);
     Route::get('selectTurnosEmpleados', [EmpleadoController::class, 'selectTurnosEmpleados']);
   });
-
-//****************Usuarios**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('usuarios', UsuarioController::class)->middleware('role:Administrador');
-    Route::get('create_usuario', [UsuarioController::class, 'create_usuario'])->middleware('role:Administrador');
-    Route::get('destroy_usuario/{id}',[UsuarioController::class, 'destroy_usuario'])->name('destroy_usuario');
-    Route::post('asignar_rol', [UsuarioController::class, 'asignar_rol'])->middleware('role:Administrador');
-    Route::post('revocar_rol', [UsuarioController::class, 'revocar_rol'])->middleware('role:Administrador');
-    Route::get('select_roles/{id}', [UsuarioController::class, 'select_roles'])->name('select_roles');
-    Route::get('select_revocar_roles/{id}',[UsuarioController::class, 'select_revocar_roles'])->name('select_revocar_roles');
-    Route::get('select_personas', [UsuarioController::class, 'select_personas'])->name('select_personas');
-    Route::post('store_usuario', [UsuarioController::class, 'store_usuario'])->middleware('role:Administrador');
-});
-  
-//****************Roles**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('roles', RolController::class)->middleware('role:Administrador');
-    Route::get('destroy_rol/{id}',[RolController::class, 'destroy_rol'])->name('destroy_rol');
-    Route::post('store_rol', [RolController::class, 'store_rol'])->middleware('role:Administrador');
-    Route::post('store_permiso', [RolController::class, 'store_permiso'])->middleware('role:Administrador');
-    Route::post('asignar_permiso', [RolController::class, 'asignar_permiso'])->middleware('role:Administrador');
-    Route::post('revocar_permiso', [RolController::class, 'revocar_permiso'])->middleware('role:Administrador');
-    Route::get('select_permiso/{id}', [RolController::class, 'select_permiso'])->name('select_permiso');
-    Route::get('select_revocar_permiso/{id}',[RolController::class, 'select_revocar_permiso'])->name('select_revocar_permiso');
-});

@@ -107,9 +107,7 @@
 <div class="col-md-12">             
   <table class="table table-striped table-bordered ">
     <thead>
-      @can('reporte-solicitudes')
-        <th class="text-center"><input type="checkbox" id="checkAll" onclick="checkAll()"> Seleccionar</th>
-      @endcan
+      <th class="text-center"><input type="checkbox" id="checkAll" onclick="checkAll()"> Seleccionar</th>
       <th class="text-center">ID</th>
       <th class="text-center">Titulo</th>
       <th class="text-center">Tipo de solicitud</th>
@@ -126,9 +124,7 @@
         <?php //dd($solicitudes); ?>
         @foreach($solicitudes as $solicitud)
           <tr>
-            @can('reporte-solicitudes')
-              <td><label><input type="checkbox" id="cbox1" value="first_checkbox"></label><br></td>
-            @endcan
+            <td><label><input type="checkbox" id="cbox1" value="first_checkbox"></label><br></td>
             <td>{{$solicitud->id}}</td>
             <td>{{$solicitud->titulo}}</td>
             <td>{{$solicitud->tipo_solicitud}}</td>
@@ -168,18 +164,14 @@
                   <div class="btn-container" style="margin-bottom: 5px; margin-right: 5px;">
                     <button id="detalle" class="btn btn-info btn-sm" onclick='fnOpenModalShow({{$solicitud->id}})' title="show">Detalles</button>
                   </div>
-                  @can('actualizar-solicitud')
+                  <div class="btn-container" style="margin-bottom: 5px; margin-right: 5px;">
+                    <button id="actualizar" class="btn btn-info btn-sm" onclick='fnOpenModalUpdate({{$solicitud->id}})' title="update">Actualizar</button>
+                  </div>
+                  @if(!$solicitud->nombre_encargado)
                     <div class="btn-container" style="margin-bottom: 5px; margin-right: 5px;">
-                      <button id="actualizar" class="btn btn-info btn-sm" onclick='fnOpenModalUpdate({{$solicitud->id}})' title="update">Actualizar</button>
+                      <button id="asignar" class="btn btn-info btn-sm" onclick='fnOpenModalAssing({{$solicitud->id}})' title="assing">Asignar</button>
                     </div>
-                  @endcan
-                  @can('asignar-solicitud')
-                    @if(!$solicitud->nombre_encargado)
-                      <div class="btn-container" style="margin-bottom: 5px; margin-right: 5px;">
-                        <button id="asignar" class="btn btn-info btn-sm" onclick='fnOpenModalAssing({{$solicitud->id}})' title="assing">Asignar</button>
-                      </div>
-                    @endif
-                  @endcan
+                  @endif
                   @if($solicitud->estado == "Aprob. pendiente" && $solicitud->id_solicitante == $personaAutenticada->id_p)
                     <div class="btn-container" style="margin-bottom: 5px; margin-right: 5px;">
                       <a href="{{url('aprobar_solicitud', $solicitud->id)}}" class="btn btn-info btn-sm" title="aprobar" onclick="return confirm ('Está seguro que desea aprobar esta solicitud?')" data-position="top" data-delay="50" data-tooltip="aprobar">Aprobar</a>
@@ -196,11 +188,9 @@
                       <a href="{{url('destroy_solicitud', $solicitud->id)}}" class="btn btn-danger btn-sm" title="Borrar" onclick="return confirm('Está seguro que desea eliminar esta solicitud?')" data-position="top" data-delay="50" data-tooltip="Borrar">X</a>
                     </div>
                   @else
-                    @can('eliminar-solicitud')
-                      <div class="btn-container" style="margin-bottom: 5px; margin-right: 5px;">
-                        <a href="{{url('destroy_solicitud', $solicitud->id)}}" class="btn btn-danger btn-sm" title="Borrar" onclick="return confirm('Está seguro que desea eliminar esta solicitud?')" data-position="top" data-delay="50" data-tooltip="Borrar">X</a>
-                      </div>
-                    @endcan
+                    <div class="btn-container" style="margin-bottom: 5px; margin-right: 5px;">
+                      <a href="{{url('destroy_solicitud', $solicitud->id)}}" class="btn btn-danger btn-sm" title="Borrar" onclick="return confirm('Está seguro que desea eliminar esta solicitud?')" data-position="top" data-delay="50" data-tooltip="Borrar">X</a>
+                    </div>
                   @endif
                 </div>
               </div>
@@ -841,190 +831,6 @@
         }
       });
     });
-  }
-
-  async function Report() {
-    // Obtener todos los checkboxes seleccionados
-    var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked:not(#checkAll)');
-
-    // Si no hay ningún checkbox seleccionado, mostrar un mensaje y salir de la función
-    if (checkboxes.length === 0) {
-      alert("Por favor, seleccione al menos una solicitud.");
-      return;
-    }
-
-    // Crear un nuevo documento PDF
-    var doc = new jsPDF('p', 'mm', 'a4');
-    // Definir la variable pageHeight
-    var pageHeight = doc.internal.pageSize.height;
-    // Agregar el título al PDF
-    doc.setFontSize(14);
-    doc.setFontStyle("bold");
-    doc.text("Solicitudes seleccionadas", 10, 10);
-    doc.setLineWidth(0.5); // Establecer el grosor del subrayado
-    doc.line(10, 12, 72, 12); // Dibujar una línea debajo del texto
-
-    // Agregar las solicitudes seleccionadas al PDF
-    var y = 20;
-    doc.setFontSize(10);
-
-    var content = [];
-
-    for (var i = 0; i < checkboxes.length; i++) {
-      var checkbox = checkboxes[i];
-      var row = checkbox.closest('tr');
-      var id = row.querySelector('td:nth-child(2)').textContent.trim();
-      var titulo = row.querySelector('td:nth-child(3)').textContent.trim();
-      var tipo = row.querySelector('td:nth-child(4)').textContent.trim();
-      var equipo = row.querySelector('td:nth-child(5)').textContent.trim();
-      var falla = row.querySelector('td:nth-child(7)').textContent.trim();
-
-      // Ajustar el diseño del contenido del PDF
-      content.push({label: "ID: ", value: id, x: 10, y: y })
-      content.push({ label: "Título: ", value: titulo, x: 50, y: y })
-
-      if (tipo == "Especializado") {
-        content.push({ label: "Equipo: ", value: equipo, x: 10, y: y + 5 });
-        content.push({ label: "Falla: ", value: falla, x: 50, y: y + 5 });
-      } else if (tipo == "Edilicio") {
-        content.push({ label: "Falla: ", value: falla, x: 10, y: y + 5 });
-      }
-
-      try {
-        // Obtener los históricos de la solicitud actual
-        var historicos = await getHistoricos(id);
-        // Agregar los históricos al contenido del PDF
-        if (tipo == "Especializado" || tipo == "Edilicio") {
-          var historicoOffset = 10;
-        } else {
-          var historicoOffset = 5;
-        }
-        for (var j = 0; j < historicos.length; j++) {
-          var historico = historicos[j];
-          var estado = historico.estado;
-          var fecha = historico.fecha;
-          var nombre = historico.nombre;
-          var descripcion = historico.descripcion;
-          var repuestos = historico.repuestos;
-          
-          var historicoContent = [
-            { label: "Histórico " + (j + 1) + ": ", value: "", x: 10, y: y + historicoOffset },
-            { label: "Fecha: ", value: fecha, x: 20, y: y + historicoOffset + 5 },
-            { label: "Estado: ", value: estado, x: 95, y: y + historicoOffset + 5 },
-            { label: "Nombre: ", value: nombre, x: 20, y: y + historicoOffset + 10 },
-          ];
-
-          if (repuestos) {
-            si = "Si";
-            historicoContent.push({ label: "Repuestos: ", value: si, x: 95, y: y + historicoOffset + 10 });
-          } else {
-            no = "No";
-            historicoContent.push({ label: "Repuestos: ", value: no, x: 95, y: y + historicoOffset + 10 });
-          }
-
-          if (descripcion) {
-            nada = "";
-            historicoContent.push({ label: "Descripción: ", value: nada, x: 20, y: y + historicoOffset + 15 });
-          }
-
-          // Incrementar el desplazamiento para el próximo histórico
-          if (descripcion) {
-            historicoOffset += 20;
-            var lines = doc.splitTextToSize(descripcion, 150); // Dividir la descripción en líneas de 150 unidades de ancho
-            for (var k = 0; k < lines.length; k++) {
-              historicoContent.push({ label: "", value: lines[k], x: 20, y: y + historicoOffset + (k * 5) }); // Añadir cada línea como una entrada separada
-            }
-            historicoOffset += lines.length * 5;
-          } else {
-            historicoOffset += 15;
-          }
-          content = content.concat(historicoContent);
-        }
-
-        y += historicoOffset;
-
-        // Incrementar la posición vertical para la próxima solicitud
-      } catch (error) {
-        console.error('Error al obtener los históricos:', error);
-      }
-    }
-    // Agregar el contenido al PDF
-    var avance = 0;
-    var contador = 1;
-    var auxiliarY = 0;
-    var idInserted = false;
-    var equipoInserted = false;
-    var fechaInserted = false;
-    var nombreInserted = false;
-    for (var k = 0; k < content.length; k++) {
-      var item = content[k];
-      if(auxiliarY >= (pageHeight - 20) && !idInserted && !equipoInserted && !fechaInserted && !nombreInserted){
-        doc.addPage();
-        contador += 1;
-        avance += 30;
-      }
-      if(contador > 1){
-        auxiliarY = (item.y-(pageHeight*(contador-1))+avance);
-        doc.setFontStyle("bold"); // Establecer estilo de fuente en negrita para la etiqueta "ID: " 
-        doc.text(item.label, item.x, auxiliarY);
-        doc.setFontStyle("normal"); // Establecer estilo de fuente normal para el valor
-
-        var labelWidth = doc.getTextWidth(item.label); // Obtener el ancho del label
-        var valueX = item.x + labelWidth + 1; // Agregar un pequeño espacio después del label
-
-        if (item.label.includes("ID")) {
-          doc.setLineWidth(0.5);
-          doc.line(10, auxiliarY - 4, 200, auxiliarY - 4);
-          idInserted = true;
-        }else{idInserted = false;}
-
-        if (item.label.includes("Equipo")) {
-          equipoInserted = true;
-        }else{equipoInserted = false;}
-
-        if (item.label.includes("Fecha")) {
-          fechaInserted = true;
-        }else{fechaInserted = false;}
-
-        if (item.label.includes("Nombre")) {
-          nombreInserted = true;
-        }else{nombreInserted = false;}
-
-        doc.text(item.value, valueX, auxiliarY);
-      }else{
-        doc.setFontStyle("bold"); // Establecer estilo de fuente en negrita para la etiqueta "ID: " 
-        doc.text(item.label, item.x, item.y);
-        doc.setFontStyle("normal"); // Establecer estilo de fuente normal para el valor
-
-        var labelWidth = doc.getTextWidth(item.label); // Obtener el ancho del label
-        var valueX = item.x + labelWidth + 1; // Agregar un pequeño espacio después del label
-
-        if (item.label.includes("ID")) {
-          if(auxiliarY != 0){
-            doc.setLineWidth(0.5);
-            doc.line(10, auxiliarY + 1, 200, auxiliarY + 1);
-          }
-          idInserted = true;
-        }else{idInserted = false;}
-
-        if (item.label.includes("Equipo")) {
-          equipoInserted = true;
-        }else{equipoInserted = false;}
-
-        if (item.label.includes("Fecha")) {
-          fechaInserted = true;
-        }else{fechaInserted = false;}
-
-        if (item.label.includes("Nombre")) {
-          nombreInserted = true;
-        }else{nombreInserted = false;}
-        
-        doc.text(item.value, valueX, item.y);
-        auxiliarY = item.y;
-      }
-    }
-    // Guardar el documento PDF después de procesar todas las solicitudes
-    doc.save('reporte.pdf');
   }
 
   $(document).ready(function(){

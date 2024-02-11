@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use App\Historico_solicitudes;
@@ -197,33 +196,6 @@ class SolicitudController extends Controller{
         $nuevo_historico->id_persona = $idPersona->id_p;
         $nuevo_historico->fecha = $fechaActual;    
         $nuevo_historico->save();
-
-        $mailNombreSolicitante = Solicitud::obtenerMailNombreTituloSolicitante($request['id_solicitud']);
-        $nombreEstadoSolicitud = Solicitud::obtenerNombreEstadoSolicitud($request['id_solicitud']);
-
-        //da error cuando el correo no existe
-        if($request['estado'] == 5){
-            try {
-                Mail::to($mailNombreSolicitante->email)->send(new \App\Mail\aprobarSolicitud($mailNombreSolicitante->nombre, $request['id_solicitud'],
-                    $nombreEstadoSolicitud, $mailNombreSolicitante->titulo));
-            } catch (\Exception $e) {}
-        }else{
-            try {
-                Mail::to($mailNombreSolicitante->email)->send(new \App\Mail\cambioDeEstadoSolicitud($mailNombreSolicitante->nombre, $request['id_solicitud'], 
-                    $nombreEstadoSolicitud, $mailNombreSolicitante->titulo));
-            } catch (\Exception $e) {}
-        }
-
-        $mailsParaRepuestos = Solicitud::obtenerUsersCorreoRepuestos();
-        
-        if($request['rep']){
-            foreach($mailsParaRepuestos as $mail){
-                try {
-                    Mail::to($mail->email)->send(new \App\Mail\avisoDeRepuesto($request['id_solicitud'], $nombreEstadoSolicitud,
-                        $mailNombreSolicitante->titulo, $request['descripcionRep']));
-                } catch (\Exception $e) {}
-            }
-        }
         
         Session::flash('message','Solicitud modificado con éxito');
         Session::flash('alert-class', 'alert-success');
@@ -259,15 +231,6 @@ class SolicitudController extends Controller{
         $nuevo_historico->id_persona = $idPersona->id_p;
         $nuevo_historico->fecha = $fechaActual;    
         $nuevo_historico->save();
-
-        $mailNombreSolicitante = Solicitud::obtenerMailNombreTituloSolicitante($request['id_solicitud']);
-        $nombreEstadoSolicitud = Solicitud::obtenerNombreEstadoSolicitud($request['id_solicitud']);
-
-        //da error cuando el correo no existe
-        try {
-            Mail::to($mailNombreSolicitante->email)->send(new \App\Mail\cambioDeEstadoSolicitud($mailNombreSolicitante->nombre, $request['id_solicitud'],
-                $nombreEstadoSolicitud, $mailNombreSolicitante->titulo));
-        } catch (\Exception $e) {}
 
         Session::flash('message','Solicitud asignada con éxito');
         Session::flash('alert-class', 'alert-success');

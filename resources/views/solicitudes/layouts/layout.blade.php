@@ -11,7 +11,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Intranet Lafedar</title>
-  <link  rel="icon"   href="img/ico.png" type="image/png" />
+  <link  rel="icon" href="img/ico.png" type="image/png" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <script language="JavaScript" src="{{ URL::asset('/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -21,10 +21,6 @@
     </button>
     <div class="collapse navbar-collapse" id="navbar1">
       <ul class="navbar-nav ml-auto">
-        @can('reporte-solicitudes')
-          <button id="reporte" class="btn btn-info" onclick='Report()' title="report">Reporte</button>
-          &nbsp&nbsp&nbsp&nbsp
-        @endcan
         <button class="btn btn-info" onclick='fnOpenModalStore()' data-toggle="modal" data-target="#agregar_solicitud"> Agregar solicitud</button>
         &nbsp
         <form action="{{ url('/logout') }}" method="POST" >
