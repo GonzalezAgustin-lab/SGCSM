@@ -36,7 +36,6 @@ class LocalizacionController extends Controller
         $localizacion = new Localizacion;
         $localizacion->id_area = $request['area'];
         $localizacion->nombre = $request['nombre'];
-        $localizacion->interno = $request['interno'];
  
         $localizacion->save();
 
@@ -49,7 +48,7 @@ class LocalizacionController extends Controller
     {
         $localizacion = DB::table('localizaciones')
         ->leftjoin('area', 'area.id_a', 'localizaciones.id_area')
-        ->select('localizaciones.id as id', 'localizaciones.nombre as nombre', 'area.nombre_a', 'localizaciones.interno as interno')
+        ->select('localizaciones.id as id', 'localizaciones.nombre as nombre', 'area.nombre_a')
         ->where('localizaciones.id', $id_a)
         ->first();
 
@@ -61,8 +60,7 @@ class LocalizacionController extends Controller
         $localizacion = DB::table('localizaciones')
         ->where('localizaciones.id',$request['id'])
         ->update([
-            'nombre' => $request['nombre'],
-            'interno' => $request['interno']
+            'nombre' => $request['nombre']
         ]);      
         Session::flash('message','Localizacion modificada con éxito');
         Session::flash('alert-class', 'alert-success');
