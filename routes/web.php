@@ -143,9 +143,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('deleteAreaXJefe/{id_ja}', [EmpleadoController::class, 'deleteAreaXJefe'])->name('deleteAreaXJefe');
     Route::get('obtenerNuevoListadoAreaXJefe/{idJefe}', [EmpleadoController::class, 'obtenerNuevoListadoAreaXJefe'])->name('obtenerNuevoListadoAreaXJefe');
     Route::get('showStoreAreaXJefe/{id_ja}', [EmpleadoController::class, 'showStoreAreaXJefe'])->name('showStoreAreaXJefe');
-    Route::get('storeRelacionJefeXArea/{jefeId}/{areaId}/{turnoId}', [EmpleadoController::class, 'storeRelacionJefeXArea'])->name('storeRelacionJefeXArea');
     Route::get('destroy_empleado/{id}', [EmpleadoController::class, 'destroy_empleado'])->name('destroy_empleado');
-    Route::get('selectAreasTurnos', [EmpleadoController::class, 'selectAreasTurnos']);
     Route::get('selectAreaEmpleados', [EmpleadoController::class, 'selectAreaEmpleados']);
-    Route::get('selectTurnosEmpleados', [EmpleadoController::class, 'selectTurnosEmpleados']);
   });

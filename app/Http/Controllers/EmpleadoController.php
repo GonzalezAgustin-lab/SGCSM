@@ -44,10 +44,8 @@ class EmpleadoController extends Controller{
         $empleado->fe_nac = $request['fe_nac'];
         $empleado->fe_ing = $request['fe_ing'];
         $empleado->area = $request['area'];
-        $empleado->turno = $request['turno'];
         $empleado->activo = $activo;
         $empleado->jefe = $jefe;
-        $empleado->rango = 3;
         $empleado->activo = 1;
         $empleado->save();
 
@@ -74,13 +72,6 @@ class EmpleadoController extends Controller{
         $activo = ($request['actividad'] == 'on') ? 1 : 0;
         $jefe = ($request['esJefe'] == 'on') ? 1 : 0;
 
-        if(!$activo || !$jefe){
-            //elimino todas las filas en las que la persona era jefe
-            DB::table('jefe_area')
-                ->where('jefe', $request['id_p'])
-                ->delete();
-        }
-
         if(!$activo) {
             //elimino todas las filas en las que el usuario tenia permisos 
             DB::table('model_has_roles')
@@ -93,10 +84,6 @@ class EmpleadoController extends Controller{
                 ->join('personas', 'users.id', '=', 'personas.usuario')
                 ->where('personas.id_p', $request['id_p'])
                 ->delete();
-            //pongo todos los puestos a lo que esta persona pertenecia en null
-            DB::table('puestos')
-                ->where('persona', $request['id_p'])
-                ->update(['persona' => null]);    
         }
 
         $empleado = DB::table('personas')
@@ -110,7 +97,6 @@ class EmpleadoController extends Controller{
                 'fe_nac' => $request['fe_nac'],
                 'fe_ing' => $request['fe_ing'],
                 'area' => $request['area'],
-                'turno' => $request['turnoEdit'],
                 'activo' => $activo,
                 'jefe' => $jefe,
             ]);      
@@ -134,31 +120,9 @@ class EmpleadoController extends Controller{
         return DB::table('area')->get();
     }  
 
-    public function selectTurnosEmpleados(){
-        return DB::table('turnos')->get();
-    }  
-
-    public function selectAreasTurnos(){
-        return [Empleado::selectAreas(),
-            Empleado::selectTurnos(),
-            Empleado::selectJefeXArea()];
-    }
-
     public function showUpdateAreaXJefe($id){
         $idsJAs = Empleado::showAreaXJefeUpdate($id);
         return view('empleado.update', ['idsJAs' => $idsJAs, 'idJefe' => $id]);
-    }
-
-    public function deleteAreaXJefe($idJA){
-        $deletedRows = DB::table('jefe_area')->where('id_ja', $idJA)->delete();
-    }
-
-    public function storeRelacionJefeXArea($idJefe, $areaId, $turnoId){
-        $jefeXArea = new JefeXArea;
-        $jefeXArea->jefe = $idJefe;
-        $jefeXArea->area = $areaId;
-        $jefeXArea->turno = $turnoId;
-        $jefeXArea->save();
     }
 
     public function obtenerNuevoListadoAreaXJefe($id){

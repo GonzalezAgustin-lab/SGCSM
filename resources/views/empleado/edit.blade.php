@@ -49,13 +49,9 @@
               </div>
 
               <div class="row">
-                <div class="col-6">
+                <div class="col-12">
                   <label for="select_area"><strong>Area:</strong></label>
                   <select class="form-control" name="area" id="select_area" required></select>
-                </div>
-                <div class="col-6">
-                  <label for="turnoEdit"><strong>Turno:</strong></label>
-                  <select class="form-control" name="turnoEdit" id="turnoEdit" required></select>
                 </div>
               </div>
 

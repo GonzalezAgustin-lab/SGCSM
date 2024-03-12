@@ -47,12 +47,6 @@
           html_select += '<option value ="'+data[i].id_a+'">'+data[i].nombre_a+'</option>';
         $('#area').html(html_select);
       });
-      $.get('/selectTurnosEmpleados',function(data){
-        var html_select = '<option value="">Seleccione turno </option>'
-        for(var i = 0; i<data.length; i ++)
-          html_select += '<option value ="'+data[i].id+'">'+data[i].nombre+'</option>';
-        $('#turno').html(html_select);
-      });
     });
   </script>
 

@@ -11,7 +11,6 @@ class Empleado extends Model
     
     public function scopeRelacion($query){
         return $query->leftjoin('area', 'area.id_a', 'personas.area')
-        ->leftjoin('turnos', 'personas.turno', 'turnos.id')
         ->select(
             'personas.id_p as id_p',
             'personas.nombre_p as nombre_p',
@@ -22,9 +21,7 @@ class Empleado extends Model
             'personas.activo as activo',
             'personas.jefe as jefe',
             'area.id_a as area',
-            'area.nombre_a as nombre_a',
-            'turnos.id as idTurno',
-            'turnos.nombre as nombreTurno')
+            'area.nombre_a as nombre_a')
         ->orderByRaw('personas.activo DESC, personas.apellido ASC');
     }
 
@@ -34,32 +31,21 @@ class Empleado extends Model
         ->where('personas.activo', 1)
         ->where('jefe_area.jefe', $persona)
         ->where('personas.id_p', '!=', $persona)
-        ->whereColumn('personas.turno', 'jefe_area.turno') // Condición para que los turnos coincidan
         ->select('personas.id_p', 'personas.nombre_p', 'personas.apellido')
         ->orderBy('apellido', 'asc')->get();
-        //dd($query);
-    }
-
-    public function scopeRango ($query){
-        return $query -> where('personas.rango','!=',1);    
     }
     
     public static function showAreaXJefeUpdate($id_ja) {
         return self::query()
             ->leftJoin('jefe_area', 'jefe_area.jefe', '=', 'personas.id_p')
             ->leftJoin('area', 'area.id_a', '=', 'jefe_area.area')
-            ->leftJoin('turnos', 'turnos.id', '=', 'jefe_area.turno')
             ->where('jefe_area.jefe', '=', $id_ja)
-            ->select('jefe_area.id_ja as id_ja', 'area.nombre_a as nombreArea', 'turnos.nombre as nombreTurno', 'jefe_area.jefe as idJefe')
+            ->select('jefe_area.id_ja as id_ja', 'area.nombre_a as nombreArea', 'jefe_area.jefe as idJefe')
             ->get();
     }
 
     public static function selectAreas() {
         return DB::table('area')->get();
-    }
-
-    public static function selectTurnos() {
-        return DB::table('turnos')->get(); 
     }
 
     public static function selectJefeXArea() {

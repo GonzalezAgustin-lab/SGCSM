@@ -28,7 +28,6 @@
       <th class="text-center">Fecha de ingreso</th>
       <th class="text-center">Fecha de nacimiento</th>
       <th class="text-center">Area</th>
-      <th class="text-center">Turno</th>
       <th class="text-center">Jefe</th>
       <th class="text-center">En actividad</th>
       <th class="text-center">Acciones</th>
@@ -56,7 +55,6 @@
               @endif
 
               <td>{{$empleado->nombre_a}}</td>
-              <td>{{$empleado->nombreTurno}}</td>
 
               @if($empleado->jefe == 1)
                 <td width="60" style="text-align: center;"><div class="circle_green"></div></td>
@@ -75,11 +73,8 @@
                   <a href="#" class="btn btn-info btn-sm mr-1" data-toggle="modal" data-id="{{$empleado->id_p}}" data-nombre="{{$empleado->nombre_p}}" 
                     data-apellido="{{$empleado->apellido}}" data-area="{{$empleado->area}}" data-dni="{{$empleado->dni}}" data-fe_nac="{{$empleado->fe_nac}}" 
                     data-fe_ing="{{$empleado->fe_ing}}" data-interno="{{$empleado->interno}}" data-correo="{{$empleado->correo}}" data-activo="{{$empleado->activo}}" 
-                    data-turno="{{$empleado->idTurno}}" data-jefe="{{$empleado->jefe}}" data-target="#editar_empleado">Editar
+                    data-jefe="{{$empleado->jefe}}" data-target="#editar_empleado">Editar
                   </a>
-                  @if($empleado->jefe == 1)
-                    <button id="jefeArea" class="btn btn-info btn-sm mr-1" onclick='fnOpenModalJefeArea({{$empleado->id_p}})' title="jefeArea">Areas</button>
-                  @endif
                   <form id="formDelete" action="{{ route('destroy_empleado', $empleado->id_p) }}" method="POST">
                     @csrf
                     @method('DELETE')
@@ -180,61 +175,6 @@
     });
   });
 
-  function updateSelectOptions() {
-    $.get('selectAreasTurnos/',function(data){
-      var html_select = '<option value="">Seleccione </option>'
-      for(var i = 0; i<data[0].length; i ++){
-        for(var k = 0; k<data[1].length; k ++){
-          var bandera = false;
-          for(var j = 0; j<data[2].length; j ++){
-            if(data[0][i].id_a == data[2][j].area && data[1][k].id == data[2][j].turno && idJefe == data[2][j].jefe){
-              bandera = true;
-            }
-          }
-          if(!bandera){
-            var ids = idJefe+"-"+data[0][i].id_a+"-"+data[1][k].id;
-            html_select += '<option value="'+ids+'">' + data[0][i].nombre_a + ' - ' + data[1][k].nombre + '</option>';          
-          }
-        }
-      }
-      $('#nuevoPermiso').html(html_select);
-    });
-  } 
-
-  function fnEliminarJefeXArea(idJA, idJefe) {
-    $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/deleteAreaXJefe/" + idJA,
-      type: 'GET',
-      success: function (data) {
-        // Llamar a la función que actualiza el contenido del modal
-        actualizarContenidoModal(idJefe);
-      },
-    });
-  }
-
-  function fnAgregarJefeXArea() {
-    var selectedValue = document.getElementById('nuevoPermiso').value;
-    if (selectedValue === "") {
-      return; // Salir de la función si no hay una opción seleccionada
-    }
-
-    $('#saveButton').prop('disabled', true);
-
-    var parts = selectedValue.split('-');
-    var jefeId = parts[0];
-    var areaId = parts[1];
-    var turnoId = parts[2];
-
-    $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/storeRelacionJefeXArea/" + jefeId + "/" + areaId + "/" + turnoId,
-      type: 'GET',
-      success: function (data) {
-        // Llamar a la función que actualiza el contenido del modal
-        actualizarContenidoModal(jefeId);
-      },
-    });
-  }
-
   function actualizarContenidoModal(idJefe) {
     // Realizar una nueva solicitud AJAX para obtener el contenido actualizado de la tabla
     $.ajax({
@@ -283,7 +223,6 @@
     var nombre = button.data('nombre')
     var apellido = button.data('apellido')
     var area = button.data('area')
-    var idTurno = button.data('turno')
     var dni = button.data('dni')
     var interno = button.data('interno')
     var fe_nac = button.data('fe_nac')
@@ -342,17 +281,6 @@
         }
       }
       $('#select_area').html(html_select);
-    });
-    $.get('selectTurnosEmpleados/',function(data){
-      var html_select = '<option value="">Seleccione </option>'
-      for(var i = 0; i<data.length; i ++){
-        if(data[i].id == idTurno){
-          html_select += '<option value ="'+data[i].id+'"selected>'+data[i].nombre+'</option>';
-        }else{
-          html_select += '<option value ="'+data[i].id+'">'+data[i].nombre+'</option>';
-        }
-      }
-      $('#turnoEdit').html(html_select);
     });
 
     // Asigna el evento change al checkbox de actividad
