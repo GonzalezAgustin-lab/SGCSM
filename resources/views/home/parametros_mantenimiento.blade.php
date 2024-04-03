@@ -7,54 +7,37 @@
   
     <div class="row">
         <br><br>
-        <div class="col-md-4" aling="center">
+        <div class="col-md-4 text-center">
             <br>
-            <a  href='/empleado'> <img  src="{{ URL::to('/img/empleados.png') }}" height="140"></a>
+            <a href='/empleado'><img src="{{ URL::to('/img/empleados.png') }}" height="140"></a>
             <h3 style="color: #3b557a">Empleados</h3>
         </div>
-        <div class="col-md-4" aling="center">
+        <div class="col-md-4 text-center">
             <br>
-            <a  href='/usuarios'> <img  src="{{ URL::to('/img/usuarios.png') }}" height="140"></a>
+            <a href='/usuarios'><img src="{{ URL::to('/img/usuarios.png') }}" height="140"></a>
             <h3 style="color: #3b557a">Usuarios</h3>
         </div>
-        <div class="col-md-4" aling="center">
+        <div class="col-md-4 text-center">
             <br>
-            <a  href='roles'> <img  src="{{ URL::to('/img/roles.png') }}" height="140"></a>
+            <a href='roles'><img src="{{ URL::to('/img/roles.png') }}" height="140"></a>
             <h3 style="color: #3b557a">Roles</h3>
         </div>
 
-        <div class="col-md-4" aling="center">
+        <div class="col-md-4 text-center">
             <br>
-            <a  href="/areas"> <img  src="{{ URL::to('/img/areas.png') }}" height="140"></a>
+            <a href="/areas"><img src="{{ URL::to('/img/areas.png') }}" height="140"></a>
             <h3 style="color: #3b557a">Areas</h3>
         </div>
-        <div class="col-md-4" aling="center">
+        <div class="col-md-4 text-center">
             <br>
-            <a  href="/localizaciones"> <img  src="{{ URL::to('/img/localizaciones.png') }}" height="140"></a>
+            <a href="/localizaciones"><img src="{{ URL::to('/img/localizaciones.png') }}" height="140"></a>
             <h3 style="color: #3b557a">Localizaciones</h3>
         </div>
-        <div class="col-md-4" aling="center">
+        <div class="col-md-4 text-center">
             <br>
-            <a  href="/estados"> <img  src="{{ URL::to('/img/estados.png') }}" height="140"></a>
-            <h3 style="color: #3b557a">Estados</h3>
-        </div>
-
-        <div class="col-md-4" aling="center">
-            <br>
-            <a  href="/fallas"> <img  src="{{ URL::to('/img/fallas.png') }}" height="140"></a>
-            <h3 style="color: #3b557a">Fallas</h3>
-        </div>
-        <div class="col-md-4" aling="center">
-            <br>
-            <a  href="/tipos_equipos"> <img  src="{{ URL::to('/img/tipos de equipos.png') }}" height="140"></a>
+            <a href="/tipos_equipos"><img src="{{ URL::to('/img/tipos de equipos.png') }}" height="140"></a>
             <h3 style="color: #3b557a">Tipos de equipos</h3>
         </div>
-        <div class="col-md-4" aling="center">
-            <br>
-            <a  href="/tipos_solicitudes"> <img  src="{{ URL::to('/img/tipos de solicitudes.png') }}" height="140"></a>
-            <h3 style="color: #3b557a">Tipos de solicitudes</h3>
-        </div>
-
 
     </div>
 

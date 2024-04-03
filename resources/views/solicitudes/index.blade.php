@@ -113,7 +113,6 @@
       <th class="text-center">Tipo de solicitud</th>
       <th class="text-center">Equipo</th>
       <th class="text-center">Estado</th>     
-      <th class="text-center">Tipo de falla</th>    
       <th class="text-center">Fecha de emision</th> 
       <!--<th class="text-center">Fecha de finalizacion</th> -->
       <th class="text-center">Solicitante</th>
@@ -136,13 +135,6 @@
               @endif
             </td>
             <td>{{$solicitud->estado}}</td>
-            <td>
-              @if($solicitud->falla)
-                <p>{{$solicitud->falla}}</p>
-              @else
-                <p style="color:gainsboro">N/A</p>
-              @endif
-            </td>
             <td>{{ \Carbon\Carbon::parse($solicitud->fechaEmision)->format('d/m/Y') }}</td>
             @if($solicitud->fechaFinalizacion)
               <!--<td>{{ \Carbon\Carbon::parse($solicitud->fechaFinalizacion)->format('d/m/Y') }}</td>  --> 
@@ -354,10 +346,8 @@
       var htmlSelectLocalizacion = '<option value="">Seleccione </option>'
       var htmlSelectTipoSolicitud = '<option value="">Seleccione </option>'
       var htmlSelectEquipo = '<option value="">Seleccione </option>'
-      var htmlSelectFalla = '<option value="">Seleccione </option>'
       var htmlDescripcionEquipo = ''
-      // [0]=areas [1]=localizaciones [2]=tipo_solicitudes [3]=equipos_mant 
-      // [4]=fallas [5]=tipos_equipos [6]=fallasxtipo
+      // [0]=areas [1]=localizaciones [2]=tipo_solicitudes [3]=equipos_mant [5]=tipos_equipos
 
       var equipoPrecargado = false;
       var areaPrecargada = false;
@@ -397,53 +387,24 @@
       $('#tipo_solicitud1').on('change', function () {
         tipoSolicitudSelected = $(this).val();
         const divEquipo = $('#div_equipo1');
-        const divFalla = $('#div_falla1');
         if (!tipoSolicitudSelected) {
           divEquipo.show();
-          divFalla.hide();
           document.getElementById("localizacion1").setAttribute("required", "required");
-          document.getElementById("falla1").setAttribute("required", "required");
         } 
         else if (tipoSolicitudSelected == 1) {
           divEquipo.show();
-          divFalla.hide();
           document.getElementById("localizacion1").setAttribute("required", "required");
-          document.getElementById("falla1").setAttribute("required", "required");
         } 
         else if (tipoSolicitudSelected == 2) {
           divEquipo.hide();
-          divFalla.show();
           divDescripcion.hide();
-          let htmlSelectFalla = '<option value="">Seleccione </option>';
-          data[6].forEach(falla => {
-            if (falla.id_tipo_solicitud == 2) {
-              data[4].forEach(falla2 => {
-                if(falla2.id == falla.id_falla){
-                  if(solicitud[0].idFalla){
-                    if(falla.id_falla === solicitud[0].idFalla){
-                      htmlSelectFalla += `<option value="${falla.id_falla}" selected>${falla2.nombre}</option>`;
-                    }else{
-                      htmlSelectFalla += `<option value="${falla.id_falla}">${falla2.nombre}</option>`;
-                    }
-                  }else{
-                    htmlSelectFalla += `<option value="${falla.id_falla}">${falla2.nombre}</option>`;
-                  }            
-                }
-              })
-            }
-          });
-
-          $('#falla1').html(htmlSelectFalla);
           document.getElementById("localizacion1").setAttribute("required", "required");
-          document.getElementById("falla1").setAttribute("required", "required");
         }
         else if (tipoSolicitudSelected == 3) {
           divEquipo.hide();
-          divFalla.hide();
           divDescripcion.hide();
           $('#div_localizacion1').hide();
           document.getElementById("localizacion1").removeAttribute("required");
-          document.getElementById("falla1").removeAttribute("required");
         }
         $('#area1').prop('disabled', false);
         $('#localizacion1').prop('disabled', false);
@@ -453,28 +414,12 @@
       $('#equipo1').on('change', function () {
         var equipoSelected = $(this).val();
         if (!equipoSelected) {
-          $('#div_falla1').hide();
           $('#div_descripcion1').hide();
-          var htmlSelectFalla = '<option value="">Seleccione </option>'
           $('#area1').prop('disabled', false);
           $('#localizacion1').prop('disabled', false);
         } else {
-          var htmlSelectFalla = '<option value="">Seleccione </option>'
           for (var k = 0; k < data[3].length; k++) {
             if (equipoSelected == data[3][k].id) {
-              for (var j = 0; j < data[6].length; j++) {
-                if (data[3][k].id_tipo == data[6][j].id_tipo_equipo) {
-                  for (var i = 0; i < data[4].length; i++) {
-                    if (data[6][j].id_falla == data[4][i].id) {
-                      if(data[6][j].id_falla === solicitud[0].idFalla){
-                        htmlSelectFalla += '<option value ="' + data[6][j].id_falla + '" selected>' + data[4][i].nombre + '</option>';
-                      }else{
-                        htmlSelectFalla += '<option value ="' + data[6][j].id_falla + '">' + data[4][i].nombre + '</option>';
-                      }
-                    }
-                  }
-                }
-              }
               var aux_tipo_equipo = data[3][k].id_tipo;
               // Obtener el id_area y id_localizacion del equipo seleccionado
               var idAreaEquipo = data[3][k].id_area;
@@ -496,10 +441,8 @@
               $('#descripcion_equipo1').prop('disabled', true);
             }
           }
-          $('#falla1').html(htmlSelectFalla);
           $('#tipo_solicitud1').val('1');
           $('#div_localizacion1').show();
-          $('#div_falla1').show();
           $('#div_descripcion1').show();
         }
       });
@@ -633,10 +576,8 @@
         var htmlSelectLocalizacion = '<option value="">Seleccione </option>'
         var htmlSelectTipoSolicitud = '<option value="">Seleccione </option>'
         var htmlSelectEquipo = '<option value="">Seleccione </option>'
-        var htmlSelectFalla = '<option value="">Seleccione </option>'
         var htmlDescripcionEquipo = ''
-        // [0]=areas [1]=localizaciones [2]=tipo_solicitudes [3]=equipos_mant 
-        // [4]=fallas [5]=tipos_equipos [6]=fallasxtipo
+        // [0]=areas [1]=localizaciones [2]=tipo_solicitudes [3]=equipos_mant [5]=tipos_equipos
 
         htmlSelectArea += data[0].map(item => `<option value="${item.id_a}">${item.nombre_a}</option>`).join('');
         htmlSelectTipoSolicitud += data[2].map(tipo_solicitud => `<option value="${tipo_solicitud.id}">${tipo_solicitud.nombre}</option>`).join('');
@@ -655,44 +596,25 @@
         $('#tipo_solicitud').on('change', function () {
           tipoSolicitudSelected = $(this).val();
           const divEquipo = $('#div_equipo');
-          const divFalla = $('#div_falla');
 
           if (!tipoSolicitudSelected) {
             divEquipo.show();
-            divFalla.hide();
             document.getElementById("localizacion").setAttribute("required", "required");
-            document.getElementById("falla").setAttribute("required", "required");
           } 
           else if (tipoSolicitudSelected == 1) {
             divEquipo.show();
-            divFalla.hide();
             document.getElementById("localizacion").setAttribute("required", "required");
-            document.getElementById("falla").setAttribute("required", "required");
           } 
           else if (tipoSolicitudSelected == 2) {
             divEquipo.hide();
-            divFalla.show();
             divDescripcion.hide();
-            let htmlSelectFalla = '<option value="">Seleccione </option>';
-            data[6].forEach(solicitud => {
-              if (solicitud.id_tipo_solicitud == 2) {
-                const falla = data[4].find(falla => falla.id === solicitud.id_falla);
-                if (falla) {
-                  htmlSelectFalla += `<option value="${solicitud.id_falla}">${falla.nombre}</option>`;
-                }
-              }
-            });
-            $('#falla').html(htmlSelectFalla);
             document.getElementById("localizacion").setAttribute("required", "required");
-            document.getElementById("falla").setAttribute("required", "required");
           }
           else if (tipoSolicitudSelected == 3) {
             divEquipo.hide();
-            divFalla.hide();
             divDescripcion.hide();
             $('#div_localizacion').hide();
             document.getElementById("localizacion").removeAttribute("required");
-            document.getElementById("falla").removeAttribute("required");
           }
           $('#area').prop('disabled', false);
           $('#localizacion').prop('disabled', false);
@@ -702,24 +624,12 @@
         $('#equipo').on('change', function () {
           var equipoSelected = $(this).val();
           if (!equipoSelected) {
-            $('#div_falla').hide();
             $('#div_descripcion').hide();
-            var htmlSelectFalla = '<option value="">Seleccione </option>'
             $('#area').prop('disabled', false);
             $('#localizacion').prop('disabled', false);
           } else {
-            var htmlSelectFalla = '<option value="">Seleccione </option>'
             for (var k = 0; k < data[3].length; k++) {
               if (equipoSelected == data[3][k].id) {
-                for (var j = 0; j < data[6].length; j++) {
-                  if (data[3][k].id_tipo == data[6][j].id_tipo_equipo) {
-                    for (var i = 0; i < data[4].length; i++) {
-                      if (data[6][j].id_falla == data[4][i].id) {
-                        htmlSelectFalla += '<option value ="' + data[6][j].id_falla + '">' + data[4][i].nombre + '</option>';
-                      }
-                    }
-                  }
-                }
                 var aux_tipo_equipo = data[3][k].id_tipo;
                 // Obtener el id_area y id_localizacion del equipo seleccionado
                 var idAreaEquipo = data[3][k].id_area;
@@ -741,10 +651,8 @@
                 $('#descripcion_equipo').prop('disabled', true);
               }
             }
-            $('#falla').html(htmlSelectFalla);
             $('#tipo_solicitud').val('1');
             $('#div_localizacion').show();
-            $('#div_falla').show();
             $('#div_descripcion').show();
           }
         });
