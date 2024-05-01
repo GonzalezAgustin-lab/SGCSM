@@ -1,24 +1,36 @@
-.botones{
-   margin: 0;
+.btn-group {
+    display: flex;
+    justify-content: center;
 }
 
-.botones a{
-    padding: 0 10px;
-    /*color: rgb(230, 2, 2);*/
+.btn-container {
+    display: inline-block;
+    margin: 5px;
 }
 
-.botones a:hover{
-    color: rgb(63, 139, 238);
+/* Estilos para el clic */
+.btn-container i:active {
+    transform: scale(0.9); /* Cambia el tamaño cuando haces clic en el ícono */
 }
 
-.botones button{
-    border: 0;
-    background-color: transparent;
+.detalle{
+    color: #ffc107;
 }
 
-.botones button:hover{
-    color: rgb(63, 139, 238) !important;
-    text-decoration: underline rgb(63, 139, 238);
+.actualizar-editar{
+    color: #007bff;
+}
+
+.asignar{
+    color: #28a745;
+}
+
+.aprobar{
+    color: #28a745
+}
+
+.reclamar{
+    color: #ffc107
 }
 
 .agregar{
@@ -30,9 +42,8 @@
 }
 
 .eliminar{
-    color:rgb(216, 13, 13);
+    color: #dc3545;
 }
-
 
 .circle_green {
     background: rgb(30, 197, 47);

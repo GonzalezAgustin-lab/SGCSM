@@ -26,8 +26,8 @@
           &nbsp
           <form action="{{ url('/logout') }}" method="POST" >
             {{ csrf_field() }}
-            <button type="submit" class="btn btn-danger" style="display:inline;cursor:pointer">
-              Cerrar sesión
+            <button type="submit" class="btn btn-danger" style="display: inline; cursor: pointer;">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
             </button>
           </form>
         </ul>

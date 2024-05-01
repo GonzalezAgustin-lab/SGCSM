@@ -70,7 +70,9 @@
         </select>
       </div>
       <div style="display: inline-block;">
-        <button type="submit" class="btn btn-default"> Buscar</button>
+        <button type="submit" class="btn btn-default">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button> 
       </div>
     </form>          
   </div>
@@ -106,9 +108,13 @@
           @else
             <td width="60"><div class="circle_grey"></div></td>
           @endif
-          <td><button class="btn btn-info btn-sm" onclick='fnOpenModalUpdate("{{$equipo_mant->id_e}}")' title="update"
-          data-tipo="{{$equipo_mant->id_tipo}}" data-area="{{$equipo_mant->id_area}}" data-localizacion="{{$equipo_mant->id_localizacion}}"
-          id="edit-{{$equipo_mant->id_e}}">Editar</button></td>
+          <td>
+            <div class="btn-container">
+              <i class="fa-solid fa-pen-to-square actualizar-editar" onclick='fnOpenModalUpdate("{{$equipo_mant->id_e}}")' title="update"
+              data-tipo="{{$equipo_mant->id_tipo}}" data-area="{{$equipo_mant->id_area}}" data-localizacion="{{$equipo_mant->id_localizacion}}"
+              id="edit-{{$equipo_mant->id_e}}"></i>
+            </div>
+          </td>
         </tr>
 
       @endforeach

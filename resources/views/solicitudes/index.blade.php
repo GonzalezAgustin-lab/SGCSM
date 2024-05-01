@@ -98,7 +98,9 @@
       </div>
       &nbsp
       <div style="display: inline-block;">
-        <button type="submit" class="btn btn-default"> Buscar</button>
+        <button type="submit" class="btn btn-default">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>      
       </div>
     </form>          
   </div>
@@ -107,20 +109,22 @@
 <div class="col-md-12">             
   <table class="table table-striped table-bordered ">
     <thead>
-      <th class="text-center"><input type="checkbox" id="checkAll" onclick="checkAll()"> Seleccionar</th>
-      <th class="text-center">ID</th>
-      <th class="text-center">Titulo</th>
-      <th class="text-center">Tipo de solicitud</th>
-      <th class="text-center">Equipo</th>
-      <th class="text-center">Estado</th>     
-      <th class="text-center">Fecha de emision</th> 
-      <!--<th class="text-center">Fecha de finalizacion</th> -->
-      <th class="text-center">Solicitante</th>
-      <th class="text-center">Encargado</th>  
-      <th class="text-center">Acciones</th>        
+      <th class="text-center align-top">
+        <label for="checkAll" style="display: inline-block;">
+          <input type="checkbox" id="checkAll" onclick="checkAll()" style="vertical-align: middle; margin-right: 5px;">
+        </label>
+      </th>
+      <th class="text-center align-top">ID</th>
+      <th class="text-center align-top">Titulo</th>
+      <th class="text-center align-top">Tipo de solicitud</th>
+      <th class="text-center align-top">Equipo</th>
+      <th class="text-center align-top">Estado</th>     
+      <th class="text-center align-top">Fecha de emision</th> 
+      <th class="text-center align-top">Solicitante</th>
+      <th class="text-center align-top">Encargado</th>  
+      <th class="text-center align-top">Acciones</th>  
     </thead>
     <tbody>
-        <?php //dd($solicitudes); ?>
         @foreach($solicitudes as $solicitud)
           <tr>
             <td><label><input type="checkbox" id="cbox1" value="first_checkbox"></label><br></td>
@@ -152,38 +156,34 @@
             </td>
             <td>
               <div class="text-center">
-                <div class="btn-group" style="display: flex; flex-wrap: wrap; justify-content: center;">
-                  <div class="btn-container" style="margin-bottom: 5px; margin-right: 5px;">
-                    <button id="detalle" class="btn btn-info btn-sm" onclick='fnOpenModalShow({{$solicitud->id}})' title="show">Detalles</button>
+                <div class="btn-group">
+                  <div class="btn-container">
+                    <i id="detalle" class="fa-solid fa-circle-info detalle" onclick='fnOpenModalShow({{$solicitud->id}})' title="show"></i>
                   </div>
-                  <div class="btn-container" style="margin-bottom: 5px; margin-right: 5px;">
-                    <button id="actualizar" class="btn btn-info btn-sm" onclick='fnOpenModalUpdate({{$solicitud->id}})' title="update">Actualizar</button>
+                  <div class="btn-container">
+                    <i id="actualizar" onclick='fnOpenModalUpdate({{$solicitud->id}})' title="update" class="fa-solid fa-arrow-up-from-bracket actualizar-editar"></i>
                   </div>
                   @if(!$solicitud->nombre_encargado)
-                    <div class="btn-container" style="margin-bottom: 5px; margin-right: 5px;">
-                      <button id="asignar" class="btn btn-info btn-sm" onclick='fnOpenModalAssing({{$solicitud->id}})' title="assing">Asignar</button>
+                    <div class="btn-container">
+                      <i id="asignar" class="fa-solid fa-user-plus asignar" onclick='fnOpenModalAssing({{$solicitud->id}})' title="assing"></i>
                     </div>
                   @endif
                   @if($solicitud->estado == "Aprob. pendiente" && $solicitud->id_solicitante == $personaAutenticada->id_p)
-                    <div class="btn-container" style="margin-bottom: 5px; margin-right: 5px;">
-                      <a href="{{url('aprobar_solicitud', $solicitud->id)}}" class="btn btn-info btn-sm" title="aprobar" onclick="return confirm ('Está seguro que desea aprobar esta solicitud?')" data-position="top" data-delay="50" data-tooltip="aprobar">Aprobar</a>
+                    <div class="btn-container">
+                      <i href="{{url('aprobar_solicitud', $solicitud->id)}}" class="fa-solid fa-check aprobar" title="aprobar" onclick="return confirm ('Está seguro que desea aprobar esta solicitud?')" data-position="top" data-delay="50" data-tooltip="aprobar"></i>
                     </div>
-                    <div class="btn-container" style="margin-bottom: 5px; margin-right: 5px;">
-                      <button id="reclamar" class="btn btn-info btn-sm" onclick='fnOpenModalReclaim({{$solicitud->id}})' title="reclaim">Reclamar</button>
+                    <div class="btn-container">
+                      <i id="reclamar" class="fa-solid fa-bullhorn reclamar" onclick='fnOpenModalReclaim({{$solicitud->id}})' title="reclaim"></i>
                     </div>
                   @endif
                   @if($solicitud->estado == "Abierta" && $solicitud->id_solicitante == $personaAutenticada->id_p)
-                    <div class="btn-container" style="margin-bottom: 5px; margin-right: 5px;">
-                      <button class="btn btn-info btn-sm" onclick='fnOpenModalEdit({{$solicitud->id}})' title="edit"  data-tipo="{{$solicitud->tipo_solicitud}}" id="edit-{{$solicitud->id}}">Editar</button>
-                    </div>
-                    <div class="btn-container" style="margin-bottom: 5px; margin-right: 5px;">
-                      <a href="{{url('destroy_solicitud', $solicitud->id)}}" class="btn btn-danger btn-sm" title="Borrar" onclick="return confirm('Está seguro que desea eliminar esta solicitud?')" data-position="top" data-delay="50" data-tooltip="Borrar">X</a>
-                    </div>
-                  @else
-                    <div class="btn-container" style="margin-bottom: 5px; margin-right: 5px;">
-                      <a href="{{url('destroy_solicitud', $solicitud->id)}}" class="btn btn-danger btn-sm" title="Borrar" onclick="return confirm('Está seguro que desea eliminar esta solicitud?')" data-position="top" data-delay="50" data-tooltip="Borrar">X</a>
+                    <div class="btn-container">
+                      <i id="editar" onclick='fnOpenModalEdit({{$solicitud->id}})' title="edit" data-tipo="{{$solicitud->tipo_solicitud}}" id="edit-{{$solicitud->id}}" class="fa-solid fa-pen-to-square actualizar-editar"></i>
                     </div>
                   @endif
+                  <div class="btn-container">
+                    <i class="fa-solid fa-circle-xmark eliminar" href="{{url('destroy_solicitud', $solicitud->id)}}" title="Borrar" onclick="return confirm('Está seguro que desea eliminar esta solicitud?')" data-position="top" data-delay="50" data-tooltip="Borrar"></i>
+                  </div>
                 </div>
               </div>
             </td>
