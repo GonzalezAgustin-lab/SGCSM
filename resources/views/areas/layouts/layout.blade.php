@@ -22,7 +22,9 @@
       </button>
       <div class="collapse navbar-collapse" id="navbar1">
         <ul class="navbar-nav ml-auto">
-          <button class="btn btn-info" onclick='fnOpenModalStore()' data-toggle="modal" data-target="#agregar_area"> Agregar area</button>
+          <button class="btn btn-info" onclick='fnOpenModalStore()' data-toggle="modal" data-target="#agregar_area">
+            <i class="fa-solid fa-plus"></i>
+          </button>
           &nbsp
           <form action="{{ url('/logout') }}" method="POST" >
             {{ csrf_field() }}

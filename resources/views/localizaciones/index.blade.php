@@ -37,8 +37,11 @@
         <td width="80">{{$localizacion->id}}</td>
         <td>{{$localizacion->nombre_a}}</td>
         <td>{{$localizacion->nombre}}</td>
-        <td width="90"><button class="btn btn-info btn-sm" onclick='fnOpenModalUpdate("{{$localizacion->id}}")' title="update"
-          data-nombre="{{$localizacion->nombre}}" data-interno="{{$localizacion->interno}}" id="edit">Editar</button></td>
+        <td width="90">
+          <div class="btn-container">
+            <i id="edit" onclick='fnOpenModalUpdate("{{$localizacion->id}}")' title="update" data-nombre="{{$localizacion->nombre}}" data-interno="{{$localizacion->interno}}" class="fa-solid fa-pen-to-square actualizar-editar"></i>
+          </div>
+        </td>
         </tr>
       @endforeach
     </tbody>       
