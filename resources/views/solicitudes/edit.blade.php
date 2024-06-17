@@ -32,11 +32,6 @@
         <label for="title"><strong>Localizacion:</strong></label>
         <select class="form-control" name="localizacion1" id="localizacion1" required></select>
       </div>
-      <div class="col-6" style="display:none;" id="div_falla1">
-        <label for="title"><strong>Fallas:</strong></label>
-        <br>
-        <select class="form-control" name="falla1" id="falla1" required></select>
-      </div>
     </div>
   </div> 
 </div>

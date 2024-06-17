@@ -39,17 +39,12 @@
             <h3 style="color: #3b557a">Estados</h3>
         </div>
 
-        <div class="col-md-4" aling="center">
-            <br>
-            <a  href="/fallas"> <img  src="{{ URL::to('/img/fallas.png') }}" height="140"></a>
-            <h3 style="color: #3b557a">Fallas</h3>
-        </div>
-        <div class="col-md-4" aling="center">
+        <div class="col-md-6" aling="center">
             <br>
             <a  href="/tipos_equipos"> <img  src="{{ URL::to('/img/tipos de equipos.png') }}" height="140"></a>
             <h3 style="color: #3b557a">Tipos de equipos</h3>
         </div>
-        <div class="col-md-4" aling="center">
+        <div class="col-md-6" aling="center">
             <br>
             <a  href="/tipos_solicitudes"> <img  src="{{ URL::to('/img/tipos de solicitudes.png') }}" height="140"></a>
             <h3 style="color: #3b557a">Tipos de solicitudes</h3>

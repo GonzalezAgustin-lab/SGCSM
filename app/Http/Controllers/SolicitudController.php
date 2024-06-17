@@ -13,7 +13,6 @@ use App\Tipo_solicitud;
 use App\Solicitud;
 use Carbon\Carbon;
 use App\Estado;
-use App\Falla;
 use App\User;
 Use Session;
 use DB;
@@ -29,7 +28,6 @@ class SolicitudController extends Controller{
         $solicitudesQuery = Solicitud::ID($request->get('id_solicitud'))
             ->Equipo($request->get('id_equipo'))
             ->Titulo($request->get('titulo'))
-            ->Falla($request->get('id_falla'))
             ->Relaciones_index($request->get('id_tipo_solicitud'), $request->get('id_estado'), $request->get('id_encargado'), $request->get('id_solicitante'), $request->get('fecha'))
             ->orderBy('id_solicitud', 'desc');
         if (Gate::allows('ver-todas-las-solicitudes')) {
@@ -121,18 +119,12 @@ class SolicitudController extends Controller{
         if($request['tipo_solicitud'] == 1){
             $solicitud->id_equipo = $request['equipo'];
         }
-        if($request['tipo_solicitud'] != 3){
-            $solicitud->id_falla = $request['falla'];
-        }
         $solicitud->id_solicitante = $idPersona->id_p;
         $solicitud->id_tipo_solicitud = $request['tipo_solicitud'];
         $solicitud->fecha_alta = $fechaActual;
         $solicitud->id_estado = 1;
         if($request['tipo_solicitud'] == 2){
             $solicitud->id_localizacion_edilicio = $request['localizacion'];
-        }
-        if($request['tipo_solicitud'] == 3){
-            $solicitud->id_area_proyecto = $request['area'];
         }
 
         $solicitud->save();
@@ -242,9 +234,7 @@ class SolicitudController extends Controller{
         Solicitud::getLocalizaciones(),
         Solicitud::getTipoSolicitudes(),
         Solicitud::getEquiposMantenimiento(), 
-        Solicitud::getFallas(),
-        Solicitud::getTipoEquipos(),
-        Solicitud::getFallasXTipo()];
+        Solicitud::getTipoEquipos()];
     }   
 
     public function select_users(){
@@ -353,8 +343,7 @@ class SolicitudController extends Controller{
             'equipos_mant.id_localizacion as idLocalizacionEquipo', 
             'equipos_mant.descripcion as descripcionEquipo',
             'solicitudes.id_localizacion_edilicio as idLocalizacionEdilicio',
-            'localizacionesEdilicios.id_area as idAreaEdilicio',
-            'solicitudes.id_falla as idFalla')
+            'localizacionesEdilicios.id_area as idAreaEdilicio')
             ->where('solicitudes.id', $idSolicitud)
             ->where('historico_solicitudes.id_estado', 1)
             ->orderBy('historico_solicitudes.fecha', 'asc')
@@ -369,10 +358,10 @@ class SolicitudController extends Controller{
 
     public function edit_solicitud(Request $request){
         if($request['tipo_solicitud1'] == 1){
-            Solicitud::editSolicitud($request['idSolicitud1'], $request['estado1'], $request['titulo1'], $request['descripcion1'], $request['equipo1'], $request['falla1'], $request['tipo_solicitud1'], null, null);
+            Solicitud::editSolicitud($request['idSolicitud1'], $request['estado1'], $request['titulo1'], $request['descripcion1'], $request['equipo1'], $request['tipo_solicitud1'], null, null);
         }
         elseif($request['tipo_solicitud1'] == 2){
-            Solicitud::editSolicitud($request['idSolicitud1'], $request['estado1'], $request['titulo1'], $request['descripcion1'], null, $request['falla1'], $request['tipo_solicitud1'], null, $request['localizacion1']);
+            Solicitud::editSolicitud($request['idSolicitud1'], $request['estado1'], $request['titulo1'], $request['descripcion1'], null, $request['tipo_solicitud1'], null, $request['localizacion1']);
         }
         elseif($request['tipo_solicitud1'] == 3){
             Solicitud::editSolicitud($request['idSolicitud1'], $request['estado1'], $request['titulo1'], $request['descripcion1'], null, null, $request['tipo_solicitud1'], $request['area1'], null);

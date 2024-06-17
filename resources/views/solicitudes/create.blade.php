@@ -31,11 +31,6 @@
         <label for="title"><strong>Localizacion:</strong></label>
         <select class="form-control" name="localizacion" id="localizacion" required></select>
       </div>
-      <div class="col-6" style="display:none;" id="div_falla">
-        <label for="title"><strong>Fallas:</strong></label>
-        <br>
-        <select class="form-control" name="falla" id="falla" required></select>
-      </div>
     </div>
     <input type="hidden" name="solicitante" value="{{ Auth::id() }}">
   </div> 

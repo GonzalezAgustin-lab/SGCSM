@@ -8,7 +8,6 @@ use App\Http\Controllers\SolicitudController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\LocalizacionController;
 use App\Http\Controllers\EstadoController;
-use App\Http\Controllers\FallaController;
 use App\Http\Controllers\Tipo_EquipoController;
 use App\Http\Controllers\Tipo_SolicitudController;
 use App\Http\Controllers\Equipo_mantController;
@@ -104,15 +103,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('update_estado', [EstadoController::class, 'update_estado'])->name('update_estado');
 });
 
-//****************Fallas**********************
-Route::middleware(['auth'])->group(function () {
-    Route::resource('fallas', FallaController::class);
-    Route::get('show_store_falla', [FallaController::class, 'show_store_falla'])->name('show_store_falla');
-    Route::post('store_falla', [FallaController::class, 'store_falla'])->name('store_falla');
-    Route::get('show_update_falla/{falla}', [FallaController::class, 'show_update_falla'])->name('show_update_falla');
-    Route::post('update_falla', [FallaController::class, 'update_falla'])->name('update_falla');
-});
-
 //****************Tipo de equipamientos****************
 Route::middleware(['auth'])->group(function () {
     Route::resource('tipos_equipos', Tipo_EquipoController::class);
@@ -120,11 +110,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('store_tipo_equipo', [Tipo_EquipoController::class, 'store_tipo_equipo'])->name('store_tipo_equipo');
     Route::get('show_update_tipo_equipo/{tipo_equipo}', [Tipo_EquipoController::class, 'show_update_tipo_equipo'])->name('show_update_tipo_equipo');
     Route::post('update_tipo_equipo', [Tipo_EquipoController::class, 'update_tipo_equipo'])->name('update_tipo_equipo');
-    Route::get('show_delete_falla_te/{falla}', [Tipo_EquipoController::class, 'show_delete_falla_te'])->name('show_delete_falla_te');
-    Route::post('delete_falla_te', [Tipo_EquipoController::class, 'delete_falla_te'])->name('delete_falla_te');
     Route::get('show_assing_tipo_equipo/{tipo_equipo}', [Tipo_EquipoController::class, 'show_assing_tipo_equipo'])->name('show_assing_tipo_equipo');
     Route::post('assing_tipo_equipo', [Tipo_EquipoController::class, 'assing_tipo_equipo'])->name('assing_tipo_equipo');
-    Route::get('select_fallas', [Tipo_EquipoController::class, 'select_fallas'])->name('select_fallas');
 });
 
 //****************Tipo de soliciudes****************
