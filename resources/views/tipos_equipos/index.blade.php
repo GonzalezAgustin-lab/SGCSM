@@ -36,7 +36,9 @@
           <td width="80">{{$tipo_equipo->id}}</td>
           <td>{{$tipo_equipo->nombre}}</td>
           <td width="300">
-            <button class="btn btn-info btn-sm" onclick='fnOpenModalUpdate("{{$tipo_equipo->id}}")' title="update" id="edit">Editar</button>
+            <div class="btn-container">
+              <i onclick='fnOpenModalUpdate("{{$tipo_equipo->id}}")' title="update" id="edit" class="fa-solid fa-pen-to-square actualizar-editar"></i>
+            </div>
           </td>
         </tr>
       @endforeach
@@ -132,40 +134,5 @@
       modalDialog.classList.remove('modal-lg');
     });
   }
-  //modal assing
-  var aux;
-  function fnOpenModalAssing(id)
-  {
-    aux=id;
-    var myModal = new bootstrap.Modal(document.getElementById('show2'));
-    var url = "{{ url('show_assing_tipo_equipo') }}/" + id;
-    $.get(url, function(data) {
-      // Borrar contenido anterior
-      $("#modalshow").empty();
-      // Establecer el contenido del modal
-      $("#modalshow").html(data);
-
-      // Borrar contenido anterior
-      $("#modalfooter").empty();
-      // Agregar el botón "Cerrar y Guardar" al footer
-
-      $("#modalfooter").append(closeButton);
-      $("#modalfooter").append(saveButton);
-
-      // Cambiar la acción del formulario
-      $('#myForm').attr('action', ruta_assing);
-
-      // Mostrar el modal
-      myModal.show();
-
-      // Cambiar el tamaño del modal a "modal-sm"
-      var modalDialog = myModal._element.querySelector('.modal-dialog');
-      modalDialog.classList.remove('modal-lg');
-      modalDialog.classList.add('modal-sm');
-    });
-    $('#show2').on('show.bs.modal', function (event) {
-    });
-  }
-  
 </script> 
 @stop

@@ -68,20 +68,27 @@
                 <td width="60" style="text-align: center;"><div class="circle_grey"></div></td>
               @endif
 
-              <td align="center" width="175">
-                <div class="d-inline-flex">
-                  <a href="#" class="btn btn-info btn-sm mr-1" data-toggle="modal" data-id="{{$empleado->id_p}}" data-nombre="{{$empleado->nombre_p}}" 
-                    data-apellido="{{$empleado->apellido}}" data-area="{{$empleado->area}}" data-dni="{{$empleado->dni}}" data-fe_nac="{{$empleado->fe_nac}}" 
-                    data-fe_ing="{{$empleado->fe_ing}}" data-interno="{{$empleado->interno}}" data-correo="{{$empleado->correo}}" data-activo="{{$empleado->activo}}" 
-                    data-jefe="{{$empleado->jefe}}" data-target="#editar_empleado">Editar
-                  </a>
-                  <form id="formDelete" action="{{ route('destroy_empleado', $empleado->id_p) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm btn-borrar" data-tooltip="Borrar"> X</button>
-                  </form>
+              <td>
+                <div class="text-center">
+                  <div class="btn-group">
+                    <div class="btn-container">
+                      <i href="#" class="fa-solid fa-pen-to-square actualizar-editar" style="margin-right: 10px;" data-toggle="modal" data-id="{{$empleado->id_p}}" data-nombre="{{$empleado->nombre_p}}" 
+                        data-apellido="{{$empleado->apellido}}" data-area="{{$empleado->area}}" data-dni="{{$empleado->dni}}" data-fe_nac="{{$empleado->fe_nac}}" 
+                        data-fe_ing="{{$empleado->fe_ing}}" data-interno="{{$empleado->interno}}" data-correo="{{$empleado->correo}}" data-activo="{{$empleado->activo}}" 
+                        data-jefe="{{$empleado->jefe}}" data-target="#editar_empleado">
+                      </i>
+                    </div>
+                    <form id="formDelete{{$empleado->id_p}}" action="{{ route('destroy_empleado', $empleado->id_p) }}" method="POST">
+                      @csrf
+                      @method('DELETE')
+                      <div class="btn-container">
+                        <i class="fa-solid fa-circle-xmark eliminar" data-tooltip="Borrar"></i>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </td>
+
             @endif
           </tr>
         @endforeach  
@@ -119,6 +126,18 @@
     </div>
   </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('.eliminar').click(function() {
+      // Obtenemos el formulario padre del ícono
+      var form = $(this).closest('form');
+      // Enviamos el formulario
+      form.submit();
+    });
+  });
+</script>
 
 <script>
   var closeButton = $('<button type="button" class="btn btn-secondary" id="closeButton" data-dismiss="modal">Cerrar</button>');

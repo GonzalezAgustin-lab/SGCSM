@@ -33,10 +33,13 @@
     <tbody>
       @foreach($areas as $area)
         <tr class="text-center">
-        <td width="80">{{$area->id_a}}</td>
-        <td>{{$area->nombre_a}}</td>
-        <td width="90"><button class="btn btn-info btn-sm" onclick='fnOpenModalUpdate("{{$area->id_a}}")' title="update"
-          data-nombre_a="{{$area->nombre_a}}" id="edit">Editar</button></td>
+          <td width="80">{{$area->id_a}}</td>
+          <td>{{$area->nombre_a}}</td>
+          <td width="90">
+            <div class="btn-container">
+              <i id="edit" onclick='fnOpenModalUpdate("{{$area->id_a}}")' title="update" data-nombre_a="{{$area->nombre_a}}" class="fa-solid fa-pen-to-square actualizar-editar"></i>
+            </div>
+          </td>
         </tr>
       @endforeach
     </tbody>       

@@ -22,12 +22,14 @@
       </button>
       <div class="collapse navbar-collapse" id="navbar1">
         <ul class="navbar-nav ml-auto">
-          <button class="btn btn-info" onclick='fnOpenModalStore()' data-toggle="modal" data-target="#agregar_localizacion">Agregar Localizacion</button>
+          <button class="btn btn-info" onclick='fnOpenModalStore()' data-toggle="modal" data-target="#agregar_localizacion">
+            <i class="fa-solid fa-plus"></i>
+          </button>
           &nbsp
           <form action="{{ url('/logout') }}" method="POST" >
             {{ csrf_field() }}
-            <button type="submit" class="btn btn-danger" style="display:inline;cursor:pointer">
-              Cerrar sesión
+            <button type="submit" class="btn btn-danger" style="display: inline; cursor: pointer;">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
             </button>
           </form>
         </ul>
