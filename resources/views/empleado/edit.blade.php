@@ -1,81 +1,65 @@
-<div class="modal fade" id="editar_empleado" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">           
-      <form action="{{ route('empleado.update', $empleado->id_p) }}" method="post" autocomplete="off">
-        {{ method_field('PUT')}} {{csrf_field()}}
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-12">
-              <input type="hidden" name="id_p" id="id_p" value="{{old('id_p')}}">
+<div class="col-md-12">
+  <input type="hidden" name="id_e" id="id_e" value="{{ $empleado->id_e }}">
 
-              <div class="row">
-                <div class="col-md-6">
-                  <label for="nombre_p"><strong>Nombre:</strong></label>
-                  <input type="text" name="nombre" class="form-control" id="nombre_p" autocomplete="off" value="{{old('nombre_p')}}" minlength="3" maxlength="30" required>
-                </div>
-                <div class="col-md-6">
-                  <label for="apellido"><strong>Apellido:</strong></label>
-                  <input type="text" name="apellido" class="form-control" id="apellido" autocomplete="off" value="{{old('apellido')}}" minlength="3" maxlength="30" required>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-6">
-                  <label for="dni"><strong>DNI:</strong></label>
-                  <input type="number" name="dni" class="form-control" id="dni" autocomplete="off" value="{{old('dni')}}" minlength="8" maxlength="11" required>
-                </div>
-                <div class="col-md-6">
-                  <label for="interno"><strong>Interno:</strong></label>
-                  <input type="number" name="interno" class="form-control" id="interno" autocomplete="off" value="{{old('interno')}}" minlength="2" maxlength="5">
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-6">
-                  <label for="fe_nac"><strong>Fecha de nacimiento:</strong></label>
-                  <input type="date" name="fe_nac" id="fe_nac" class="form-control" step="1" value="{{old('fe_nac')}}">
-                </div>
-                <div class="col-md-6">
-                  <label for="fe_ing"><strong>Fecha de ingreso:</strong></label>
-                  <input type="date" name="fe_ing" id="fe_ing" class="form-control" step="1" value="<?php echo date("Y-m-d");?>">
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col">
-                  <label for="correo"><strong>Correo electrónico:</strong></label>
-                  <input type="email" name="correo" class="form-control" id="correo" value="{{old('correo')}}" >
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-12">
-                  <label for="select_area"><strong>Area:</strong></label>
-                  <select class="form-control" name="area" id="select_area" required></select>
-                </div>
-              </div>
-
-              <p></p>
-              
-              <div class="row">
-                <div class="col-6">
-                  <label for="actividad"><strong>En actividad:</strong></label>
-                  <input type="checkbox" name="actividad" id="actividad">
-                </div>
-                <div class="col-6">
-                  <label for="esJefe"><strong>Es jefe:</strong></label>
-                  <input type="checkbox" name="esJefe" id="esJefe">
-                </div>
-              </div>
-
-              <p></p>
-              
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-              <button type="submit" class="btn btn-info">Editar</button>
-            </div>
-          </div>
-        </div>
-      </form>                
+  <div class="row">
+    <div class="col-md-6">
+      <label for="nombre_p"><strong>Nombre:</strong></label>
+      <input type="text" name="nombre" class="form-control" id="nombre_p" autocomplete="off" value="{{ $empleado->nombre }}" minlength="3" maxlength="30" required>
+    </div>
+    <div class="col-md-6">
+      <label for="apellido"><strong>Apellido:</strong></label>
+      <input type="text" name="apellido" class="form-control" id="apellido" autocomplete="off" value="{{ $empleado->apellido }}" minlength="3" maxlength="30" required>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <label for="dni"><strong>DNI:</strong></label>
+      <input type="number" name="dni" class="form-control" id="dni" autocomplete="off" value="{{ $empleado->dni }}" minlength="8" maxlength="11" required>
+    </div>
+    <div class="col-md-6">
+      <label for="interno"><strong>Interno:</strong></label>
+      <input type="number" name="interno" class="form-control" id="interno" autocomplete="off" value="{{ $empleado->interno }}" minlength="2" maxlength="5">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <label for="fe_nac"><strong>Fecha de nacimiento:</strong></label>
+      <input type="date" name="fe_nac" id="fe_nac" class="form-control" step="1" value="{{ $empleado->fe_nac }}">
+    </div>
+    <div class="col-md-6">
+      <label for="fe_ing"><strong>Fecha de ingreso:</strong></label>
+      <input type="date" name="fe_ing" id="fe_ing" class="form-control" step="1" value="{{ $empleado->fe_ing }}">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <label for="correo"><strong>Correo electrónico:</strong></label>
+      <input type="email" name="correo" class="form-control" id="correo" value="{{ $empleado->correo }}" >
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <label for="select_area"><strong>Area:</strong></label>
+      <select class="form-control" name="area" id="select_area" required></select>
+    </div>
+  </div>
+
+  <p></p>
+  
+  <div class="row">
+    <div class="col-6">
+      <label for="actividad"><strong>En actividad:</strong></label>
+      <input type="checkbox" name="actividad" id="actividad" {{ $empleado->activo ? 'checked' : '' }}>
+    </div>
+    <div class="col-6">
+      <label for="esJefe"><strong>Es jefe:</strong></label>
+      <input type="checkbox" name="esJefe" id="esJefe" {{ $empleado->jefe ? 'checked' : '' }}>
+    </div>
+  </div>
+
+  <p></p>
 </div>

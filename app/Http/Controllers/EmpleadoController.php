@@ -106,27 +106,23 @@ class EmpleadoController extends Controller{
         return redirect('empleado');
     }
 
-    public function destroy_empleado(Request $request, $id){
-        $empleado = Empleado::find($id);
-        $empleado->activo = 0;
-        $empleado->save();
-
-         return response()->json([
-        'message' => 'Empleado eliminado con éxito'
-        ]);       
-    }
-
     public function selectAreaEmpleados(){
         return DB::table('area')->get();
     }  
 
-    public function showUpdateAreaXJefe($id){
-        $idsJAs = Empleado::showAreaXJefeUpdate($id);
-        return view('empleado.update', ['idsJAs' => $idsJAs, 'idJefe' => $id]);
+    public function show_update_empleado($id_e)
+    {
+        $empleado = DB::table('personas')
+        ->select('id_p as id_e', 'nombre_p as nombre', 'apellido as apellido', 'dni as dni', 
+            'interno as interno', 'correo as correo', 'fe_nac as fe_nac', 'fe_ing as fe_ing', 
+            'area as area', 'jefe as jefe', 'activo as activo')
+        ->where('id_p', $id_e)
+        ->first();
+
+        return view('empleado.edit', ['empleado' => $empleado]);       
     }
 
-    public function obtenerNuevoListadoAreaXJefe($id){
-        $idsJAs = Empleado::showAreaXJefeUpdate($id);
-        return view('empleado.update', ['idsJAs' => $idsJAs, 'idJefe' => $id]);
-    }
+    public function select_areas(){
+        return Solicitud::getArea();
+    }   
 }

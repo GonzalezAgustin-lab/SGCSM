@@ -126,10 +126,7 @@ Route::middleware(['auth'])->group(function () {
 //****************Empleados**********************
 Route::middleware(['auth'])->group(function () {
     Route::resource('empleado', EmpleadoController::class);
-    Route::get('showUpdateAreaXJefe/{id_ja}',[EmpleadoController::class, 'showUpdateAreaXJefe'])->name('showUpdateAreaXJefe');
-    Route::get('deleteAreaXJefe/{id_ja}', [EmpleadoController::class, 'deleteAreaXJefe'])->name('deleteAreaXJefe');
-    Route::get('obtenerNuevoListadoAreaXJefe/{idJefe}', [EmpleadoController::class, 'obtenerNuevoListadoAreaXJefe'])->name('obtenerNuevoListadoAreaXJefe');
-    Route::get('showStoreAreaXJefe/{id_ja}', [EmpleadoController::class, 'showStoreAreaXJefe'])->name('showStoreAreaXJefe');
-    Route::get('destroy_empleado/{id}', [EmpleadoController::class, 'destroy_empleado'])->name('destroy_empleado');
     Route::get('selectAreaEmpleados', [EmpleadoController::class, 'selectAreaEmpleados']);
+    Route::get('show_update_empleado/{id_e}', [EmpleadoController::class, 'show_update_empleado'])->name('show_update_empleado');
+    Route::post('update_empleado', [EmpleadoController::class, 'update_empleado'])->name('update_empleado');
   });

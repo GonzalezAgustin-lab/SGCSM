@@ -70,25 +70,12 @@
 
               <td>
                 <div class="text-center">
-                  <div class="btn-group">
-                    <div class="btn-container">
-                      <i href="#" class="fa-solid fa-pen-to-square actualizar-editar" style="margin-right: 10px;" data-toggle="modal" data-id="{{$empleado->id_p}}" data-nombre="{{$empleado->nombre_p}}" 
-                        data-apellido="{{$empleado->apellido}}" data-area="{{$empleado->area}}" data-dni="{{$empleado->dni}}" data-fe_nac="{{$empleado->fe_nac}}" 
-                        data-fe_ing="{{$empleado->fe_ing}}" data-interno="{{$empleado->interno}}" data-correo="{{$empleado->correo}}" data-activo="{{$empleado->activo}}" 
-                        data-jefe="{{$empleado->jefe}}" data-target="#editar_empleado">
+                  <div class="btn-container">
+                      <i onclick='fnOpenModalUpdate("{{$empleado->id_p}}")' class="fa-solid fa-pen-to-square actualizar-editar" data-toggle="modal" data-target="#editar_empleado">
                       </i>
-                    </div>
-                    <form id="formDelete{{$empleado->id_p}}" action="{{ route('destroy_empleado', $empleado->id_p) }}" method="POST">
-                      @csrf
-                      @method('DELETE')
-                      <div class="btn-container">
-                        <i class="fa-solid fa-circle-xmark eliminar" data-tooltip="Borrar"></i>
-                      </div>
-                    </form>
                   </div>
                 </div>
               </td>
-
             @endif
           </tr>
         @endforeach  
@@ -102,13 +89,15 @@
 <div class="modal fade" id="show2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog estilo" role="document">
     <div class="modal-content">
-      {{csrf_field()}}
-      <div id="modalshow" class="modal-body">
-        <!-- Datos -->
-      </div>
-      <div id="modalfooter" class="modal-footer">
-        <!-- Footer -->
-      </div>
+      <form id="myForm" method="POST" enctype="multipart/form-data">
+        {{csrf_field()}}
+        <div id="modalshow" class="modal-body">
+          <!-- Datos -->
+        </div>
+        <div id="modalfooter" class="modal-footer">
+          <!-- Footer -->
+        </div>
+      </form>
     </div>
   </div>
 </div>
@@ -140,9 +129,10 @@
 </script>
 
 <script>
+  var ruta_update = '{{ route('update_empleado') }}';
   var closeButton = $('<button type="button" class="btn btn-secondary" id="closeButton" data-dismiss="modal">Cerrar</button>');
   var closeButton2 = $('<button type="button" class="btn btn-secondary" id="closeButton2" data-dismiss="modal">Cerrar</button>');
-  var saveButton = $('<button type="submit" class="btn btn-info" id="saveButton" onclick="fnSaveSolicitud()">Guardar</button>');
+  var saveButton = $('<button type="submit" class="btn btn-info" id="saveButton" onclick="fnSaveEmpleado()">Guardar</button>');
   var idJefe;
   function fnOpenModalJefeArea(id){
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
@@ -188,13 +178,13 @@
     });
 
     // Controlador para el modal
-    $('#show2').on('show.bs.modal', function (event) {
+    /*$('#show2').on('show.bs.modal', function (event) {
       // Actualizar opciones de selección
       updateSelectOptions();
-    });
+    });*/
   });
 
-  function actualizarContenidoModal(idJefe) {
+  /*function actualizarContenidoModal(idJefe) {
     // Realizar una nueva solicitud AJAX para obtener el contenido actualizado de la tabla
     $.ajax({
       url: window.location.protocol + '//' + window.location.host + "/obtenerNuevoListadoAreaXJefe/" + idJefe, 
@@ -205,91 +195,52 @@
         updateSelectOptions();
       },
     });
-  }
-  /*function fnOpenModalAgregarRelacion(id) {
-    var myModal3 = new bootstrap.Modal(document.getElementById('show3'));
+  }*/
+
+  function fnOpenModalUpdate(id_e) 
+  {
+    var myModal = new bootstrap.Modal(document.getElementById('show2'));
     $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/showStoreAreaXJefe/" + id,
+      url: window.location.protocol + '//' + window.location.host + "/show_update_empleado/" + id_e,
       type: 'GET',
       success: function(data) {
         // Borrar contenido anterior
-        $("#modalshow3").empty();
+        $("#modalshow").empty();
         // Establecer el contenido del modal
-        $("#modalshow3").html(data);
-
+        $("#modalshow").html(data);
+        console.log(data);
         // Borrar contenido anterior
-        $("#modalfooter3").empty();
+        $("#modalfooter").empty();
 
-        // Agregar el botón "Cerrar y Guardar" al footer
-        $("#modalfooter3").append(saveButton);
-        $("#modalfooter3").append(closeButton2);
+        // Agregar el botón "Cerrar" al footer
+        $("#modalfooter").append(closeButton);
+        $("#modalfooter").append(saveButton);
+
+        //Cambiar la acción del formulario
+        $('#myForm').attr('action', ruta_update);
 
         // Mostrar el modal
-        myModal3.show();
+        myModal.show();
 
         // Cambiar el tamaño del modal a "modal-lg"
-        var modalDialog = myModal3._element.querySelector('.modal-dialog');
+        var modalDialog = myModal._element.querySelector('.modal-dialog');
         modalDialog.classList.remove('modal-sm');
-        modalDialog.classList.add('modal-lg');
-
+        modalDialog.classList.remove('modal-lg');
       },
     });
-  }*/
+  }
 
-  $('#editar_empleado').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) 
-    var id = button.data('id')
-    var nombre = button.data('nombre')
-    var apellido = button.data('apellido')
-    var area = button.data('area')
-    var dni = button.data('dni')
-    var interno = button.data('interno')
-    var fe_nac = button.data('fe_nac')
-    var fe_ing = button.data('fe_ing')
-    var correo = button.data('correo')
-    var activo = button.data('activo')
-    var jefe = button.data('jefe')
-    var actividad = $('#actividad');
-    var esJefe = $('#esJefe');
-    var modal = $(this)
-    
-    actividad.prop('checked', activo == 1);
-    esJefe.prop('checked', jefe == 1);
-    modal.find('.modal-body #id_p').val(id);
-    modal.find('.modal-body #nombre_p').val(nombre);
-    modal.find('.modal-body #apellido').val(apellido);
-    modal.find('.modal-body #dni').val(dni);
-    modal.find('.modal-body #interno').val(interno);
-    modal.find('.modal-body #fe_nac').val(fe_nac);
-    modal.find('.modal-body #fe_ing').val(fe_ing);
-    modal.find('.modal-body #correo').val(correo);
-
-    var actividadCheckbox = $('#actividad');
-    var jefeCheckbox = $('#esJefe');
-
-    var actividadChecked = actividadCheckbox.prop('checked');
-    var jefeChecked = jefeCheckbox.prop('checked');
-
-    if (actividadChecked && jefeChecked) {
-      $('#actividad').prop('checked', true);
-      $('#esJefe').prop('checked', true);
-      $('#esJefe').prop('disabled', false);
-    } else if(actividadChecked && !jefeChecked) {
-      $('#actividad').prop('checked', true);
-      $('#esJefe').prop('checked', false);
-      $('#esJefe').prop('disabled', false);
-    }else if(!actividadChecked && jefeChecked) {
-      console.log("jefe");
-      $('#actividad').prop('checked', false);
-      $('#esJefe').prop('checked', false);
-      $('#esJefe').prop('disabled', true);
-    }else if(!actividadChecked && !jefeChecked) {
-      console.log("ninguno");
-      $('#actividad').prop('checked', false);
-      $('#esJefe').prop('checked', false);
-      $('#esJefe').prop('disabled', true);
+  function fnSaveSolicitud(){
+    var form = document.getElementById('myForm');
+    if (form.checkValidity()) {
+      $('#saveButton').prop('disabled', true);
+      $('#myForm').submit();
+    } else {
+      console.log('El formulario no es válido. Completar los campos requeridos antes de enviar.');
     }
+  }
 
+  $('#show2').on('show.bs.modal', function (event){
     $.get('selectAreaEmpleados/',function(data){
       var html_select = '<option value="">Seleccione </option>'
       for(var i = 0; i<data.length; i ++){
@@ -301,27 +252,7 @@
       }
       $('#select_area').html(html_select);
     });
-
-    // Asigna el evento change al checkbox de actividad
-    $('#actividad').on('change', function(event) {
-      handleActividadChange(event);
-    });
-
-    function handleActividadChange(event) {
-      // Si event está definido, obten el checkbox de actividad
-      var actividadCheckbox = event ? $(event.target) : $('#actividad');
-
-      if (actividadCheckbox.prop('checked')) {
-        // Si se marca el checkbox de actividad, desactiva el checkbox de jefe
-        $('#esJefe').prop('checked', false);
-        $('#esJefe').prop('disabled', false);
-      } else {
-        // Si se desmarca el checkbox de actividad, habilita el checkbox de jefe
-        $('#esJefe').prop('disabled', true);
-        $('#esJefe').prop('checked', false);
-      }
-    }
-  })
+  });
 </script>
 
 <script> 
@@ -345,7 +276,6 @@
    });
  });
 </script>
-
 
 <script>
   $(document).ready(function(){
@@ -371,7 +301,6 @@
     });
 });
 </script>
-
 
 @endsection
 
