@@ -176,14 +176,7 @@
         $('#esJefeCreate').prop('checked', false);
       }
     });
-
-    // Controlador para el modal
-    /*$('#show2').on('show.bs.modal', function (event) {
-      // Actualizar opciones de selección
-      updateSelectOptions();
-    });*/
   });
-
   /*function actualizarContenidoModal(idJefe) {
     // Realizar una nueva solicitud AJAX para obtener el contenido actualizado de la tabla
     $.ajax({
@@ -229,6 +222,19 @@
       },
     });
   }
+
+  /*$('#show2').on('show.bs.modal', function (event) {
+    $.get('select_tablas/',function(data){
+      data[0].forEach(item => {
+        if ((item.id_a === solicitud[0].idAreaProyecto) || (item.id_a === solicitud[0].idAreaEquipo) || (item.id_a === solicitud[0].idAreaEdilicio)) {
+          htmlSelectArea += `<option value="${item.id_a}" selected>${item.nombre_a}</option>`;
+          areaPrecargada = true;
+        } else {
+          htmlSelectArea += `<option value="${item.id_a}">${item.nombre_a}</option>`;
+        }
+      });
+    });
+  });*/
 
   function fnSaveSolicitud(){
     var form = document.getElementById('myForm');

@@ -19,7 +19,6 @@ class EmpleadoController extends Controller{
 
     public function index(Request $request){
         $empleados = Empleado::Relacion()->get();
-
         return view ('empleado.index', array('empleados' => $empleados));
     }
     

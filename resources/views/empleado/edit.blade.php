@@ -15,7 +15,7 @@
   <div class="row">
     <div class="col-md-6">
       <label for="dni"><strong>DNI:</strong></label>
-      <input type="number" name="dni" class="form-control" id="dni" autocomplete="off" value="{{ $empleado->dni }}" minlength="8" maxlength="11" required>
+      <input disabled type="number" name="dni" class="form-control" id="dni" autocomplete="off" value="{{ $empleado->dni }}" minlength="8" maxlength="11" required>
     </div>
     <div class="col-md-6">
       <label for="interno"><strong>Interno:</strong></label>
