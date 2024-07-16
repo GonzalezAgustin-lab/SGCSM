@@ -1,3 +1,6 @@
+<!-- Título del modal -->
+<h5 class="modal-title">Agregar equipamiento</h5>
+<hr>
 
 <div class="form-group col-md-12">
   <div class="row">

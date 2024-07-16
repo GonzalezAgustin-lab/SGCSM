@@ -1,8 +1,10 @@
 
 <!-- Modal Mostrar-->
+<!-- Título del modal -->
+<h5 class="modal-title">Detalle</h5>
+<hr>
+
 <div class="col-md-12">
-    <h4> Detalle: </h4>
-    <hr>
     <div class="row">
         <div class="col-md-4">
             <strong>ID: </strong>
@@ -48,11 +50,11 @@
         </div>
     </div>  
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <strong>Solicitante: </strong>
             <p>{{$solicitud->nombre_solicitante}} {{$solicitud->apellido_solicitante}}</p>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <strong>Encargado: </strong>
             @if($solicitud->nombre_encargado)
                 <p>{{$solicitud->nombre_encargado}} {{$solicitud->apellido_encargado}}</p>

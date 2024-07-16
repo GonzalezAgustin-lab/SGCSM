@@ -5,6 +5,11 @@
         {{csrf_field()}}
         <div class="modal-body">
           <div class="row">
+
+            <!-- Título del modal -->
+            <h5 class="modal-title">Agregar empleado</h5>
+            <hr>
+
             <div class="col-md-12">
               <input type="hidden" name="id" value="{{{ isset($empleado->id_p) ? $empleado->id_p : ''}}}">
               <div class="row">

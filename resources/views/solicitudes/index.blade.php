@@ -877,7 +877,7 @@
         var html_select = '<option value="">Seleccione </option>'
         for(var i = 0; i<data[0].length; i ++){
           for(var k = 0; k<data[1].length; k ++){
-            if((data[0][i].id == data[1][k].model_id) && (data[1][k].role_id == 21 || data[1][k].role_id == 24 || data[1][k].role_id == 30)){
+            if((data[0][i].id == data[1][k].model_id) && (data[1][k].role_id == 3)){
               html_select += '<option value ="'+data[0][i].id+'">'+data[0][i].name+'</option>';
             }
           }

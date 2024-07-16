@@ -1,3 +1,6 @@
+<!-- Título del modal -->
+<h5 class="modal-title">Editar empleado</h5>
+<hr>
 <div class="col-md-12">
   <input type="hidden" name="id_e" id="id_e" value="{{ $empleado->id_e }}">
 
