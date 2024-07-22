@@ -22,9 +22,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbar1">
       <ul class="navbar-nav ml-auto">    
-        <a class="btn btn-info"  data-toggle="modal" data-target="#agregar_usuario" type="submit">
+        <button class="btn btn-info" data-toggle="modal" data-target="#agregar_usuario">
           <i class="fa-solid fa-plus"></i>
-        </a>
+        </button>
         &nbsp
         <!--<button class="btn btn-info"  data-toggle="modal" data-target="#agregar_permiso">Nuevo permiso</button> -->      
         <form action="{{ url('/logout') }}" method="POST" >
