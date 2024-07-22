@@ -44,6 +44,7 @@
       @endforeach
     </tbody>       
   </table>
+
   <div class="modal fade" id="show2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -59,6 +60,7 @@
       </div>
     </div>
   </div>
+  
   {{ $areas->appends($_GET)->links() }}
 </div>
 <script> 

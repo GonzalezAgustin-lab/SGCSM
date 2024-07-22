@@ -46,8 +46,8 @@
 
   <div class="row">
     <div class="col-12">
-      <label for="select_area"><strong>Area:</strong></label>
-      <select class="form-control" name="area" id="select_area" required></select>
+      <label for="area"><strong>Area:</strong></label>
+      <select class="form-control" name="area" id="area" required></select>
     </div>
   </div>
 
@@ -55,12 +55,12 @@
   
   <div class="row">
     <div class="col-6">
-      <label for="actividad"><strong>En actividad:</strong></label>
-      <input type="checkbox" name="actividad" id="actividad" {{ $empleado->activo ? 'checked' : '' }}>
+      <label for="actividadEditar"><strong>En actividad:</strong></label>
+      <input type="checkbox" name="actividadEditar" id="actividadEditar" {{ $empleado->activo ? 'checked' : '' }}>
     </div>
     <div class="col-6">
-      <label for="esJefe"><strong>Es jefe:</strong></label>
-      <input type="checkbox" name="esJefe" id="esJefe" {{ $empleado->jefe ? 'checked' : '' }}>
+      <label for="esJefeEditar"><strong>Es jefe:</strong></label>
+      <input type="checkbox" name="esJefeEditar" id="esJefeEditar" {{ $empleado->jefe ? 'checked' : '' }}>
     </div>
   </div>
 

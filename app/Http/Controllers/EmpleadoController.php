@@ -19,9 +19,24 @@ class EmpleadoController extends Controller{
 
     public function index(Request $request){
         $empleados = Empleado::Relacion()->get();
+        //ver contenido de lo que trae de la base de datos
+        /*$atributosEmpleados = [];
+
+        // Iterar sobre la colección de empleados y almacenar los atributos en un array
+        foreach ($empleados as $empleado) {
+            // Asegúrate de estar accediendo correctamente a los atributos
+            $atributosEmpleados[] = $empleado->attributesToArray();
+        }
+    
+        // Mostrar los atributos de todos los empleados
+        dd($atributosEmpleados);    */ 
         return view ('empleado.index', array('empleados' => $empleados));
     }
     
+    public function show_store_empleado(){
+        return view('empleado.create');       
+    }
+
     public function store(Request $request){
         $aux= DB::table('personas')->where('personas.dni',$request['dni'])->first();
 
@@ -67,30 +82,29 @@ class EmpleadoController extends Controller{
         return view ('empleado.edit', ['empleado' => $empleados], ['area' => $area]);
     }
     
-    public function update(Request $request, $id){
-        $activo = ($request['actividad'] == 'on') ? 1 : 0;
-        $jefe = ($request['esJefe'] == 'on') ? 1 : 0;
+    public function update_empleado(Request $request){
+        $activo = ($request['actividadEditar'] == 'on') ? 1 : 0;
+        $jefe = ($request['esJefeEditar'] == 'on') ? 1 : 0;
 
         if(!$activo) {
             //elimino todas las filas en las que el usuario tenia permisos 
             DB::table('model_has_roles')
                 ->leftjoin('users', 'users.id', 'model_has_roles.model_id')
                 ->leftjoin('personas', 'personas.usuario', 'users.id')
-                ->where('personas.id_p', $request['id_p'])
+                ->where('personas.id_p', $request['id_e'])
                 ->delete();
-            //elimino usuario si descativo la persona
+            //elimino usuario si desactivo la persona
             DB::table('users')
                 ->join('personas', 'users.id', '=', 'personas.usuario')
-                ->where('personas.id_p', $request['id_p'])
+                ->where('personas.id_p', $request['id_e'])
                 ->delete();
         }
 
         $empleado = DB::table('personas')
-            ->where('personas.id_p',$request['id_p'])
+            ->where('personas.id_p',$request['id_e'])
             ->update([
                 'nombre_p' => $request['nombre'],
                 'apellido' => $request['apellido'],
-                'dni' => $request['dni'],
                 'interno' => $request['interno'],
                 'correo' => $request['correo'],
                 'fe_nac' => $request['fe_nac'],

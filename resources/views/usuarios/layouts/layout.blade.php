@@ -22,7 +22,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbar1">
       <ul class="navbar-nav ml-auto">    
-        <a href="#" class="btn btn-info"  data-toggle="modal" data-target="#agregar_usuario" type="submit">
+        <a class="btn btn-info"  data-toggle="modal" data-target="#agregar_usuario" type="submit">
           <i class="fa-solid fa-plus"></i>
         </a>
         &nbsp
