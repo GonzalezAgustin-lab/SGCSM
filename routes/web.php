@@ -150,7 +150,7 @@ Route::middleware(['auth'])->group(function () {
 //****************Roles**********************
 Route::middleware(['auth'])->group(function () {
     Route::resource('roles', RolController::class)->middleware('role:Administrador');
-    Route::post('store_rol', [RolController::class, 'store_rol'])->middleware('role:Administrador');
+    /*Route::post('store_rol', [RolController::class, 'store_rol'])->middleware('role:Administrador');*/
     /*Route::post('store_permiso', [RolController::class, 'store_permiso'])->middleware('role:Administrador');*/
     Route::post('asignar_permiso', [RolController::class, 'asignar_permiso'])->middleware('role:Administrador');
     Route::post('revocar_permiso', [RolController::class, 'revocar_permiso'])->middleware('role:Administrador');

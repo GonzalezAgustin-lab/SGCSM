@@ -36,8 +36,6 @@
 </head>
 <script type="text/javascript" src="{{ URL::asset('/js/bootstrap.min.js') }}"></script>
 
-@include('roles.create_rol')
-
 <body>
   @yield('content')
 </body>
