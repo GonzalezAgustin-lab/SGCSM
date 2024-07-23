@@ -1,4 +1,6 @@
 <!-- Modal Agregar-->
+<h5 class="modal-title">Agregar localizacion</h5>
+<hr>
 <div class="form-group col-md-12">
   <div class="row">
     <div class="col-6">
