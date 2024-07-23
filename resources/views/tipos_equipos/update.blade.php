@@ -1,4 +1,6 @@
 <!-- Modal Editar-->
+<h5 class="modal-title">Actualizar tipo de equipo</h5>
+<hr>
 <div class="form-group col-md-12">
   <div class="row">
     <div class="col">
