@@ -3,11 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Historico_solicitudes extends Model
 {
-    public $table = "historico_solicitudes";
-    public $timestamps = false;
+    use SoftDeletes;
+    protected $table = 'historico_solicitudes';
+    protected $primaryKey = 'id_solicitud';
+    public $timestamps = false; // Deshabilita las marcas de tiempo
+
     /*public function scopeID_solicitud($query, $id_solitud)
     {
         if($id_solitud)

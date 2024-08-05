@@ -4,10 +4,19 @@ namespace App;
 use App\Historico_solicitudes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Solicitud extends Model{
+    use SoftDeletes;
     public $table = "solicitudes";
     public $timestamps = false;
+    public function scopeFilterByRequest($query, $request)
+    {
+        return $query->ID($request->get('id_solicitud'))
+                    ->Equipo($request->get('id_equipo'))
+                    ->Titulo($request->get('titulo'))
+                    ->Relaciones_index($request->get('id_tipo_solicitud'), $request->get('id_estado'), $request->get('id_encargado'), $request->get('id_solicitante'), $request->get('fecha'));
+    }
     public function scopeID($query, $id_solicitud){
         if($id_solicitud){
             return $query -> where('id_solicitud','LIKE',"%$id_solicitud%");
@@ -81,7 +90,6 @@ class Solicitud extends Model{
                 'estados.nombre as estado', 
                 'area_equipo.nombre_a as area_equipo', 
                 'area_edilicio.nombre_a as area_edilicio', 
-                'area_proyecto.nombre_a as area_proyecto',
                 'loc_equipo.nombre as loc_equipo', 
                 'loc_edilicio.nombre as loc_edilicio')
             ->leftjoin('historico_solicitudes', 'historico_solicitudes.id_solicitud', 'solicitudes.id')
@@ -94,22 +102,27 @@ class Solicitud extends Model{
             ->leftjoin('localizaciones as loc_edilicio', 'loc_edilicio.id' ,'solicitudes.id_localizacion_edilicio')
             ->leftjoin('area as area_equipo', 'area_equipo.id_a', 'equipos_mant.id_area')
             ->leftjoin('area as area_edilicio', 'area_edilicio.id_a', 'loc_edilicio.id_area')
-            ->leftjoin('area as area_proyecto', 'area_proyecto.id_a', 'solicitudes.id_area_proyecto')
             ->where('historico_solicitudes.actual', '=', 1)
             ->where('solicitudes.id', $id);
     }
-    public function scopeHistoricoSolicitudes($query, $id){
-        return $query->leftjoin('estados', 'estados.id', 'historico_solicitudes.id_estado') 
-            ->where('id_solicitud', $id)
-            ->select('historico_solicitudes.descripcion as descripcion', 
-                'estados.nombre as estado', 
-                'historico_solicitudes.fecha as fecha', 
-                'historico_solicitudes.repuestos as rep', 
-                'historico_solicitudes.descripcion_repuestos as desc_rep')
-            ->from('historico_solicitudes')
+    public function scopeHistoricoSolicitudes($query, $id)
+    {
+        return $query->from('historico_solicitudes')
+            ->leftJoin('estados', 'estados.id', '=', 'historico_solicitudes.id_estado')
+            ->leftJoin('solicitudes as s', 's.id', '=', 'historico_solicitudes.id_solicitud')
+            ->withoutGlobalScopes() // Ignora los alcances globales, como el borrado lógico
+            ->where('historico_solicitudes.id_solicitud', $id)
+            ->whereNull('s.deleted_at') // Usa el alias 's' para la columna 'deleted_at'
+            ->select(
+                'historico_solicitudes.descripcion as descripcion',
+                'estados.nombre as estado',
+                'historico_solicitudes.fecha as fecha',
+                'historico_solicitudes.repuestos as rep',
+                'historico_solicitudes.descripcion_repuestos as desc_rep'
+            )
             ->orderBy('fecha', 'desc')
             ->get();
-    }
+    }    
     public static function getEquiposMantenimientoConLocalizacionYArea(){
         return DB::table('equipos_mant')
         ->leftJoin('localizaciones', 'localizaciones.id', 'equipos_mant.id_localizacion')
@@ -189,10 +202,9 @@ class Solicitud extends Model{
         ->where('solicitudes.id', $idSolicitud)
         ->update(['id_encargado' => $idUser]);
     }
-    public static function getHistoricosDeUnaSolicitud($id){
-        return DB::table('historico_solicitudes')
-        ->where('historico_solicitudes.id_solicitud', $id)
-        ->get();
+    public static function getHistoricosDeUnaSolicitud($id)
+    {
+        return Historico_solicitudes::where('id_solicitud', $id)->get();
     }
     public static function deleteHistorico($id){
         DB::table('historico_solicitudes')->where('id_solicitud', $id)->delete();
@@ -240,14 +252,13 @@ class Solicitud extends Model{
 
         return $consulta;
     }
-    public static function editSolicitud($id, $estado, $titulo, $descripcion, $equipo, $tipo, $area, $localizacion){
+    public static function editSolicitud($id, $estado, $titulo, $descripcion, $equipo, $tipo, $localizacion){
         DB::table('solicitudes')
             ->where('solicitudes.id', $id)
             ->update([
                 'titulo' => $titulo, 
                 'id_equipo' => $equipo, 
                 'id_tipo_solicitud' => $tipo, 
-                'id_area_proyecto' => $area, 
                 'id_localizacion_edilicio' => $localizacion]);
         
         //este codigo se utiliza desarrollo por incompatibilidad en las versiones de la base de datos con la consulta

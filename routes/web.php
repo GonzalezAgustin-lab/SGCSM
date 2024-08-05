@@ -50,7 +50,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('show_solicitud/{solicitud}', [SolicitudController::class, 'show_solicitud'])->name('show_solicitud');
     Route::get('aprobar_solicitud/{solicitud}', [SolicitudController::class, 'aprobar_solicitud']);
-    Route::get('destroy_solicitud/{solicitud}', [SolicitudController::class, 'destroy_solicitud']);
+    Route::delete('destroy_solicitud/{solicitud}', [SolicitudController::class, 'destroy_solicitud']);
 
     Route::get('select_tablas', [SolicitudController::class, 'select_tablas'])->name('select_tablas');
     Route::get('select_estado', [SolicitudController::class, 'select_estado'])->name('select_estado');

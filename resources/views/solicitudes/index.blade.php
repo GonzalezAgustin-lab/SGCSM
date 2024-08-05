@@ -85,7 +85,7 @@
           <option value="0">{{'Todos'}} </option>
           @foreach($usuarios as $usuario)
             @foreach($model_as_roles as $model_as_rol)
-              @if(($model_as_rol->role_id == 21 || $model_as_rol->role_id == 24 || $model_as_rol->role_id == 25 || $model_as_rol->role_id == 30) and $usuario->idUsuario == $model_as_rol->model_id)
+              @if(($model_as_rol->role_id == 3) and ($usuario->idUsuario == $model_as_rol->model_id))
                 @if($usuario->idPersona == $id_encargado)
                   <option value="{{$usuario->idPersona}}" selected>{{$usuario->name}} </option>
                 @else
@@ -182,7 +182,13 @@
                     </div>
                   @endif
                   <div class="btn-container">
-                    <i class="fa-solid fa-circle-xmark eliminar" href="{{url('destroy_solicitud', $solicitud->id)}}" title="Borrar" onclick="return confirm('Está seguro que desea eliminar esta solicitud?')" data-position="top" data-delay="50" data-tooltip="Borrar"></i>
+                    <form action="{{ url('destroy_solicitud', $solicitud->id) }}" method="POST" onsubmit="return confirm('Está seguro que desea eliminar esta solicitud?')" style="display: inline;">
+                      @csrf
+                      @method('DELETE')
+                      <button class="btnEliminar" type="submit" title="Borrar">
+                        <i class="eliminar fa-solid fa-circle-xmark"></i>
+                      </button>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -191,6 +197,20 @@
         @endforeach
     </tbody>
   </table>
+
+<style>
+.btnEliminar{
+    background: transparent; /* Fondo transparente */
+    border: none; /* Sin borde */
+    padding: 0; /* Sin padding */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    outline: none; /* Elimina el borde de enfoque */
+}
+
+.btnEliminar:focus {
+    outline: none; /* Elimina el borde de enfoque cuando el botón está enfocado */
+}
+</style>
 
   {{ $solicitudes->appends($_GET)->links() }}
   <br>
@@ -204,6 +224,22 @@
             <!-- Datos -->
           </div>
           <div id="modalfooter" class="modal-footer">
+            <!-- Footer -->
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="show3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog estilo" role="document">
+      <div class="modal-content">
+        <form id="myForm3" method="POST" enctype="multipart/form-data">
+          {{csrf_field()}}
+          <div id="modalshow3" class="modal-body">
+            <!-- Datos -->
+          </div>
+          <div id="modalfooter3" class="modal-footer">
             <!-- Footer -->
           </div>
         </form>
@@ -531,8 +567,8 @@
         var modalDialog = myModal3._element.querySelector('.modal-dialog');
         modalDialog.classList.remove('modal-sm');
         modalDialog.classList.add('modal-lg');
-        modalDialog.style.width = '100%'; // Añade esta línea
-        modalDialog.style.maxWidth = '100%'; // Añade esta línea
+        modalDialog.style.width = '90%'; // Añade esta línea
+        modalDialog.style.maxWidth = '90%'; // Añade esta línea
       },
     });
   }

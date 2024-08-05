@@ -19,54 +19,36 @@ use DB;
 
 
 class SolicitudController extends Controller{
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $userAutenticado = Auth::id();
         $areaUserAutenticado = Solicitud::obtenerAreaUserAutenticado($userAutenticado);
         $personaAutenticada1 = Solicitud::obtenerIdPersonaAutenticada($userAutenticado);
         $personaAutenticada = $personaAutenticada1->id_p;
-        
-        $solicitudesQuery = Solicitud::ID($request->get('id_solicitud'))
-            ->Equipo($request->get('id_equipo'))
-            ->Titulo($request->get('titulo'))
-            ->Relaciones_index($request->get('id_tipo_solicitud'), $request->get('id_estado'), $request->get('id_encargado'), $request->get('id_solicitante'), $request->get('fecha'))
+    
+        $solicitudesQuery = Solicitud::filterByRequest($request)
             ->orderBy('id_solicitud', 'desc');
+    
         if (Gate::allows('ver-todas-las-solicitudes')) {
-            // Jefe
-            $solicitudes = $solicitudesQuery->where('id_tipo_solicitud', '!=', 3)->paginate(20);
-        } elseif (Gate::allows('ver-solicitudes-asignadas')) {
-            // Empleados - Solicitudes asignadas
-            $solicitudes = $solicitudesQuery->where('id_encargado', $personaAutenticada)->paginate(20);
-        } elseif (Gate::allows('ver-solicitudes-sin-asignar')) {
-            // Empleados que pueden asignar
-            $solicitudes = $solicitudesQuery->where(function ($query) use ($personaAutenticada) {
-                $query->where('id_encargado', $personaAutenticada)
-                    ->where('id_tipo_solicitud', '!=', 3)
-                    ->orWhereNull('id_encargado');
-            })->paginate(20);
-        } elseif (Gate::allows('ver-todas-las-solicitudes-y-proyectos')){
             $solicitudes = $solicitudesQuery->paginate(20);
-        } elseif (Gate::allows('ver-proyectos')){
-            //revisar -----------------
-            $solicitudes = $solicitudesQuery->where('id_encargado', $personaAutenticada)->orWhere('id_tipo_solicitud', 3)->where('historico_solicitudes.actual', '=', 1)->paginate(20);
-        }else{
-            // usuarios
+        } elseif (Gate::allows('ver-solicitudes-asignadas')) {
+            $solicitudes = $solicitudesQuery->where('id_encargado', $personaAutenticada)->paginate(20);
+        } else {
             $solicitudes = $solicitudesQuery->where(function ($query) use ($areaUserAutenticado, $personaAutenticada) {
                 $query->where('id_area', $areaUserAutenticado->area)
-                    ->orWhere('id_solicitante', $personaAutenticada);
+                      ->orWhere('id_solicitante', $personaAutenticada);
             })->paginate(20);
         }
     
-        $tiposSolicitudes = DB::table('tipo_solicitudes')->orderBy('nombre','asc')->get();
-        $estados = DB::table('estados')->orderBy('nombre','asc')->get();
-        $usuarios = DB::table('users')->orderBy('name','asc')
+        // Cargar datos adicionales
+        $tiposSolicitudes = DB::table('tipo_solicitudes')->orderBy('nombre', 'asc')->get();
+        $estados = DB::table('estados')->orderBy('nombre', 'asc')->get();
+        $usuarios = DB::table('users')->orderBy('name', 'asc')
             ->leftjoin('personas', 'personas.usuario', 'users.id')
-            ->select('users.id as idUsuario',
-                'users.name as name',
-                'personas.id_p as idPersona')
+            ->select('users.id as idUsuario', 'users.name as name', 'personas.id_p as idPersona')
             ->get();
         $model_as_roles = DB::table('model_has_roles')->get();
     
-
         return view('solicitudes.index', [
             'solicitudes' => $solicitudes,
             'tiposSolicitudes' => $tiposSolicitudes,
@@ -256,10 +238,11 @@ class SolicitudController extends Controller{
         $historico_solicitudes = Solicitud::getHistoricosDeUnaSolicitud($id);
 
         foreach ($historico_solicitudes as $historico_solicitud) {
-            Solicitud::deleteHistorico($historico_solicitud->id_solicitud); 
+            $historico_solicitud->delete();
         }
 
         $solicitud -> delete(); 
+
         Session::flash('message','Solicitud eliminada con éxito');
         Session::flash('alert-class', 'alert-success');
         return redirect('solicitudes');
@@ -338,7 +321,6 @@ class SolicitudController extends Controller{
             'historico_solicitudes.fecha as fecha', 
             'historico_solicitudes.id_estado as estado',
             'tipo_solicitudes.nombre as nombreTipoSolicitud',
-            'solicitudes.id_area_proyecto as idAreaProyecto',
             'equipos_mant.id_area as idAreaEquipo', 
             'equipos_mant.id_localizacion as idLocalizacionEquipo', 
             'equipos_mant.descripcion as descripcionEquipo',
@@ -358,13 +340,13 @@ class SolicitudController extends Controller{
 
     public function edit_solicitud(Request $request){
         if($request['tipo_solicitud1'] == 1){
-            Solicitud::editSolicitud($request['idSolicitud1'], $request['estado1'], $request['titulo1'], $request['descripcion1'], $request['equipo1'], $request['tipo_solicitud1'], null, null);
+            Solicitud::editSolicitud($request['idSolicitud1'], $request['estado1'], $request['titulo1'], $request['descripcion1'], $request['equipo1'], $request['tipo_solicitud1'], null);
         }
         elseif($request['tipo_solicitud1'] == 2){
-            Solicitud::editSolicitud($request['idSolicitud1'], $request['estado1'], $request['titulo1'], $request['descripcion1'], null, $request['tipo_solicitud1'], null, $request['localizacion1']);
+            Solicitud::editSolicitud($request['idSolicitud1'], $request['estado1'], $request['titulo1'], $request['descripcion1'], null, $request['tipo_solicitud1'], $request['localizacion1']);
         }
         elseif($request['tipo_solicitud1'] == 3){
-            Solicitud::editSolicitud($request['idSolicitud1'], $request['estado1'], $request['titulo1'], $request['descripcion1'], null, null, $request['tipo_solicitud1'], $request['area1'], null);
+            Solicitud::editSolicitud($request['idSolicitud1'], $request['estado1'], $request['titulo1'], $request['descripcion1'], null, null, $request['tipo_solicitud1'], null);
         }
        
         Session::flash('message','Solicitud editada con éxito');
