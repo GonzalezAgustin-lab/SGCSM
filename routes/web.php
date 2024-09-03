@@ -1,16 +1,17 @@
 <?php
 
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\EmpleadoController;
-use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\RolController;
-use App\Http\Controllers\SolicitudController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AreaController;
-use App\Http\Controllers\LocalizacionController;
 use App\Http\Controllers\EstadoController;
+use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\EmpleadoController;
+use App\Http\Controllers\SolicitudController;
 use App\Http\Controllers\Tipo_EquipoController;
-use App\Http\Controllers\Tipo_SolicitudController;
 use App\Http\Controllers\Equipo_mantController;
+use App\Http\Controllers\LocalizacionController;
+use App\Http\Controllers\Tipo_SolicitudController;
+use App\Http\Controllers\MantenimientoPreventivoController;
 
 //****************Rutas de Autenticación**********************
 Auth::routes();
@@ -156,4 +157,20 @@ Route::middleware(['auth'])->group(function () {
     Route::post('revocar_permiso', [RolController::class, 'revocar_permiso'])->middleware('role:Administrador');
     Route::get('select_permiso/{id}', [RolController::class, 'select_permiso'])->name('select_permiso');
     Route::get('select_revocar_permiso/{id}',[RolController::class, 'select_revocar_permiso'])->name('select_revocar_permiso');
+});
+
+//****************Mantenimiento preventivo**********************
+Route::middleware(['auth'])->group(function () {
+    Route::resource('mantenimientoPreventivo', MantenimientoPreventivoController::class)->middleware('role:Administrador');
+
+    Route::get('show_store_mant_prev', [MantenimientoPreventivoController::class, 'show_store_mant_prev'])->name('show_store_mant_prev');
+    Route::post('store_mant_prev', [MantenimientoPreventivoController::class, 'store_mant_prev'])->name('store_mant_prev');
+
+    Route::get('show_mostrar_equipos_mant', [MantenimientoPreventivoController::class, 'show_mostrar_equipos_mant'])->name('show_mostrar_equipos_mant');
+    Route::post('mostrar_equipos_mant', [MantenimientoPreventivoController::class, 'mostrar_equipos_mant'])->name('mostrar_equipos_mant');
+    Route::get('select_tablas', [MantenimientoPreventivoController::class, 'select_tablas'])->name('select_tablas');
+
+    /*Route::get('show_update_equipo_mant/{equipo_mant}', [MantenimientoPreventivoController::class, 'show_update_equipo_mant'])->name('show_update_equipo_mant');
+    Route::post('update_equipo_mant', [MantenimientoPreventivoController::class, 'update_equipo_mant'])->name('update_equipo_mant');
+    */
 });
