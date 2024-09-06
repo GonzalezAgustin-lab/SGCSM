@@ -11,7 +11,7 @@ use App\Http\Controllers\Tipo_EquipoController;
 use App\Http\Controllers\Equipo_mantController;
 use App\Http\Controllers\LocalizacionController;
 use App\Http\Controllers\Tipo_SolicitudController;
-use App\Http\Controllers\MantenimientoPreventivoController;
+use App\Http\Controllers\MantenimientoProgramadoController;
 
 //****************Rutas de Autenticación**********************
 Auth::routes();
@@ -159,18 +159,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('select_revocar_permiso/{id}',[RolController::class, 'select_revocar_permiso'])->name('select_revocar_permiso');
 });
 
-//****************Mantenimiento preventivo**********************
+//****************Mantenimiento programado**********************
 Route::middleware(['auth'])->group(function () {
-    Route::resource('mantenimientoPreventivo', MantenimientoPreventivoController::class)->middleware('role:Administrador');
+    Route::resource('mantenimientoProgramado', MantenimientoProgramadoController::class)->middleware('role:Administrador');
 
-    Route::get('show_store_mant_prev', [MantenimientoPreventivoController::class, 'show_store_mant_prev'])->name('show_store_mant_prev');
-    Route::post('store_mant_prev', [MantenimientoPreventivoController::class, 'store_mant_prev'])->name('store_mant_prev');
+    Route::get('show_store_mant_prog', [MantenimientoProgramadoController::class, 'show_store_mant_prog'])->name('show_store_mant_prog');
+    Route::post('store_mant_prog', [MantenimientoProgramadoController::class, 'store_mant_prog'])->name('store_mant_prog');
 
-    Route::get('show_mostrar_equipos_mant', [MantenimientoPreventivoController::class, 'show_mostrar_equipos_mant'])->name('show_mostrar_equipos_mant');
-    Route::post('mostrar_equipos_mant', [MantenimientoPreventivoController::class, 'mostrar_equipos_mant'])->name('mostrar_equipos_mant');
-    Route::get('select_tablas_mant_prog', [MantenimientoPreventivoController::class, 'select_tablas_mant_prog'])->name('select_tablas_mant_prog');
+    Route::get('show_mostrar_equipos_mant', [MantenimientoProgramadoController::class, 'show_mostrar_equipos_mant'])->name('show_mostrar_equipos_mant');
+    Route::post('mostrar_equipos_mant', [MantenimientoProgramadoController::class, 'mostrar_equipos_mant'])->name('mostrar_equipos_mant');
+    Route::get('select_tablas_mant_prog', [MantenimientoProgramadoController::class, 'select_tablas_mant_prog'])->name('select_tablas_mant_prog');
 
-    Route::get('show_edit_mant_prev/{mant_prev}', [MantenimientoPreventivoController::class, 'show_edit_mant_prev'])->name('show_edit_mant_prev');
-    Route::post('edit_mant_prev', [MantenimientoPreventivoController::class, 'edit_mant_prev'])->name('edit_mant_prev');
-    Route::get('getMantProg/{mant_prev}', [MantenimientoPreventivoController::class, 'getMantProg'])->name('getMantProg');
+    Route::get('show_edit_mant_prog/{mant_prev}', [MantenimientoProgramadoController::class, 'show_edit_mant_prog'])->name('show_edit_mant_prog');
+    Route::post('edit_mant_prog', [MantenimientoProgramadoController::class, 'edit_mant_prog'])->name('edit_mant_prog');
+    Route::get('getMantProg/{mant_prev}', [MantenimientoProgramadoController::class, 'getMantProg'])->name('getMantProg');
 });

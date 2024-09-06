@@ -32,6 +32,6 @@
       <input type="checkbox" name="activo" id="activo" checked>
     </div>
   </div>
-  <input type="hidden" name="solicitante" value="{{ Auth::id() }}">
+  <!--<input type="hidden" name="solicitante" value="{{ Auth::id() }}"> -->
 </div>
       

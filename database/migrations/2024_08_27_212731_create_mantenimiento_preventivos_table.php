@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mantenimientos_preventivos', function (Blueprint $table) {
+        Schema::create('mantenimientos_programados', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
             $table->integer('frecuencia');
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mantenimientos_preventivos');
+        Schema::dropIfExists('mantenimientos_programados');
     }
 };

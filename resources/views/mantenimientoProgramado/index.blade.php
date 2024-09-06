@@ -1,4 +1,4 @@
-@extends('mantenimientoPreventivo.layouts.layout')
+@extends('mantenimientoProgramado.layouts.layout')
 @section('content')
 
 <!-- alertas -->
@@ -10,17 +10,17 @@
 </div>
 
 @if(Session::has('message'))
-  <div class="container" id="div.alert">
+  <div class="container" id="divAlert">
     <div class="row">
       <div class="col-1"></div>
-      <div class="alert {{Session::get('alert-class')}} col-10 text-center" role="alert">
-        {{Session::get('message')}}
+      <div class="alert {{ Session::get('alert-class') }} col-10 text-center" role="alert">
+        {{ Session::get('message') }}
       </div>
     </div>
   </div>
 @endif
 
-<!-- barra para buscar solicitudes -->
+<!-- barra para buscar mantenimientos programados -->
 <div class="col">
   <div class="form-group">
     <form  method="GET">
@@ -43,16 +43,16 @@
       <th class="text-center align-top">Acciones</th>  
     </thead>
     <tbody>   
-      @foreach($mantenimientos_preventivos as $mant_prev)
+      @foreach($mantenimientos_programados as $mant_prog)
           <tr>
-            <td align="center">{{$mant_prev->id}}</td>
-            <td>{{$mant_prev->nombre}}</td>
-            <td>{{$mant_prev->equipo}}</td>
-            <td>{{$mant_prev->descripcion}}</td>
-            <td align="center">{{$mant_prev->frecuencia}}</td>
-            <td align="center">{{$mant_prev->ult_fech_mant}}</td>
-            <td align="center">{{$mant_prev->fecha_de_inicio}}</td>
-            @if($mant_prev->activo)
+            <td align="center">{{$mant_prog->id}}</td>
+            <td>{{$mant_prog->nombre}}</td>
+            <td>{{$mant_prog->equipo}}</td>
+            <td>{{$mant_prog->descripcion}}</td>
+            <td align="center">{{$mant_prog->frecuencia}}</td>
+            <td align="center">{{$mant_prog->ult_fech_mant}}</td>
+            <td align="center">{{$mant_prog->fecha_de_inicio}}</td>
+            @if($mant_prog->activo)
               <td width="60" style="text-align: center;"><div class="circle_green"></div></td>
             @else
               <td width="60" style="text-align: center;"><div class="circle_grey"></div></td>
@@ -61,10 +61,10 @@
               <div class="text-center">
                 <div class="btn-group">
                   <div class="btn-container">
-                    <i onclick='fnOpenModalEdit({{$mant_prev->id}})' title="edit" id="edit-{{$mant_prev->id}}" class="fa-solid fa-pen-to-square actualizar-editar"></i>
+                    <i onclick='fnOpenModalEdit({{$mant_prog->id}})' title="edit" id="edit-{{$mant_prog->id}}" class="fa-solid fa-pen-to-square actualizar-editar"></i>
                   </div>
                   <div class="btn-container">
-                    <form action="{{ url('destroy_solicitud', $mant_prev->id) }}" method="POST" onsubmit="return confirm('¿Está seguro que desea eliminar este mantenimiento programado?')" style="display: inline;">
+                    <form action="{{ url('destroy_mant_prog', $mant_prog->id) }}" method="POST" onsubmit="return confirm('¿Está seguro que desea eliminar este mantenimiento programado?')" style="display: inline;">
                       @csrf
                       @method('DELETE')
                       <button class="btnEliminar" type="submit" title="Borrar">
@@ -171,13 +171,13 @@
   }
 
   var ruta = '{{ route('mostrar_equipos_mant') }}';
-  var ruta_create = '{{ route('store_mant_prev') }}';
-  var ruta_edit = '{{ route('edit_mant_prev') }}';
+  var ruta_create = '{{ route('store_mant_prog') }}';
+  var ruta_edit = '{{ route('edit_mant_prog') }}';
   var closeButton = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>');
-  var saveButton = $('<button type="submit" class="btn btn-info" id="saveButton" onclick="fnSaveMantPrev()">Guardar</button>');
-  var saveButton2 = $('<button type="submit" class="btn btn-info" id="saveButton2" onclick="fnSaveSolicitud2()">Guardar</button>');
+  var saveButton = $('<button type="submit" class="btn btn-info" id="saveButton" onclick="fnSaveMantProg()">Guardar</button>');
+  var saveButton2 = $('<button type="submit" class="btn btn-info" id="saveButton2" onclick="fnSaveMantProg2()">Guardar</button>');
 
-  function fnSaveMantPrev() {
+  function fnSaveMantProg() {
     var form = document.getElementById('myForm');
     if (form.checkValidity()) {
       $('#saveButton').prop('disabled', true);
@@ -187,7 +187,7 @@
     }
   }
 
-  function fnSaveMantPrev2() {
+  /*function fnSaveMantProg2() {
     var form = document.getElementById('myForm4');
     if (form.checkValidity()) {
       $('#saveButton2').prop('disabled', true);
@@ -195,12 +195,12 @@
     } else {
       console.log('El formulario no es válido. Completar los campos requeridos antes de enviar.');
     }
-  }
+  }*/
 
   //modal store
   function fnOpenModalStore() {
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
-    var url = window.location.origin + "/show_store_mant_prev/";
+    var url = window.location.origin + "/show_store_mant_prog/";
     $.get(url, function(data) {
       // Borrar contenido anterior
       $("#modalshow").empty();
@@ -297,7 +297,7 @@
   async function fnOpenModalEdit(id) {
     var myModal = new bootstrap.Modal(document.getElementById('show4'));
     $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/show_edit_mant_prev/" + id,
+      url: window.location.protocol + '//' + window.location.host + "/show_edit_mant_prog/" + id,
       type: 'GET',
       success: function(data) {
         // Borrar contenido anterior
@@ -360,6 +360,14 @@
 
     })
   });
+
+  //Duracion de alerta (agregado, elimnado, editado)
+  $(document).ready(function(){
+    setTimeout(function(){
+      $(".alert").fadeOut();
+    }, 5000); // 5 segundos
+  });
+
 </script>
 
 @stop

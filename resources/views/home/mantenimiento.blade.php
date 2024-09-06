@@ -19,8 +19,8 @@
         </div>
         <div class="col-md-6 text-center">
             <br>
-            <a href="/mantenimientoPreventivo"> <img  src="{{ URL::to('/img/mantenimientoPreventivo.png') }}" height="140"></a>
-            <h2 style="color: #3b557a">Mantenimiento Preventivo</h2>
+            <a href="/mantenimientoProgramado"> <img  src="{{ URL::to('/img/mantenimientoProgramado.png') }}" height="140"></a>
+            <h2 style="color: #3b557a">Mantenimiento Programado</h2>
         </div>
         <div class="col-md-6 text-center">
             <br>

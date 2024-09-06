@@ -4,21 +4,21 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class MantenimientoPreventivo extends Model
+class MantenimientoProgramado extends Model
 {
-    public $table = "mantenimientos_preventivos";
+    public $table = "mantenimientos_programados";
 
     public function scopeRelaciones_index($query){
-        $query->leftjoin('frecuencias', 'frecuencias.id', 'mantenimientos_preventivos.frecuencia')
-        ->select('mantenimientos_preventivos.id as id',
-            'mantenimientos_preventivos.nombre as nombre',
-            'mantenimientos_preventivos.equipo as equipo',
-            'mantenimientos_preventivos.descripcion as descripcion',
-            'mantenimientos_preventivos.activo as activo',
-            'mantenimientos_preventivos.ultima_fecha_mantenimiento as ult_fech_mant',
-            'mantenimientos_preventivos.fecha_de_inicio as fecha_de_inicio',
-            'mantenimientos_preventivos.created_at as fecha_de_creacion',
-            'mantenimientos_preventivos.updated_at as fecha_de_actualizacion',
+        $query->leftjoin('frecuencias', 'frecuencias.id', 'mantenimientos_programados.frecuencia')
+        ->select('mantenimientos_programados.id as id',
+            'mantenimientos_programados.nombre as nombre',
+            'mantenimientos_programados.equipo as equipo',
+            'mantenimientos_programados.descripcion as descripcion',
+            'mantenimientos_programados.activo as activo',
+            'mantenimientos_programados.ultima_fecha_mantenimiento as ult_fech_mant',
+            'mantenimientos_programados.fecha_de_inicio as fecha_de_inicio',
+            'mantenimientos_programados.created_at as fecha_de_creacion',
+            'mantenimientos_programados.updated_at as fecha_de_actualizacion',
             'frecuencias.nombre as frecuencia');
         return $query;
     }
@@ -40,8 +40,8 @@ class MantenimientoPreventivo extends Model
             $activoAux = 0;
         }
         //dd($activo ,$activoAux);
-        DB::table('mantenimientos_preventivos')
-            ->where('mantenimientos_preventivos.id', $id)
+        DB::table('mantenimientos_programados')
+            ->where('mantenimientos_programados.id', $id)
             ->update([
                 'nombre' => $nombre, 
                 'descripcion' => $descripcion, 

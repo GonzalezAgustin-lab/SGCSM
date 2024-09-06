@@ -23,7 +23,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbar1">
         <ul class="navbar-nav ml-auto">
-          <button class="btn btn-info" onclick='fnOpenModalStore()' data-toggle="modal" data-target="#agregar_ment_preventivo">
+          <button class="btn btn-info" onclick='fnOpenModalStore()' data-toggle="modal" data-target="#agregar_ment_programado">
             <i class="fa-solid fa-plus"></i>
           </button>
           &nbsp
