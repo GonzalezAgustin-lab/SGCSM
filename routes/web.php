@@ -170,7 +170,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('mostrar_equipos_mant', [MantenimientoPreventivoController::class, 'mostrar_equipos_mant'])->name('mostrar_equipos_mant');
     Route::get('select_tablas', [MantenimientoPreventivoController::class, 'select_tablas'])->name('select_tablas');
 
-    /*Route::get('show_update_equipo_mant/{equipo_mant}', [MantenimientoPreventivoController::class, 'show_update_equipo_mant'])->name('show_update_equipo_mant');
-    Route::post('update_equipo_mant', [MantenimientoPreventivoController::class, 'update_equipo_mant'])->name('update_equipo_mant');
-    */
+    Route::get('show_edit_mant_prev/{mant_prev}', [MantenimientoPreventivoController::class, 'show_edit_mant_prev'])->name('show_edit_mant_prev');
+    Route::post('edit_mant_prev', [MantenimientoPreventivoController::class, 'edit_mant_prev'])->name('edit_mant_prev');
+    Route::get('getMantProg/{mant_prev}', [MantenimientoPreventivoController::class, 'getMantProg'])->name('getMantProg');
 });

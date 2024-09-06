@@ -2,12 +2,12 @@
 <input type="hidden" name="id">
 
 <!-- Título del modal -->
-<h5 class="modal-title">Agregar mantenimiento preventivo</h5>
+<h5 class="modal-title">Agregar mantenimiento programado</h5>
 <hr>
 
 <div class="form-group col-md-12">
-  <label for="title"><strong>Nombre:</strong></label>
-  <input type="text" name="nombre" class="form-control"  autocomplete="off" id="nombre" minlength="10" maxlength="50" required>
+  <label for="title"><strong>Titulo:</strong></label>
+  <input type="text" class="form-control" autocomplete="off" name="nombre" id="nombre" minlength="10" maxlength="50" required>
 
   <label for="title"><strong>Descripcion:</strong></label>
   <textarea rows="3" type="text" class="form-control" name="descripcion" id="descripcion"  minlength="10" maxlength="500" required></textarea>

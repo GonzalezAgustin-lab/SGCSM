@@ -32,10 +32,51 @@
 <div class="col-md-12">             
   <table class="table table-striped table-bordered ">
     <thead>
-      
+      <th class="text-center align-top">ID</th>
+      <th class="text-center align-top">Titulo</th>
+      <th class="text-center align-top">Equipo</th>
+      <th class="text-center align-top">Descripcion</th>
+      <th class="text-center align-top">Frecuencia</th>
+      <th class="text-center align-top">Ultima fecha de mantenimiento</th>  
+      <th class="text-center align-top">Fecha de inicio</th>    
+      <th class="text-center align-top">Activo</th> 
+      <th class="text-center align-top">Acciones</th>  
     </thead>
-    <tbody>
-
+    <tbody>   
+      @foreach($mantenimientos_preventivos as $mant_prev)
+          <tr>
+            <td align="center">{{$mant_prev->id}}</td>
+            <td>{{$mant_prev->nombre}}</td>
+            <td>{{$mant_prev->equipo}}</td>
+            <td>{{$mant_prev->descripcion}}</td>
+            <td align="center">{{$mant_prev->frecuencia}}</td>
+            <td align="center">{{$mant_prev->ult_fech_mant}}</td>
+            <td align="center">{{$mant_prev->fecha_de_inicio}}</td>
+            @if($mant_prev->activo)
+              <td width="60" style="text-align: center;"><div class="circle_green"></div></td>
+            @else
+              <td width="60" style="text-align: center;"><div class="circle_grey"></div></td>
+            @endif
+            <td>
+              <div class="text-center">
+                <div class="btn-group">
+                  <div class="btn-container">
+                    <i onclick='fnOpenModalEdit({{$mant_prev->id}})' title="edit" id="edit-{{$mant_prev->id}}" class="fa-solid fa-pen-to-square actualizar-editar"></i>
+                  </div>
+                  <div class="btn-container">
+                    <form action="{{ url('destroy_solicitud', $mant_prev->id) }}" method="POST" onsubmit="return confirm('¿Está seguro que desea eliminar este mantenimiento programado?')" style="display: inline;">
+                      @csrf
+                      @method('DELETE')
+                      <button class="btnEliminar" type="submit" title="Borrar">
+                        <i class="eliminar fa-solid fa-circle-xmark"></i>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        @endforeach
     </tbody>
   </table>
 
@@ -85,6 +126,22 @@
     </div>
   </div>
 
+  <div class="modal fade" id="show4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog estilo" role="document">
+      <div class="modal-content">
+        <form id="myForm4" method="POST" enctype="multipart/form-data">
+          {{csrf_field()}}
+          <div id="modalshow4" class="modal-body">
+            <!-- Datos -->
+          </div>
+          <div id="modalfooter4" class="modal-footer">
+            <!-- Footer -->
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- Incluir archivos CSS de Select2 -->
@@ -111,19 +168,30 @@
 <script>
   function manejarSeleccion(idEquipo) {
     $('#equipo').val(idEquipo).trigger('change');
-    $('#equipo1').val(idEquipo).trigger('change');
   }
 
   var ruta = '{{ route('mostrar_equipos_mant') }}';
   var ruta_create = '{{ route('store_mant_prev') }}';
+  var ruta_edit = '{{ route('edit_mant_prev') }}';
   var closeButton = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>');
   var saveButton = $('<button type="submit" class="btn btn-info" id="saveButton" onclick="fnSaveMantPrev()">Guardar</button>');
+  var saveButton2 = $('<button type="submit" class="btn btn-info" id="saveButton2" onclick="fnSaveSolicitud2()">Guardar</button>');
 
   function fnSaveMantPrev() {
     var form = document.getElementById('myForm');
     if (form.checkValidity()) {
       $('#saveButton').prop('disabled', true);
       $('#myForm').submit();
+    } else {
+      console.log('El formulario no es válido. Completar los campos requeridos antes de enviar.');
+    }
+  }
+
+  function fnSaveMantPrev2() {
+    var form = document.getElementById('myForm4');
+    if (form.checkValidity()) {
+      $('#saveButton2').prop('disabled', true);
+      $('#myForm4').submit();
     } else {
       console.log('El formulario no es válido. Completar los campos requeridos antes de enviar.');
     }
@@ -209,6 +277,89 @@
     });
   }
 
+  function getMantProg(idMantProg) {
+    return new Promise(function(resolve, reject) {
+      $.ajax({
+        url: window.location.protocol + '//' + window.location.host + "/getMantProg/" + idMantProg,
+        method: 'GET',
+        success: function(data) {
+          resolve(data);
+        },
+        error: function(error) {
+          reject(error);
+        }
+      });
+    });
+  }
+
+  var mantProg;
+  //modal edit
+  async function fnOpenModalEdit(id) {
+    var myModal = new bootstrap.Modal(document.getElementById('show4'));
+    $.ajax({
+      url: window.location.protocol + '//' + window.location.host + "/show_edit_mant_prev/" + id,
+      type: 'GET',
+      success: function(data) {
+        // Borrar contenido anterior
+        $("#modalshow4").empty();
+        // Establecer el contenido del modal
+        $("#modalshow4").html(data);
+
+        // Borrar contenido anterior
+        $("#modalfooter4").empty();
+        // Agregar el botón "Cerrar y Guardar" al footer
+        $("#modalfooter4").append(closeButton);
+        $("#modalfooter4").append(saveButton2);
+
+        // Cambiar la acción del formulario
+        $('#myForm4').attr('action', ruta_edit);
+
+        // Mostrar el modal
+        myModal.show();
+
+        // Cambiar el tamaño del modal a "modal-lg"
+        var modalDialog = myModal._element.querySelector('.modal-dialog');
+        modalDialog.classList.remove('modal-sm');
+        modalDialog.classList.remove('modal-lg');
+      },
+    });
+    try {
+      mantProg = await getMantProg(id);
+    } catch (error) {
+      console.error('Error al obtener el mantenimiento programado:', error);
+    }
+  }
+
+  $('#show4').on('show.bs.modal', function (event){
+    $.get('select_tablas/',function(data){
+      var htmlSelectFrecuencia = '<option value="">Seleccione </option>'
+      var htmlSelectEquipo = '<option value="">Seleccione </option>'
+
+      htmlSelectFrecuencia += data[0].map(item => {
+          const selected = item.id === mantProg[0].frecuencia ? 'selected' : '';
+          return `<option value="${item.id}" ${selected}>${item.nombre}</option>`;
+      }).join('');
+
+      htmlSelectEquipo += data[1].map(equipo => {
+          const selected = equipo.id === mantProg[0].equipo ? 'selected' : '';
+          return `<option value="${equipo.id}" ${selected}>${equipo.id}</option>`;
+      }).join('');
+
+      $('#nombre1').val(mantProg[0].nombre);
+      $('#descripcion1').val(mantProg[0].descripcion);
+      $('#fecha_de_inicio1').val(mantProg[0].fecha_de_inicio);
+
+      if(mantProg[0].activo == 1){
+        $('#activo1').prop('checked', true);
+      }else {$('#activo1').prop('checked', false);}
+
+      $('#equipo1').select2();
+      $('#equipo1').html(htmlSelectEquipo);  
+      $('#frecuencia1').html(htmlSelectFrecuencia);   
+      $('#idMantProg1').val(mantProg[0].id);
+
+    })
+  });
 </script>
 
 @stop

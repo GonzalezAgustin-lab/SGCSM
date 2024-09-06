@@ -3,6 +3,7 @@
 
   <link href="{{ URL::asset('/css/bootstrap.min.css') }}" rel="stylesheet" id="bootstrap-css">
   <link href="{{ asset('css/acciones.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/estado.css') }}" rel="stylesheet">
 
   <script src="https://kit.fontawesome.com/b36ad16a06.js" crossorigin="anonymous"></script>
   <script type="text/javascript" src="{{ URL::asset('/js/modal-jquery.min.js') }}"></script>
