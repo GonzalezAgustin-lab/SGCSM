@@ -228,7 +228,7 @@
     });
 
     $('#show2').on('show.bs.modal', function (event){
-      $.get('select_tablas/',function(data){
+      $.get('select_tablas_mant_prog/',function(data){
         var htmlSelectFrecuencia = '<option value="">Seleccione </option>'
         var htmlSelectEquipo = '<option value="">Seleccione </option>'
 
@@ -331,7 +331,7 @@
   }
 
   $('#show4').on('show.bs.modal', function (event){
-    $.get('select_tablas/',function(data){
+    $.get('select_tablas_mant_prog/',function(data){
       var htmlSelectFrecuencia = '<option value="">Seleccione </option>'
       var htmlSelectEquipo = '<option value="">Seleccione </option>'
 

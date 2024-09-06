@@ -375,7 +375,7 @@
   }
 
   $('#show4').on('show.bs.modal', function (event){
-    $.get('select_tablas/',function(data){
+    $.get('select_tablas_solicitudes/',function(data){
       var divDescripcion = $('#div_descripcion1')
       divDescripcion.hide();
       var htmlSelectArea = '<option value="">Seleccione </option>'
@@ -393,6 +393,7 @@
       var equipoSelected;
       var areaSelected;
 
+      console.log(data);
       data[2].forEach(tipo_solicitud => {
         if (tipo_solicitud.nombre === solicitud[0].nombreTipoSolicitud) {
           htmlSelectTipoSolicitud += `<option value="${tipo_solicitud.id}" selected>${tipo_solicitud.nombre}</option>`;
@@ -605,7 +606,7 @@
     });
 
     $('#show2').on('show.bs.modal', function (event){
-      $.get('select_tablas/',function(data){
+      $.get('select_tablas_solicitudes/',function(data){
         var divDescripcion = $('#div_descripcion')
         divDescripcion.hide();
         var htmlSelectArea = '<option value="">Seleccione </option>'

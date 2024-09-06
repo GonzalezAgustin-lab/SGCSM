@@ -81,7 +81,7 @@ class MantenimientoPreventivoController extends Controller
         return view('mantenimientoPreventivo.show_equipo', ['equipos' => $equipos,]);
     }
 
-    public function select_tablas(){
+    public function select_tablas_mant_prog(){
         return [MantenimientoPreventivo::getFrecuencias(),
         MantenimientoPreventivo::getEquiposMantenimiento()];
     }   

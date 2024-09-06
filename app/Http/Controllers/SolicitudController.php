@@ -211,7 +211,7 @@ class SolicitudController extends Controller{
         return redirect('solicitudes');
     }
 
-    public function select_tablas(){
+    public function select_tablas_solicitudes(){
         return [Solicitud::getArea(),
         Solicitud::getLocalizaciones(),
         Solicitud::getTipoSolicitudes(),

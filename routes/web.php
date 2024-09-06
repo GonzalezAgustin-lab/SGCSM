@@ -53,7 +53,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('aprobar_solicitud/{solicitud}', [SolicitudController::class, 'aprobar_solicitud']);
     Route::delete('destroy_solicitud/{solicitud}', [SolicitudController::class, 'destroy_solicitud']);
 
-    Route::get('select_tablas', [SolicitudController::class, 'select_tablas'])->name('select_tablas');
+    Route::get('select_tablas_solicitudes', [SolicitudController::class, 'select_tablas_solicitudes'])->name('select_tablas_solicitudes');
     Route::get('select_estado', [SolicitudController::class, 'select_estado'])->name('select_estado');
     Route::get('select_users', [SolicitudController::class, 'select_users'])->name('select_users');
     Route::get('select_equipos', [SolicitudController::class, 'select_equipos'])->name('select_equipos');
@@ -168,7 +168,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('show_mostrar_equipos_mant', [MantenimientoPreventivoController::class, 'show_mostrar_equipos_mant'])->name('show_mostrar_equipos_mant');
     Route::post('mostrar_equipos_mant', [MantenimientoPreventivoController::class, 'mostrar_equipos_mant'])->name('mostrar_equipos_mant');
-    Route::get('select_tablas', [MantenimientoPreventivoController::class, 'select_tablas'])->name('select_tablas');
+    Route::get('select_tablas_mant_prog', [MantenimientoPreventivoController::class, 'select_tablas_mant_prog'])->name('select_tablas_mant_prog');
 
     Route::get('show_edit_mant_prev/{mant_prev}', [MantenimientoPreventivoController::class, 'show_edit_mant_prev'])->name('show_edit_mant_prev');
     Route::post('edit_mant_prev', [MantenimientoPreventivoController::class, 'edit_mant_prev'])->name('edit_mant_prev');
