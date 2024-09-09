@@ -8,7 +8,29 @@ class MantenimientoProgramado extends Model
 {
     public $table = "mantenimientos_programados";
 
-    public function scopeRelaciones_index($query){
+    public function scopeFilterByRequest($query, $request)
+    {
+        return $query->ID($request->get('id_mant_prog'))
+                    ->Equipo($request->get('id_equipo'))
+                    ->Titulo($request->get('nombre'))
+                    ->Relaciones_index($request->get('id_frecuencia'));
+    }
+    public function scopeID($query, $id_mant_prog){
+        if($id_mant_prog){
+            return $query -> where('mantenimientos_programados.id','LIKE',"%$id_mant_prog%");
+        }
+    }
+    public function scopeTitulo($query, $nombre){
+        if($nombre){
+            return $query -> where('mantenimientos_programados.nombre','LIKE',"%$nombre%");
+        }
+    }
+    public  function scopeEquipo ($query, $id_equipo){
+    	if($id_equipo){
+    	    return $query -> where('mantenimientos_programados.equipo','LIKE', "%$id_equipo%");
+    	}
+    }
+    public function scopeRelaciones_index($query, $id_frecuencia){
         $query->leftjoin('frecuencias', 'frecuencias.id', 'mantenimientos_programados.frecuencia')
         ->select('mantenimientos_programados.id as id',
             'mantenimientos_programados.nombre as nombre',
@@ -20,6 +42,11 @@ class MantenimientoProgramado extends Model
             'mantenimientos_programados.created_at as fecha_de_creacion',
             'mantenimientos_programados.updated_at as fecha_de_actualizacion',
             'frecuencias.nombre as frecuencia');
+
+        if ($id_frecuencia != 0) {
+            $query->where('mantenimientos_programados.frecuencia', $id_frecuencia);
+        }
+        
         return $query;
     }
 

@@ -24,7 +24,37 @@
 <div class="col">
   <div class="form-group">
     <form  method="GET">
-      
+      <div style="display: inline-block;">
+        <label for="id_mant_prog" style="display: block; margin-bottom: 5px;"><h6>ID:</h6></label>
+        <input type="text" class="form-control" name="id_mant_prog" id="id_mant_prog" autocomplete="off" value="{{$id_mant_prog}}">
+      </div>
+      <div style="display: inline-block;">
+        <label for="nombre" style="display: block; margin-bottom: 5px;"><h6>Titulo:</h6></label>
+        <input type="text" class="form-control" name="nombre" id="nombre" autocomplete="off" value="{{$nombre}}">
+      </div>
+      <div style="display: inline-block;">
+        <label for="id_equipo" style="display: block; margin-bottom: 5px;"><h6>Equipo:</h6></label>
+        <input type="text" class="form-control" name="id_equipo" id="id_equipo" autocomplete="off" value="{{$id_equipo}}">
+      </div>
+      <div style="display: inline-block;">
+        <label for="tipo" style="display: block; margin-bottom: 5px;"><h6>Frecuencia:</h6></label>
+        <select class="form-control" name="id_frecuencia"  id="id_frecuencia">
+          <option value="0">{{'Todos'}} </option>
+          @foreach($frecuencias as $frecuencia)
+            @if($frecuencia->id == $id_frecuencia)
+              <option value="{{$frecuencia->id}}" selected>{{$frecuencia->nombre}} </option>
+            @else
+              <option value="{{$frecuencia->id}}">{{$frecuencia->nombre}} </option>
+            @endif
+          @endforeach
+        </select>
+      </div>
+      &nbsp
+      <div style="display: inline-block;">
+        <button type="submit" class="btn btn-default">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>      
+      </div>
     </form>          
   </div>
 </div>

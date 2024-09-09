@@ -14,11 +14,19 @@ class MantenimientoProgramadoController extends Controller
      */
     public function index(Request $request)
     {
-        $mantenimientos_programados_query = MantenimientoProgramado::Relaciones_index($request);
+        $mantenimientos_programados_query = MantenimientoProgramado::filterByRequest($request);
         $mantenimientos_programados = $mantenimientos_programados_query->paginate(20);
 
-        return view('mantenimientoProgramado.index', 
-            ['mantenimientos_programados' => $mantenimientos_programados,]);
+        $frecuencias = MantenimientoProgramado::getFrecuencias();
+
+        return view('mantenimientoProgramado.index', [
+            'mantenimientos_programados' => $mantenimientos_programados,
+            'frecuencias' => $frecuencias,
+            'id_mant_prog' => $request->get('id_mant_prog'),
+            'nombre' => $request->get('nombre'),
+            'id_equipo' => $request->get('id_equipo'),
+            'id_frecuencia' => $request->get('id_frecuencia'),
+        ]);
     }
 
     /**
