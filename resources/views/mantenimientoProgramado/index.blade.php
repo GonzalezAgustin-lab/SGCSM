@@ -178,22 +178,6 @@
 <link href="{{ asset('select2/dist/css/select2.min.css') }}" rel="stylesheet" />
 <script src="{{ asset('select2/dist/js/select2.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
-<script>
-  // Obtén el campo de entrada de fecha por su ID
-  var fechaInput = document.getElementById('fecha');
-
-  // Verifica si hay un valor guardado en el almacenamiento local (localStorage)
-  if (localStorage.getItem('fechaValue')) {
-    // Restaura el valor guardado en el campo de entrada de fecha
-    fechaInput.value = localStorage.getItem('fechaValue');
-  }
-
-  // Escucha el evento 'change' del campo de entrada de fecha
-  fechaInput.addEventListener('change', function() {
-    // Guarda el valor seleccionado en el almacenamiento local (localStorage)
-    localStorage.setItem('fechaValue', fechaInput.value);
-  });
-</script>
 
 <script>
   function manejarSeleccion(idEquipo) {
@@ -258,6 +242,20 @@
     });
 
     $('#show2').on('show.bs.modal', function (event){
+      // Obtener la fecha actual
+      var today = new Date();
+      
+      // Sumar un día a la fecha actual
+      today.setDate(today.getDate() + 1);
+      
+      // Formatear la fecha a YYYY-MM-DD
+      var year = today.getFullYear();
+      var month = (today.getMonth() + 1).toString().padStart(2, '0');
+      var day = today.getDate().toString().padStart(2, '0');
+      var minDate = `${year}-${month}-${day}`;
+      
+      // Establecer el valor mínimo en el campo de fecha
+      $('#fecha_de_inicio').attr('min', minDate);
       $.get('select_tablas_mant_prog/',function(data){
         var htmlSelectFrecuencia = '<option value="">Seleccione </option>'
         var htmlSelectEquipo = '<option value="">Seleccione </option>'
@@ -275,7 +273,7 @@
   function fnOpenModalShowEquipos() {
     var myModal3 = new bootstrap.Modal(document.getElementById('show3'));
     $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/show_mostrar_equipos_mant/",
+      url: window.location.protocol + '//' + window.location.host + "/show_mostrar_equipos_mant_prog/",
       type: 'GET',
       success: function(data) {
         // Borrar contenido anterior
@@ -361,6 +359,21 @@
   }
 
   $('#show4').on('show.bs.modal', function (event){
+    // Obtener la fecha actual
+    var today = new Date();
+    
+    // Sumar un día a la fecha actual
+    today.setDate(today.getDate() + 1);
+    
+    // Formatear la fecha a YYYY-MM-DD
+    var year = today.getFullYear();
+    var month = (today.getMonth() + 1).toString().padStart(2, '0');
+    var day = today.getDate().toString().padStart(2, '0');
+    var minDate = `${year}-${month}-${day}`;
+    
+    // Establecer el valor mínimo en el campo de fecha
+    $('#fecha_de_inicio1').attr('min', minDate);
+
     $.get('select_tablas_mant_prog/',function(data){
       var htmlSelectFrecuencia = '<option value="">Seleccione </option>'
       var htmlSelectEquipo = '<option value="">Seleccione </option>'

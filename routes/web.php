@@ -46,7 +46,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('show_reclamar_solicitud/{solicitud}', [SolicitudController::class, 'show_reclamar_solicitud'])->name('show_reclamar_solicitud');
     Route::post('reclaim_solicitud', [SolicitudController::class, 'reclaim_solicitud'])->name('reclaim_solicitud');
 
-    Route::get('show_mostrar_equipos_mant', [SolicitudController::class, 'show_mostrar_equipos_mant'])->name('show_mostrar_equipos_mant');
+    Route::get('show_mostrar_equipos_mant_solicitudes', [SolicitudController::class, 'show_mostrar_equipos_mant_solicitudes'])->name('show_mostrar_equipos_mant_solicitudes');
     Route::post('mostrar_equipos_mant', [SolicitudController::class, 'mostrar_equipos_mant'])->name('mostrar_equipos_mant');
 
     Route::get('show_solicitud/{solicitud}', [SolicitudController::class, 'show_solicitud'])->name('show_solicitud');
@@ -166,7 +166,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('show_store_mant_prog', [MantenimientoProgramadoController::class, 'show_store_mant_prog'])->name('show_store_mant_prog');
     Route::post('store_mant_prog', [MantenimientoProgramadoController::class, 'store_mant_prog'])->name('store_mant_prog');
 
-    Route::get('show_mostrar_equipos_mant', [MantenimientoProgramadoController::class, 'show_mostrar_equipos_mant'])->name('show_mostrar_equipos_mant');
+    Route::get('show_mostrar_equipos_mant_prog', [MantenimientoProgramadoController::class, 'show_mostrar_equipos_mant_prog'])->name('show_mostrar_equipos_mant_prog');
     Route::post('mostrar_equipos_mant', [MantenimientoProgramadoController::class, 'mostrar_equipos_mant'])->name('mostrar_equipos_mant');
     Route::get('select_tablas_mant_prog', [MantenimientoProgramadoController::class, 'select_tablas_mant_prog'])->name('select_tablas_mant_prog');
 

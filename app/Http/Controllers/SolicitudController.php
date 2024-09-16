@@ -136,7 +136,7 @@ class SolicitudController extends Controller{
         ]);       
     }
 
-    public function show_mostrar_equipos_mant(){
+    public function show_mostrar_equipos_mant_solicitudes(){
         $equipos = Solicitud::getEquiposMantenimientoConLocalizacionYArea();
 
         return view('solicitudes.show_equipo', ['equipos' => $equipos,]);

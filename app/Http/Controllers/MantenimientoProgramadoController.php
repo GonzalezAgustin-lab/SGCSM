@@ -73,7 +73,7 @@ class MantenimientoProgramadoController extends Controller
         return view('mantenimientoProgramado.create');       
     }
 
-    public function show_mostrar_equipos_mant(){
+    public function show_mostrar_equipos_mant_prog(){
         $equipos = MantenimientoProgramado::getEquiposMantenimientoConLocalizacionYArea();
 
         return view('mantenimientoProgramado.show_equipo', ['equipos' => $equipos,]);

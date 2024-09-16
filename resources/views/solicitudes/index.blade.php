@@ -542,7 +542,7 @@
   function fnOpenModalShowEquipos() {
     var myModal3 = new bootstrap.Modal(document.getElementById('show3'));
     $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/show_mostrar_equipos_mant/",
+      url: window.location.protocol + '//' + window.location.host + "/show_mostrar_equipos_mant_solicitudes/",
       type: 'GET',
       success: function(data) {
         // Borrar contenido anterior
