@@ -61,7 +61,13 @@
       </div>
     </div>
   </div>
-{{ $localizaciones->appends($_GET)->links() }}
+    
+  <div class="d-flex justify-content-end">
+    <div class="pagination">
+      {{ $localizaciones->links('pagination::bootstrap-4') }}
+    </div>
+  </div>
+
 </div>
 <script> 
   //Duracion de alerta (agregado, elimnado, editado)

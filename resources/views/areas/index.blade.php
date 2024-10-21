@@ -61,7 +61,12 @@
     </div>
   </div>
   
-  {{ $areas->appends($_GET)->links() }}
+  <div class="d-flex justify-content-end">
+    <div class="pagination">
+      {{ $areas->links('pagination::bootstrap-4') }}
+    </div>
+  </div>
+  
 </div>
 <script> 
   //Duracion de alerta (agregado, elimnado, editado)

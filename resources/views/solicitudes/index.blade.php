@@ -109,11 +109,13 @@
 <div class="col-md-12">             
   <table class="table table-striped table-bordered ">
     <thead>
-      <th class="text-center align-top">
-        <label for="checkAll" style="display: inline-block;">
-          <input type="checkbox" id="checkAll" onclick="checkAll()" style="vertical-align: middle; margin-right: 5px;">
-        </label>
-      </th>
+      @can('reporte-solicitudes')
+        <th class="text-center align-top">
+          <label for="checkAll" style="display: inline-block;">
+            <input type="checkbox" id="checkAll" onclick="checkAll()" style="vertical-align: middle; margin-right: 5px;">
+          </label>
+        </th>
+      @endcan
       <th class="text-center align-top">ID</th>
       <th class="text-center align-top">Titulo</th>
       <th class="text-center align-top">Tipo de solicitud</th>
@@ -127,7 +129,9 @@
     <tbody>
         @foreach($solicitudes as $solicitud)
           <tr>
-            <td><label><input type="checkbox" id="cbox1" value="first_checkbox"></label><br></td>
+            @can('reporte-solicitudes')
+              <td><label><input type="checkbox" id="cbox1" value="first_checkbox"></label><br></td>
+            @endcan
             <td>{{$solicitud->id}}</td>
             <td>{{$solicitud->titulo}}</td>
             <td>{{$solicitud->tipo_solicitud}}</td>
@@ -181,15 +185,17 @@
                       <i id="editar" onclick='fnOpenModalEdit({{$solicitud->id}})' title="edit" data-tipo="{{$solicitud->tipo_solicitud}}" id="edit-{{$solicitud->id}}" class="fa-solid fa-pen-to-square actualizar-editar"></i>
                     </div>
                   @endif
-                  <div class="btn-container">
-                    <form action="{{ url('destroy_solicitud', $solicitud->id) }}" method="POST" onsubmit="return confirm('Está seguro que desea eliminar esta solicitud?')" style="display: inline;">
-                      @csrf
-                      @method('DELETE')
-                      <button class="btnEliminar" type="submit" title="Borrar">
-                        <i class="eliminar fa-solid fa-circle-xmark"></i>
-                      </button>
-                    </form>
-                  </div>
+                  @can('eliminar-solicitud')
+                    <div class="btn-container">
+                      <form action="{{ url('destroy_solicitud', $solicitud->id) }}" method="POST" onsubmit="return confirm('Está seguro que desea eliminar esta solicitud?')" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btnEliminar" type="submit" title="Borrar">
+                          <i class="eliminar fa-solid fa-circle-xmark"></i>
+                        </button>
+                      </form>
+                    </div>
+                  @endcan
                 </div>
               </div>
             </td>
@@ -198,22 +204,28 @@
     </tbody>
   </table>
 
-<style>
-.btnEliminar{
-    background: transparent; /* Fondo transparente */
-    border: none; /* Sin borde */
-    padding: 0; /* Sin padding */
-    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
-    outline: none; /* Elimina el borde de enfoque */
-}
+  <div class="d-flex justify-content-between">
+    <div>
+      <button class="btn btn-info" onclick="Report()"><i class="fa-solid fa-file-arrow-down"></i></button>
+    </div>
+    <div class="pagination">
+      {{ $solicitudes->links('pagination::bootstrap-4') }}
+    </div>
+  </div>
 
-.btnEliminar:focus {
-    outline: none; /* Elimina el borde de enfoque cuando el botón está enfocado */
-}
-</style>
+  <style>
+    .btnEliminar{
+      background: transparent; /* Fondo transparente */
+      border: none; /* Sin borde */
+      padding: 0; /* Sin padding */
+      cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+      outline: none; /* Elimina el borde de enfoque */
+    }
 
-  {{ $solicitudes->appends($_GET)->links() }}
-  <br>
+    .btnEliminar:focus {
+      outline: none; /* Elimina el borde de enfoque cuando el botón está enfocado */
+    }
+  </style>
 
   <div class="modal fade" id="show2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog estilo" role="document">
@@ -268,6 +280,297 @@
 <link href="{{ asset('select2/dist/css/select2.min.css') }}" rel="stylesheet" />
 <script src="{{ asset('select2/dist/js/select2.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+
+<script>
+  async function Report() {
+    // Obtener todos los checkboxes seleccionados
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked:not(#checkAll)');
+
+    // Si no hay ningún checkbox seleccionado, mostrar un mensaje y salir de la función
+    if (checkboxes.length === 0) {
+      alert("Por favor, seleccione al menos una solicitud.");
+      return;
+    }
+
+    // Crear un nuevo documento PDF
+    var doc = new jsPDF('p', 'mm', 'a4');
+    // Definir la variable pageHeight
+    var pageHeight = doc.internal.pageSize.height;
+    // Agregar el título al PDF
+    doc.setFontSize(14);
+    doc.setFontStyle("bold");
+    doc.text("Solicitudes seleccionadas", 10, 10);
+    doc.setLineWidth(0.5); // Establecer el grosor del subrayado
+    doc.line(10, 12, 72, 12); // Dibujar una línea debajo del texto
+
+    // Agregar las solicitudes seleccionadas al PDF
+    var y = 20;
+    doc.setFontSize(10);
+
+    var content = [];
+
+    for (var i = 0; i < checkboxes.length; i++) {
+      var checkbox = checkboxes[i];
+      var row = checkbox.closest('tr');
+      var id = row.querySelector('td:nth-child(2)').textContent.trim();
+      var titulo = row.querySelector('td:nth-child(3)').textContent.trim();
+      var tipo = row.querySelector('td:nth-child(4)').textContent.trim();
+      var equipo = row.querySelector('td:nth-child(5)').textContent.trim();
+      var falla = row.querySelector('td:nth-child(7)').textContent.trim();
+
+      // Ajustar el diseño del contenido del PDF
+      content.push({label: "ID: ", value: id, x: 10, y: y })
+      content.push({ label: "Título: ", value: titulo, x: 50, y: y })
+
+      if (tipo == "Especializado") {
+        content.push({ label: "Equipo: ", value: equipo, x: 10, y: y + 5 });
+        content.push({ label: "Falla: ", value: falla, x: 50, y: y + 5 });
+      } else if (tipo == "Edilicio") {
+        content.push({ label: "Falla: ", value: falla, x: 10, y: y + 5 });
+      }
+
+      try {
+        // Obtener los históricos de la solicitud actual
+        var historicos = await getHistoricos(id);
+        // Agregar los históricos al contenido del PDF
+        if (tipo == "Especializado" || tipo == "Edilicio") {
+          var historicoOffset = 10;
+        } else {
+          var historicoOffset = 5;
+        }
+        for (var j = 0; j < historicos.length; j++) {
+          var historico = historicos[j];
+          var estado = historico.estado;
+          var fecha = historico.fecha;
+          var nombre = historico.nombre;
+          var descripcion = historico.descripcion;
+          var repuestos = historico.repuestos;
+          
+          var historicoContent = [
+            { label: "Histórico " + (j + 1) + ": ", value: "", x: 10, y: y + historicoOffset },
+            { label: "Fecha: ", value: fecha, x: 20, y: y + historicoOffset + 5 },
+            { label: "Estado: ", value: estado, x: 95, y: y + historicoOffset + 5 },
+            { label: "Nombre: ", value: nombre, x: 20, y: y + historicoOffset + 10 },
+          ];
+
+          if (repuestos) {
+            si = "Si";
+            historicoContent.push({ label: "Repuestos: ", value: si, x: 95, y: y + historicoOffset + 10 });
+          } else {
+            no = "No";
+            historicoContent.push({ label: "Repuestos: ", value: no, x: 95, y: y + historicoOffset + 10 });
+          }
+
+          if (descripcion) {
+            nada = "";
+            historicoContent.push({ label: "Descripción: ", value: nada, x: 20, y: y + historicoOffset + 15 });
+          }
+
+          // Incrementar el desplazamiento para el próximo histórico
+          if (descripcion) {
+            historicoOffset += 20;
+            var lines = doc.splitTextToSize(descripcion, 150); // Dividir la descripción en líneas de 150 unidades de ancho
+            for (var k = 0; k < lines.length; k++) {
+              historicoContent.push({ label: "", value: lines[k], x: 20, y: y + historicoOffset + (k * 5) }); // Añadir cada línea como una entrada separada
+            }
+            historicoOffset += lines.length * 5;
+          } else {
+            historicoOffset += 15;
+          }
+          content = content.concat(historicoContent);
+        }
+
+        y += historicoOffset;
+
+        // Incrementar la posición vertical para la próxima solicitud
+      } catch (error) {
+        console.error('Error al obtener los históricos:', error);
+      }
+    }
+    // Agregar el contenido al PDF
+    var avance = 0;
+    var contador = 1;
+    var auxiliarY = 0;
+    var idInserted = false;
+    var equipoInserted = false;
+    var fechaInserted = false;
+    var nombreInserted = false;
+    for (var k = 0; k < content.length; k++) {
+      var item = content[k];
+      if(auxiliarY >= (pageHeight - 20) && !idInserted && !equipoInserted && !fechaInserted && !nombreInserted){
+        doc.addPage();
+        contador += 1;
+        avance += 30;
+      }
+      if(contador > 1){
+        auxiliarY = (item.y-(pageHeight*(contador-1))+avance);
+        doc.setFontStyle("bold"); // Establecer estilo de fuente en negrita para la etiqueta "ID: " 
+        doc.text(item.label, item.x, auxiliarY);
+        doc.setFontStyle("normal"); // Establecer estilo de fuente normal para el valor
+
+        var labelWidth = doc.getTextWidth(item.label); // Obtener el ancho del label
+        var valueX = item.x + labelWidth + 1; // Agregar un pequeño espacio después del label
+
+        if (item.label.includes("ID")) {
+          doc.setLineWidth(0.5);
+          doc.line(10, auxiliarY - 4, 200, auxiliarY - 4);
+          idInserted = true;
+        }else{idInserted = false;}
+
+        if (item.label.includes("Equipo")) {
+          equipoInserted = true;
+        }else{equipoInserted = false;}
+
+        if (item.label.includes("Fecha")) {
+          fechaInserted = true;
+        }else{fechaInserted = false;}
+
+        if (item.label.includes("Nombre")) {
+          nombreInserted = true;
+        }else{nombreInserted = false;}
+
+        doc.text(item.value, valueX, auxiliarY);
+      }else{
+        doc.setFontStyle("bold"); // Establecer estilo de fuente en negrita para la etiqueta "ID: " 
+        doc.text(item.label, item.x, item.y);
+        doc.setFontStyle("normal"); // Establecer estilo de fuente normal para el valor
+
+        var labelWidth = doc.getTextWidth(item.label); // Obtener el ancho del label
+        var valueX = item.x + labelWidth + 1; // Agregar un pequeño espacio después del label
+
+        if (item.label.includes("ID")) {
+          if(auxiliarY != 0){
+            doc.setLineWidth(0.5);
+            doc.line(10, auxiliarY + 1, 200, auxiliarY + 1);
+          }
+          idInserted = true;
+        }else{idInserted = false;}
+
+        if (item.label.includes("Equipo")) {
+          equipoInserted = true;
+        }else{equipoInserted = false;}
+
+        if (item.label.includes("Fecha")) {
+          fechaInserted = true;
+        }else{fechaInserted = false;}
+
+        if (item.label.includes("Nombre")) {
+          nombreInserted = true;
+        }else{nombreInserted = false;}
+        
+        doc.text(item.value, valueX, item.y);
+        auxiliarY = item.y;
+      }
+    }
+    // Guardar el documento PDF después de procesar todas las solicitudes
+    doc.save('reporte.pdf');
+  }
+
+  async function ReporteSolicitudes() {
+    // Realizar una petición al servidor para obtener todas las solicitudes con sus históricos
+    const response = await fetch('/generar-reporte');
+    const solicitudes = await response.json();
+
+    if (!solicitudes.length) {
+        alert("No hay solicitudes disponibles.");
+        return;
+    }
+
+    // Crear un nuevo documento PDF
+    var doc = new jsPDF('p', 'mm', 'a4');
+    var pageHeight = doc.internal.pageSize.height;
+    
+    // Agregar el título al PDF
+    doc.setFontSize(14);
+    doc.setFontStyle("bold");
+    doc.text("Solicitudes y sus Históricos", 10, 10);
+    doc.line(10, 12, 72, 12);
+
+    var y = 20;
+    doc.setFontSize(10);
+    var content = [];
+
+    // Recorrer las solicitudes y sus históricos
+    for (let solicitud of solicitudes) {
+        let id = solicitud.id;
+        let titulo = solicitud.titulo;
+        let tipo = solicitud.tipo;
+        let equipo = solicitud.equipo;
+        let falla = solicitud.falla;
+
+        // Agregar datos de la solicitud al PDF
+        content.push({ label: "ID: ", value: id, x: 10, y: y });
+        content.push({ label: "Título: ", value: titulo, x: 50, y: y });
+
+        if (tipo === "Especializado") {
+            content.push({ label: "Equipo: ", value: equipo, x: 10, y: y + 5 });
+            content.push({ label: "Falla: ", value: falla, x: 50, y: y + 5 });
+        } else if (tipo === "Edilicio") {
+            content.push({ label: "Falla: ", value: falla, x: 10, y: y + 5 });
+        }
+
+        y += 15;
+
+        // Recorrer los históricos de cada solicitud
+        let historicoOffset = 10;
+        for (let historico of solicitud.historicos) {
+            let estado = historico.estado;
+            let fecha = historico.fecha;
+            let nombre = historico.nombre;
+            let descripcion = historico.descripcion;
+            let repuestos = historico.repuestos ? "Sí" : "No";
+
+            content.push({ label: "Histórico: ", value: "", x: 10, y: y + historicoOffset });
+            content.push({ label: "Fecha: ", value: fecha, x: 20, y: y + historicoOffset + 5 });
+            content.push({ label: "Estado: ", value: estado, x: 95, y: y + historicoOffset + 5 });
+            content.push({ label: "Nombre: ", value: nombre, x: 20, y: y + historicoOffset + 10 });
+            content.push({ label: "Repuestos: ", value: repuestos, x: 95, y: y + historicoOffset + 10 });
+
+            // Si hay descripción, dividir en líneas y agregar al PDF
+            if (descripcion) {
+                let lines = doc.splitTextToSize(descripcion, 150);
+                for (let i = 0; i < lines.length; i++) {
+                    content.push({ label: "", value: lines[i], x: 20, y: y + historicoOffset + (i * 5) });
+                }
+                historicoOffset += lines.length * 5;
+            }
+
+            historicoOffset += 15;
+        }
+
+        y += historicoOffset;
+    }
+
+    // Agregar el contenido al PDF
+    var avance = 0;
+    var contador = 1;
+    var auxiliarY = 0;
+
+    for (let item of content) {
+        if (auxiliarY >= (pageHeight - 20)) {
+            doc.addPage();
+            contador += 1;
+            avance += 30;
+        }
+
+        if (contador > 1) {
+            auxiliarY = (item.y - (pageHeight * (contador - 1)) + avance);
+        } else {
+            auxiliarY = item.y;
+        }
+
+        doc.setFontStyle("bold");
+        doc.text(item.label, item.x, auxiliarY);
+        doc.setFontStyle("normal");
+        doc.text(item.value, item.x + doc.getTextWidth(item.label) + 1, auxiliarY);
+    }
+
+    // Guardar el documento PDF
+    doc.save('reporte_solicitudes.pdf');
+  }
+
+</script>
+
 <script>
   // Obtén el campo de entrada de fecha por su ID
   var fechaInput = document.getElementById('fecha');

@@ -353,4 +353,24 @@ class SolicitudController extends Controller{
         Session::flash('alert-class', 'alert-success');
         return redirect ('solicitudes');
     }
+
+    /*public function generarReporte()
+    {
+        // Obtener todas las solicitudes
+        $solicitudes = Solicitud::all();
+
+        // Recorrer cada solicitud y obtener sus históricos
+        foreach ($solicitudes as $solicitud) {
+            $solicitud->historicos = $this->obtenerHistoricosPorSolicitud($solicitud->id);
+        }
+
+        // Retornar los datos como JSON
+        return response()->json($solicitudes);
+    }
+
+    public function obtenerHistoricosPorSolicitud($id)
+    {
+        return Historico::where('id_solicitud', $id)->get();
+    }*/
+
 }

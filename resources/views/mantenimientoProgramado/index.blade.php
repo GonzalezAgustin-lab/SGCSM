@@ -110,6 +110,12 @@
     </tbody>
   </table>
 
+  <div class="d-flex justify-content-end">
+    <div class="pagination">
+      {{ $mantenimientos_programados->links('pagination::bootstrap-4') }}
+    </div>
+  </div>
+
   <style>
   .btnEliminar{
       background: transparent; /* Fondo transparente */

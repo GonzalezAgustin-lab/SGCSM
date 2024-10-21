@@ -120,6 +120,13 @@
       @endforeach
     </tbody>       
   </table>
+
+  <div class="d-flex justify-content-end">
+    <div class="pagination">
+      {{ $equipos_mant->links('pagination::bootstrap-4') }}
+    </div>
+  </div>
+
   <div class="modal fade" id="show2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -135,7 +142,6 @@
       </div>
     </div>
   </div>
-  {{ $equipos_mant->appends($_GET)->links() }}
 </div>
 <script> 
   //Duracion de alerta (agregado, elimnado, editado)
