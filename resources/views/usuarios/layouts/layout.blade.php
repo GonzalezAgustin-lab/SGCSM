@@ -22,14 +22,14 @@
     </button>
     <div class="collapse navbar-collapse" id="navbar1">
       <ul class="navbar-nav ml-auto">    
-        <button class="btn btn-info" data-toggle="modal" data-target="#agregar_usuario">
+        <button class="btn btn-info" data-toggle="modal" data-target="#agregar_usuario" title="Agregar usuario">
           <i class="fa-solid fa-plus"></i>
         </button>
         &nbsp
         <!--<button class="btn btn-info"  data-toggle="modal" data-target="#agregar_permiso">Nuevo permiso</button> -->      
         <form action="{{ url('/logout') }}" method="POST" >
           {{ csrf_field() }}
-          <button type="submit" class="btn btn-danger" style="display: inline; cursor: pointer;">
+          <button type="submit" class="btn btn-danger" style="display: inline; cursor: pointer;" title="Cerrar sesion">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
           </button>          
         </form>

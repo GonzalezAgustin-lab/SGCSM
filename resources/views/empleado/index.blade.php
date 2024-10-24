@@ -73,7 +73,7 @@
                   <div class="btn-container">
                       <i onclick='fnOpenModalUpdate("{{$empleado->id_p}}")' data-area="{{$empleado->area}}" 
                       class="fa-solid fa-pen-to-square actualizar-editar" data-target="#editar_empleado"
-                      id="edit-{{$empleado->id_p}}">
+                      id="edit-{{$empleado->id_p}}" title="Editar">
                       </i>
                   </div>
                 </div>

@@ -37,7 +37,7 @@
           <td>{{$tipo_equipo->nombre}}</td>
           <td width="300">
             <div class="btn-container">
-              <i onclick='fnOpenModalUpdate("{{$tipo_equipo->id}}")' title="update" id="edit" class="fa-solid fa-pen-to-square actualizar-editar"></i>
+              <i onclick='fnOpenModalUpdate("{{$tipo_equipo->id}}")' id="edit" class="fa-solid fa-pen-to-square actualizar-editar" title="Actualizar"></i>
             </div>
           </td>
         </tr>

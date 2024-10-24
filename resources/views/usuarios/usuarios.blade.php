@@ -55,13 +55,13 @@
               <div class="text-center">
                 <div class="btn-group">
                   <div class="btn-container">
-                    <i id="asignar" class="fa-solid fa-circle-plus asignar" data-toggle="modal" data-target="#asignar_rol" data-id="{{$usuario->id}}" data-nombre="{{$usuario->nombre_usuario}}" title="assing"></i>
+                    <i id="asignar" class="fa-solid fa-circle-plus asignar" data-toggle="modal" data-target="#asignar_rol" data-id="{{$usuario->id}}" data-nombre="{{$usuario->nombre_usuario}}" title="Asignar rol"></i>
                   </div>
                   <div class="btn-container">
-                    <i id="revocar" class="fa-solid fa-circle-minus eliminar" data-toggle="modal" data-target="#revocar_rol" data-id="{{$usuario->id}}" data-nombre="{{$usuario->nombre_usuario}}" title="revocar"></i>
+                    <i id="revocar" class="fa-solid fa-circle-minus eliminar" data-toggle="modal" data-target="#revocar_rol" data-id="{{$usuario->id}}" data-nombre="{{$usuario->nombre_usuario}}" title="Revocar rol"></i>
                   </div>
                   <div class="btn-container">
-                    <a href="{{ url('destroy_usuario', $usuario->id) }}" onclick="return confirm('¿Está seguro que desea eliminar este usuario?')" title="Borrar">
+                    <a href="{{ url('destroy_usuario', $usuario->id) }}" onclick="return confirm('¿Está seguro que desea eliminar este usuario?')" title="Eliminar usuario">
                       <i class="fa-solid fa-circle-xmark eliminar" data-tooltip="Borrar"></i>
                     </a>
                   </div>

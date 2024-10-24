@@ -37,7 +37,7 @@
           <td>{{$area->nombre_a}}</td>
           <td width="90">
             <div class="btn-container">
-              <i id="edit" onclick='fnOpenModalUpdate("{{$area->id_a}}")' title="update" data-nombre_a="{{$area->nombre_a}}" class="fa-solid fa-pen-to-square actualizar-editar"></i>
+              <i id="edit" onclick='fnOpenModalUpdate("{{$area->id_a}}")' data-nombre_a="{{$area->nombre_a}}" class="fa-solid fa-pen-to-square actualizar-editar" title="Editar"></i>
             </div>
           </td>
         </tr>

@@ -50,16 +50,13 @@
               <div class="text-center">
                 <div class="btn-group">
                   <div class="btn-container">
-                    <i id="asignar" class="fa-solid fa-circle-plus asignar" data-toggle="modal" data-target="#asignar_permiso" data-id="{{$rol->id_rol}}" data-nombre="{{$rol->nombre_rol}}" title="assing"></i>
+                    <i id="asignar" class="fa-solid fa-circle-plus asignar" data-toggle="modal" data-target="#asignar_permiso" data-id="{{$rol->id_rol}}" data-nombre="{{$rol->nombre_rol}}" title="Asignar permiso"></i>
                   </div>
                   <div class="btn-container">
-                    <i id="revocar" class="fa-solid fa-circle-minus eliminar" data-toggle="modal" data-target="#revocar_permiso" data-id="{{$rol->id_rol}}" data-nombre="{{$rol->nombre_rol}}" title="revocar"></i>
+                    <i id="revocar" class="fa-solid fa-circle-minus eliminar" data-toggle="modal" data-target="#revocar_permiso" data-id="{{$rol->id_rol}}" data-nombre="{{$rol->nombre_rol}}" title="Revocar permiso"></i>
                   </div>
                 </div>
-              </div>
-              <!--<a href=# data-toggle="modal" data-target="#asignar_permiso" data-id="{{$rol->id_rol}}" data-nombre="{{$rol->nombre_rol}}" class="btn btn-info btn-sm" type="submit"> Asignar Permiso</a>
-              <a href=# data-toggle="modal" data-target="#revocar_permiso" data-id="{{$rol->id_rol}}" data-nombre="{{$rol->nombre_rol}}" class="btn btn-warning btn-sm" type="submit"> Revocar Permiso</a>
--->         
+              </div> 
             </td>
           </tr>                    
         @endforeach  

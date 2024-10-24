@@ -110,9 +110,9 @@
           @endif
           <td>
             <div class="btn-container">
-              <i class="fa-solid fa-pen-to-square actualizar-editar" onclick='fnOpenModalUpdate("{{$equipo_mant->id_e}}")' title="update"
+              <i class="fa-solid fa-pen-to-square actualizar-editar" onclick='fnOpenModalUpdate("{{$equipo_mant->id_e}}")'
               data-tipo="{{$equipo_mant->id_tipo}}" data-area="{{$equipo_mant->id_area}}" data-localizacion="{{$equipo_mant->id_localizacion}}"
-              id="edit-{{$equipo_mant->id_e}}"></i>
+              id="edit-{{$equipo_mant->id_e}}" title="Editar"></i>
             </div>
           </td>
         </tr>

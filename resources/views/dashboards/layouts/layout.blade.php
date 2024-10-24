@@ -27,7 +27,7 @@
         <ul class="navbar-nav ml-auto">
           <form action="{{ url('/logout') }}" method="POST" >
             {{ csrf_field() }}
-            <button type="submit" class="btn btn-danger" style="display: inline; cursor: pointer;">
+            <button type="submit" class="btn btn-danger" style="display: inline; cursor: pointer;" title="Cerrar sesion">
               <i class="fa-solid fa-arrow-right-from-bracket"></i>
             </button>
           </form>

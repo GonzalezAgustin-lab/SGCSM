@@ -39,7 +39,7 @@
         <td>{{$localizacion->nombre}}</td>
         <td width="90">
           <div class="btn-container">
-            <i id="edit" onclick='fnOpenModalUpdate("{{$localizacion->id}}")' title="update" data-nombre="{{$localizacion->nombre}}" data-interno="{{$localizacion->interno}}" class="fa-solid fa-pen-to-square actualizar-editar"></i>
+            <i id="edit" onclick='fnOpenModalUpdate("{{$localizacion->id}}")' data-nombre="{{$localizacion->nombre}}" data-interno="{{$localizacion->interno}}" class="fa-solid fa-pen-to-square actualizar-editar" title="Editar"></i>
           </div>
         </td>
         </tr>

@@ -162,27 +162,27 @@
               <div class="text-center">
                 <div class="btn-group">
                   <div class="btn-container">
-                    <i id="detalle" class="fa-solid fa-circle-info detalle" onclick='fnOpenModalShow({{$solicitud->id}})' title="show"></i>
+                    <i id="detalle" class="fa-solid fa-circle-info detalle" onclick='fnOpenModalShow({{$solicitud->id}})' title="Detalle"></i>
                   </div>
                   <div class="btn-container">
-                    <i id="actualizar" onclick='fnOpenModalUpdate({{$solicitud->id}})' title="update" class="fa-solid fa-arrow-up-from-bracket actualizar-editar"></i>
+                    <i id="actualizar" class="fa-solid fa-arrow-up-from-bracket actualizar-editar" onclick='fnOpenModalUpdate({{$solicitud->id}})' title="Actualizar"></i>
                   </div>
                   @if(!$solicitud->nombre_encargado)
                     <div class="btn-container">
-                      <i id="asignar" class="fa-solid fa-user-plus asignar" onclick='fnOpenModalAssing({{$solicitud->id}})' title="assing"></i>
+                      <i id="asignar" class="fa-solid fa-user-plus asignar" onclick='fnOpenModalAssing({{$solicitud->id}})' title="Asignar"></i>
                     </div>
                   @endif
                   @if($solicitud->estado == "Aprob. pendiente" && $solicitud->id_solicitante == $personaAutenticada->id_p)
                     <div class="btn-container">
-                      <i href="{{url('aprobar_solicitud', $solicitud->id)}}" class="fa-solid fa-check aprobar" title="aprobar" onclick="return confirm ('Está seguro que desea aprobar esta solicitud?')" data-position="top" data-delay="50" data-tooltip="aprobar"></i>
+                      <i href="{{url('aprobar_solicitud', $solicitud->id)}}" class="fa-solid fa-check aprobar" title="Aprobar" onclick="return confirm ('Está seguro que desea aprobar esta solicitud?')" data-position="top" data-delay="50" data-tooltip="aprobar"></i>
                     </div>
                     <div class="btn-container">
-                      <i id="reclamar" class="fa-solid fa-bullhorn reclamar" onclick='fnOpenModalReclaim({{$solicitud->id}})' title="reclaim"></i>
+                      <i id="reclamar" class="fa-solid fa-bullhorn reclamar" onclick='fnOpenModalReclaim({{$solicitud->id}})' title="Reclamar"></i>
                     </div>
                   @endif
                   @if($solicitud->estado == "Abierta" && $solicitud->id_solicitante == $personaAutenticada->id_p)
                     <div class="btn-container">
-                      <i id="editar" onclick='fnOpenModalEdit({{$solicitud->id}})' title="edit" data-tipo="{{$solicitud->tipo_solicitud}}" id="edit-{{$solicitud->id}}" class="fa-solid fa-pen-to-square actualizar-editar"></i>
+                      <i id="editar" class="fa-solid fa-pen-to-square actualizar-editar" onclick='fnOpenModalEdit({{$solicitud->id}})' data-tipo="{{$solicitud->tipo_solicitud}}" id="edit-{{$solicitud->id}}" title="Editar"></i>
                     </div>
                   @endif
                   @can('eliminar-solicitud')
@@ -190,7 +190,7 @@
                       <form action="{{ url('destroy_solicitud', $solicitud->id) }}" method="POST" onsubmit="return confirm('Está seguro que desea eliminar esta solicitud?')" style="display: inline;">
                         @csrf
                         @method('DELETE')
-                        <button class="btnEliminar" type="submit" title="Borrar">
+                        <button class="btnEliminar" type="submit" title="Eliminar">
                           <i class="eliminar fa-solid fa-circle-xmark"></i>
                         </button>
                       </form>

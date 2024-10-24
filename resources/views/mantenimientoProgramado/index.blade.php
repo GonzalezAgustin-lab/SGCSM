@@ -91,13 +91,13 @@
               <div class="text-center">
                 <div class="btn-group">
                   <div class="btn-container">
-                    <i onclick='fnOpenModalEdit({{$mant_prog->id}})' title="edit" id="edit-{{$mant_prog->id}}" class="fa-solid fa-pen-to-square actualizar-editar"></i>
+                    <i onclick='fnOpenModalEdit({{$mant_prog->id}})' id="edit-{{$mant_prog->id}}" class="fa-solid fa-pen-to-square actualizar-editar" title="Editar"></i>
                   </div>
                   <div class="btn-container">
                     <form action="{{ url('destroy_mant_prog', $mant_prog->id) }}" method="POST" onsubmit="return confirm('¿Está seguro que desea eliminar este mantenimiento programado?')" style="display: inline;">
                       @csrf
                       @method('DELETE')
-                      <button class="btnEliminar" type="submit" title="Borrar">
+                      <button class="btnEliminar" type="submit" title="Eliminar">
                         <i class="eliminar fa-solid fa-circle-xmark"></i>
                       </button>
                     </form>

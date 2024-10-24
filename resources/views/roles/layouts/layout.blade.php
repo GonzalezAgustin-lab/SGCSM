@@ -17,7 +17,7 @@
   <script language="JavaScript" src="{{ URL::asset('/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/parametros_mantenimiento"> <img class="logo" src="{{ URL::to('/img/logo.png') }}" height="40"> </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar1" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar1" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" title="Agregar rol">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbar1">
@@ -25,7 +25,7 @@
         <!--<button class="btn btn-info"  data-toggle="modal" data-target="#agregar_permiso">Nuevo permiso</button> -->      
         <form action="{{ url('/logout') }}" method="POST" >
           {{ csrf_field() }}
-          <button type="submit" class="btn btn-danger" style="display: inline; cursor: pointer;">
+          <button type="submit" class="btn btn-danger" style="display: inline; cursor: pointer;" title="Cerrar sesion">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
           </button>          
         </form>
