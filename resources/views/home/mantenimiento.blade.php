@@ -24,7 +24,7 @@
         </div>
         <div class="col-md-6 text-center">
             <br>
-            <a href="/"> <img  src="{{ URL::to('/img/dashboard.png') }}" height="140"></a>
+            <a href="/dashboard"> <img  src="{{ URL::to('/img/dashboard.png') }}" height="140"></a>
             <h2 style="color: #3b557a">Dashboard</h2>
         </div>
         <div class="col-md-6 text-center">

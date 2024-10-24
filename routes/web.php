@@ -7,6 +7,7 @@ use App\Http\Controllers\EstadoController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\SolicitudController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Tipo_EquipoController;
 use App\Http\Controllers\Equipo_mantController;
 use App\Http\Controllers\LocalizacionController;
@@ -173,4 +174,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('show_edit_mant_prog/{mant_prev}', [MantenimientoProgramadoController::class, 'show_edit_mant_prog'])->name('show_edit_mant_prog');
     Route::post('edit_mant_prog', [MantenimientoProgramadoController::class, 'edit_mant_prog'])->name('edit_mant_prog');
     Route::get('getMantProg/{mant_prev}', [MantenimientoProgramadoController::class, 'getMantProg'])->name('getMantProg');
+});
+
+//****************Dashboards**********************
+Route::middleware(['auth'])->group(function () {
+    Route::resource('dashboard', DashboardController::class);
 });
