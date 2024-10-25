@@ -1,7 +1,7 @@
 @extends('layouts.app_parametros_mant')
 @section('content')
 
-<div class="container text-center" >
+<div class="container text-center">
 
     <br><br><br>
   
@@ -23,20 +23,26 @@
             <h3 style="color: #3b557a">Roles</h3>
         </div>
 
-        <div class="col-md-4 text-center">
+        <div class="col-md-6 text-center">
             <br>
             <a href="/areas"><img src="{{ URL::to('/img/areas.png') }}" height="140"></a>
             <h3 style="color: #3b557a">Areas</h3>
         </div>
-        <div class="col-md-4 text-center">
+        <div class="col-md-6 text-center">
             <br>
             <a href="/localizaciones"><img src="{{ URL::to('/img/localizaciones.png') }}" height="140"></a>
             <h3 style="color: #3b557a">Localizaciones</h3>
         </div>
-        <div class="col-md-4 text-center">
+
+        <div class="col-md-6 text-center">
             <br>
             <a href="/tipos_equipos"><img src="{{ URL::to('/img/tipos de equipos.png') }}" height="140"></a>
             <h3 style="color: #3b557a">Tipos de equipos</h3>
+        </div>
+        <div class="col-md-6 text-center">
+            <br>
+            <a href="/backup"><img src="{{ URL::to('/img/backup.png') }}" height="140"></a>
+            <h3 style="color: #3b557a">Back up</h3>
         </div>
 
     </div>

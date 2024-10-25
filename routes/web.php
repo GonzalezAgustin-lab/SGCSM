@@ -4,6 +4,7 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\EstadoController;
+use App\Http\Controllers\BackupController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\SolicitudController;
@@ -179,4 +180,10 @@ Route::middleware(['auth'])->group(function () {
 //****************Dashboards**********************
 Route::middleware(['auth'])->group(function () {
     Route::resource('dashboard', DashboardController::class);
+});
+
+//********************Back up*********************
+Route::middleware(['auth'])->group(function () {
+    Route::resource('backup', BackupController::class);
+    Route::post('/export-backup', [BackupController::class, 'exportBackup'])->name('backup.export');
 });
