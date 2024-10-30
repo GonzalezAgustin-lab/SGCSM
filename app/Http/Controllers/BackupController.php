@@ -17,18 +17,15 @@ class BackupController extends Controller
     public function exportBackup()
     {
         try {
-            // Obtener configuración de la base de datos
             $databaseName = config('database.connections.mysql.database');
             $username = config('database.connections.mysql.username');
             $password = config('database.connections.mysql.password');
             $host = config('database.connections.mysql.host');
             
-            // Verificar que tenemos toda la información necesaria
             if (empty($databaseName)) {
                 throw new \Exception('Nombre de base de datos no configurado');
             }
 
-            // Crear el directorio con permisos adecuados
             $backupPath = storage_path('app/backups');
             if (!file_exists($backupPath)) {
                 mkdir($backupPath, 0777, true);
@@ -39,37 +36,46 @@ class BackupController extends Controller
             $filename = "{$databaseName}_" . date('Y_m_d_His') . ".sql";
             $filePath = str_replace('\\', '/', $backupPath . '/' . $filename);
 
-            // Asegurar que el archivo se pueda crear
             touch($filePath);
             chmod($filePath, 0777);
 
-            // Construir el comando mysqldump
             $command = [
                 'C:\\xampp\\mysql\\bin\\mysqldump',
-                "-u{$username}"
+                "-u{$username}",
+                "--databases",        // Incluye CREATE DATABASE y USE DATABASE
+                "--add-drop-database",// Agrega DROP DATABASE IF EXISTS
+                "--routines",         // Incluye procedimientos almacenados y funciones
+                "--triggers",         // Incluye triggers
+                "--events",           // Incluye eventos
+                "--add-drop-table",   // Agrega DROP TABLE IF EXISTS
+                "--create-options",   // Incluye opciones de CREATE TABLE
+                "--set-charset",      // Configura el charset
+                "--no-tablespaces"    // Evita problemas de permisos con tablespaces
             ];
 
-            // Agregar password solo si existe
             if (!empty($password)) {
                 $command[] = "-p{$password}";
             }
 
-            // Agregar host y nombre de base de datos
             $command[] = "-h{$host}";
             $command[] = $databaseName;
             $command[] = "--result-file={$filePath}";
 
-            // Debug - Imprimir comando (comentar en producción)
             \Log::info('Comando a ejecutar: ' . implode(' ', $command));
 
             $process = new Process($command);
             $process->setTimeout(3600);
             
-            // Ejecutar el proceso
             $process->mustRun();
 
-            // Verificar si el archivo existe y tiene contenido
             if (file_exists($filePath) && filesize($filePath) > 0) {
+                $header = "-- Base de datos: `{$databaseName}`\n";
+                $header .= "-- Fecha de exportación: " . date('Y-m-d H:i:s') . "\n";
+                $header .= "-- Servidor: {$host}\n\n";
+                
+                $content = file_get_contents($filePath);
+                file_put_contents($filePath, $header . $content);
+
                 return response()->download($filePath)->deleteFileAfterSend(true);
             } else {
                 throw new \Exception('El archivo de backup no se generó correctamente');
