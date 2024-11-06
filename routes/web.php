@@ -184,6 +184,10 @@ Route::middleware(['auth'])->group(function () {
 
 //********************Back up*********************
 Route::middleware(['auth'])->group(function () {
-    Route::resource('backup', BackupController::class);
+    Route::get('/backup', [BackupController::class, 'indexBackup']);
     Route::post('/export-backup', [BackupController::class, 'exportBackup'])->name('backup.export');
 });
+
+//********************Restore Back up*********************
+Route::get('/restore', [BackupController::class, 'indexRestore'])->name('restore');
+Route::post('/import-backup', [BackupController::class, 'importBackup'])->name('backup.import');
