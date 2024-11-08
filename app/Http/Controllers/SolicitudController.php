@@ -224,9 +224,21 @@ class SolicitudController extends Controller{
         Solicitud::getModelHasRoles()];
     }  
 
-    public function select_estado(){
-        return Solicitud::getEstados();
-    } 
+    public function select_estado()
+    {
+        $userAutenticado = Auth::id();
+        $queryEstados = Solicitud::getEstados();
+        $rolAutenticado = Solicitud::obtenerRolUserAutenticado($userAutenticado);
+    
+        if ($rolAutenticado->nombreRol === "Empleado-Mantenimiento") {
+            $estados = $queryEstados->whereNotIn('nombre', ['Aprobada', 'Reclamada']);
+            return $estados;
+        } elseif ($rolAutenticado->nombreRol === "Administrador" || $rolAutenticado === "Jefe-Mantenimiento") {
+            return $queryEstados;
+        }
+        
+        return collect([]);
+    }
 
     public function select_equipos(){
         return Solicitud::getEquiposMantenimiento();

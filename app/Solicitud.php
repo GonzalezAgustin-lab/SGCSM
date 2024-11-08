@@ -209,6 +209,13 @@ class Solicitud extends Model{
     public static function deleteHistorico($id){
         DB::table('historico_solicitudes')->where('id_solicitud', $id)->delete();
     }
+    public static function obtenerRolUserAutenticado($idUser){
+        return (DB::table('model_has_roles')
+        ->leftJoin('roles', 'roles.id', 'model_has_roles.role_id')
+        ->select('roles.name as nombreRol')
+        ->where('model_has_roles.model_id', $idUser)
+        ->first());
+    }
     public static function obtenerAreaUserAutenticado($idUser){
         return (DB::table('personas')
         ->leftJoin('users', 'users.id', 'personas.usuario')
