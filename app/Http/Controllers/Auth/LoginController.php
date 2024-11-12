@@ -28,6 +28,6 @@ class LoginController extends Controller
     }
     protected function redirectTo()
     {
-        return '/instructivos';
+        return '/';
     }
 }

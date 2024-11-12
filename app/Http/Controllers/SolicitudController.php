@@ -171,7 +171,7 @@ class SolicitudController extends Controller{
         $nuevo_historico->fecha = $fechaActual;    
         $nuevo_historico->save();
         
-        Session::flash('message','Solicitud modificado con éxito');
+        Session::flash('message','Solicitud actualizada con éxito');
         Session::flash('alert-class', 'alert-success');
         return redirect('solicitudes');
     }

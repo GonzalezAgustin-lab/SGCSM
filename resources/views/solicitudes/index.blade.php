@@ -174,7 +174,10 @@
                   @endif
                   @if($solicitud->estado == "Aprob. pendiente" && $solicitud->id_solicitante == $personaAutenticada->id_p)
                     <div class="btn-container">
-                      <i href="{{url('aprobar_solicitud', $solicitud->id)}}" class="fa-solid fa-check aprobar" title="Aprobar" onclick="return confirm ('Está seguro que desea aprobar esta solicitud?')" data-position="top" data-delay="50" data-tooltip="aprobar"></i>
+                      <form id="aprobarForm{{$solicitud->id}}" action="{{ route('aprobar_solicitud', $solicitud->id) }}" method="POST" style="display: inline;">
+                        @csrf
+                        <i id="aprobar" class="fa-solid fa-check aprobar" onclick="aprobarSolicitud({{$solicitud->id}})" title="Aprobar" data-position="top" data-delay="50" data-tooltip="aprobar"></i>
+                      </form>
                     </div>
                     <div class="btn-container">
                       <i id="reclamar" class="fa-solid fa-bullhorn reclamar" onclick='fnOpenModalReclaim({{$solicitud->id}})' title="Reclamar"></i>
@@ -1227,6 +1230,12 @@
     });
   }
   
+  function aprobarSolicitud(id) {
+    if (confirm('¿Está seguro que desea aprobar esta solicitud?')) {
+      document.getElementById('aprobarForm' + id).submit();
+    }
+  }
+
   function fnOpenModalReclaim(id){
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
     $.ajax({

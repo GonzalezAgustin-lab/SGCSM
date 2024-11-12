@@ -52,7 +52,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('mostrar_equipos_mant', [SolicitudController::class, 'mostrar_equipos_mant'])->name('mostrar_equipos_mant');
 
     Route::get('show_solicitud/{solicitud}', [SolicitudController::class, 'show_solicitud'])->name('show_solicitud');
-    Route::get('aprobar_solicitud/{solicitud}', [SolicitudController::class, 'aprobar_solicitud']);
+    Route::post('aprobar_solicitud/{solicitud}', [SolicitudController::class, 'aprobar_solicitud'])->name('aprobar_solicitud');
     Route::delete('destroy_solicitud/{solicitud}', [SolicitudController::class, 'destroy_solicitud']);
 
     Route::get('select_tablas_solicitudes', [SolicitudController::class, 'select_tablas_solicitudes'])->name('select_tablas_solicitudes');
