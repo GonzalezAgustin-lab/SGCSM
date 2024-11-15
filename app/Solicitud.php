@@ -230,6 +230,22 @@ class Solicitud extends Model{
         ->first());
 
     }
+    public static function obtenerIdJefesMant(){
+        return (DB::table('personas')
+        ->leftJoin('users', 'users.id', 'personas.usuario')
+        ->leftJoin('model_has_roles', 'model_has_roles.model_id', 'users.id')
+        ->leftJoin('roles', 'roles.id', 'model_has_roles.role_id')
+        ->select('users.name as nombre', 'users.email as email')
+        ->where('roles.name', 'Jefe-Mantenimiento')
+        ->get());
+    }
+    public static function obtenerTituloYEstadoSolicitud($idSolicitud){
+        return (DB::table('solicitudes')
+        ->leftJoin('estados', 'estados.id', 'solicitudes.id_estado')
+        ->select('solicitudes.titulo as titulo', 'estados.nombre as estado')
+        ->where('solicitudes.id', $idSolicitud)
+        ->first());
+    }
     public static function obtenerMailNombreTituloSolicitante($idSolicitud){
         $consulta = DB::table('personas')
         ->leftJoin('solicitudes', 'solicitudes.id_solicitante', 'personas.id_p')

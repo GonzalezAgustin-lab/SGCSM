@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use App\Historico_solicitudes;
@@ -170,6 +171,43 @@ class SolicitudController extends Controller{
         $nuevo_historico->id_persona = $idPersona->id_p;
         $nuevo_historico->fecha = $fechaActual;    
         $nuevo_historico->save();
+
+        $mailNombreSolicitante = Solicitud::obtenerMailNombreTituloSolicitante($request['id_solicitud']);
+        $nombreEstadoSolicitud = Solicitud::obtenerNombreEstadoSolicitud($request['id_solicitud']);
+
+        //da error cuando el correo no existe
+        if($request['estado'] == 5){
+            try {
+                Mail::to($mailNombreSolicitante->email)->send(new \App\Mail\aprobarSolicitud(
+                    $mailNombreSolicitante->nombre, 
+                    $request['id_solicitud'],
+                    $nombreEstadoSolicitud, 
+                    $mailNombreSolicitante->titulo));
+            } catch (\Exception $e) {
+                Session::flash('message2','No se pudo enviar el correo');
+                Session::flash('alert-class2', 'alert-warning');
+            }
+        }else{
+            try {
+                Mail::to($mailNombreSolicitante->email)->send(new \App\Mail\cambioDeEstadoSolicitud(
+                    $mailNombreSolicitante->nombre, 
+                    $request['id_solicitud'], 
+                    $nombreEstadoSolicitud, 
+                    $mailNombreSolicitante->titulo));
+            } catch (\Exception $e) {
+                Session::flash('message2','No se pudo enviar el correo');
+                Session::flash('alert-class2', 'alert-warning');
+            }
+        }
+
+        if($request['estado'] == 5 || $request['estado'] == 6 || $request['estado'] == 7){
+            try {
+                $this->envioCorreoJefeMant($request['id_solicitud']);
+            } catch (\Exception $e) {
+                Session::flash('message2','No se pudo enviar el correo');
+                Session::flash('alert-class2', 'alert-warning');
+            }
+        } 
         
         Session::flash('message','Solicitud actualizada con éxito');
         Session::flash('alert-class', 'alert-success');
@@ -205,6 +243,21 @@ class SolicitudController extends Controller{
         $nuevo_historico->id_persona = $idPersona->id_p;
         $nuevo_historico->fecha = $fechaActual;    
         $nuevo_historico->save();
+
+        $mailNombreSolicitante = Solicitud::obtenerMailNombreTituloSolicitante($request['id_solicitud']);
+        $nombreEstadoSolicitud = Solicitud::obtenerNombreEstadoSolicitud($request['id_solicitud']);
+
+        //da error cuando el correo no existe
+        try {
+            Mail::to($mailNombreSolicitante->email)->send(new \App\Mail\cambioDeEstadoSolicitud(
+                $mailNombreSolicitante->nombre, 
+                $request['id_solicitud'],
+                $nombreEstadoSolicitud, 
+                $mailNombreSolicitante->titulo));
+        } catch (\Exception $e) {
+            Session::flash('message2','No se pudo enviar el correo');
+            Session::flash('alert-class2', 'alert-warning');
+        }
 
         Session::flash('message','Solicitud asignada con éxito');
         Session::flash('alert-class', 'alert-success');
@@ -278,6 +331,8 @@ class SolicitudController extends Controller{
         $nuevo_historico->id_persona = $idPersona->id_p;
         $nuevo_historico->fecha = $fechaActual;    
         $nuevo_historico->save();
+
+        $this->envioCorreoJefeMant($solicitud->id);
 
         Session::flash('message','Solicitud aprobada con éxito');
         Session::flash('alert-class', 'alert-success');
@@ -366,23 +421,25 @@ class SolicitudController extends Controller{
         return redirect ('solicitudes');
     }
 
-    /*public function generarReporte()
-    {
-        // Obtener todas las solicitudes
-        $solicitudes = Solicitud::all();
+    public function envioCorreoJefeMant($idSolicitud){
+        $idsJefesMant = Solicitud::obtenerIdJefesMant();
+        $tituloYEstadoSolicitud = Solicitud::obtenerTituloYEstadoSolicitud($idSolicitud);
 
-        // Recorrer cada solicitud y obtener sus históricos
-        foreach ($solicitudes as $solicitud) {
-            $solicitud->historicos = $this->obtenerHistoricosPorSolicitud($solicitud->id);
+        foreach ($idsJefesMant as $jefe) {
+            if ($tituloYEstadoSolicitud->estado == "Aprob. pendiente" || $tituloYEstadoSolicitud->estado == "Aprobada" || $tituloYEstadoSolicitud->estado == "Reclamada") {
+                try {
+                    Mail::to($jefe->email)->send(new \App\Mail\avisoJefeCambioSolicitudes(
+                        $jefe->nombre,
+                        $idSolicitud,
+                        $tituloYEstadoSolicitud->estado,
+                        $tituloYEstadoSolicitud->titulo
+                    ));
+                } catch (\Exception $e) {
+                    Session::flash('message2', 'No se pudo enviar el correo');
+                    Session::flash('alert-class2', 'alert-warning');
+                }
+            }
         }
-
-        // Retornar los datos como JSON
-        return response()->json($solicitudes);
     }
-
-    public function obtenerHistoricosPorSolicitud($id)
-    {
-        return Historico::where('id_solicitud', $id)->get();
-    }*/
 
 }

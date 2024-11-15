@@ -20,6 +20,17 @@
   </div>
 @endif
 
+@if(Session::has('message2'))
+  <div class="container" id="div.alert2">
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="alert {{Session::get('alert-class2')}} col-10 text-center" role="alert">
+        {{Session::get('message2')}}
+      </div>
+    </div>
+  </div>
+@endif
+
 <!-- barra para buscar solicitudes -->
 <div class="col">
   <div class="form-group">
