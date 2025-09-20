@@ -132,6 +132,8 @@
 <script>
   var ruta_update = '{{ route('update_empleado') }}';
   var ruta_create = '{{ route('store') }}';
+  var ruta_show_store_empleado = "{{ url('show_store_empleado') }}";
+  var ruta_show_update_empleado = "{{ url('show_update_empleado') }}";
   var closeButton = $('<button type="button" class="btn btn-secondary" id="closeButton" data-dismiss="modal">Cerrar</button>');
   var closeButton2 = $('<button type="button" class="btn btn-secondary" id="closeButton2" data-dismiss="modal">Cerrar</button>');
   var saveButton = $('<button type="submit" class="btn btn-info" id="saveButton" onclick="fnSaveEmpleado()">Guardar</button>');
@@ -140,7 +142,7 @@
 
   function fnOpenModalAgregarEmpleado(){
     var myModal = new bootstrap.Modal(document.getElementById('show3'));
-    var url = window.location.origin + "/show_store_empleado/";
+      var url = ruta_show_store_empleado;
     $.get(url, function(data) {
       // Borrar contenido anterior
       $("#modalshow3").empty();
@@ -207,7 +209,7 @@
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
     var area = document.getElementById('edit-' + id_e).getAttribute('data-area');
     $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/show_update_empleado/" + id_e,
+      url: ruta_show_update_empleado + "/" + id_e,
       type: 'GET',
       success: function(data) {
         // Borrar contenido anterior

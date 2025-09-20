@@ -68,73 +68,52 @@
 
 </div>
 <script> 
-  //Duracion de alerta (agregado, elimnado, editado)
-  $("tipo_equipo").ready(function(){
+  //Duracion de alerta (agregado, eliminado, editado)
+  $(document).ready(function(){
     setTimeout(function(){
       $("div.alert").fadeOut();
     }, 5000 ); // 5 secs
   });
-  </script> 
+</script> 
 
 <script> 
   var ruta_create = '{{ route('store_tipo_equipo') }}'; 
   var ruta_update = '{{ route('update_tipo_equipo') }}';
+  var ruta_show_store_tipo_equipo = "{{ url('show_store_tipo_equipo') }}";
+  var ruta_show_update_tipo_equipo = "{{ url('show_update_tipo_equipo') }}";
   var closeButton = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>');
   var saveButton = $('<button type="submit" class="btn btn-info">Guardar</button>');
+
   //modal store
   function fnOpenModalStore() {
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
-    var url = window.location.origin + "/show_store_tipo_equipo/";
+    var url = ruta_show_store_tipo_equipo + "/";
     $.get(url, function(data) {
-      // Borrar contenido anterior
       $("#modalshow").empty();
-
-      // Establecer el contenido del modal
       $("#modalshow").html(data);
-
-      // Borrar contenido anterior
       $("#modalfooter").empty();
-
-      // Agregar el botón "Cerrar y Guardar" al footer
       $("#modalfooter").append(closeButton);
       $("#modalfooter").append(saveButton);
-
-      // Cambiar la acción del formulario
       $('#myForm').attr('action', ruta_create);
-
-      // Mostrar el modal
       myModal.show();
-
-      // Cambiar el tamaño del modal a "modal-lg"
       var modalDialog = myModal._element.querySelector('.modal-dialog');
       modalDialog.classList.remove('modal-sm');
       modalDialog.classList.remove('modal-lg');
     });
   }
+
   //modal update
   function fnOpenModalUpdate(id) {
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
-    var url = "{{ url('show_update_tipo_equipo') }}/" + id;
+    var url = ruta_show_update_tipo_equipo + "/" + id;
     $.get(url, function(data) {
-      // Borrar contenido anterior
       $("#modalshow").empty();
-      // Establecer el contenido del modal
       $("#modalshow").html(data);
-
-      // Borrar contenido anterior
       $("#modalfooter").empty();
-
-      // Agregar el botón "Cerrar" y "Guardar" al footer
       $("#modalfooter").append(closeButton);
       $("#modalfooter").append(saveButton);
-
-      // Cambiar la acción del formulario
       $('#myForm').attr('action', ruta_update);
-
-      // Mostrar el modal
       myModal.show();
-
-      // Cambiar el tamaño del modal a "modal-lg"
       var modalDialog = myModal._element.querySelector('.modal-dialog');
       modalDialog.classList.remove('modal-sm');
       modalDialog.classList.remove('modal-lg');

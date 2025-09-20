@@ -87,6 +87,7 @@ class Equipo_mantController extends Controller{
         ->update([
             'id' => $request['id'],
             'id_tipo' => $request['tipo_equipo_mant_editar'],
+            'id_area' => $request['area_editar'],  
             'marca' => $request['marca'],
             'modelo' => $request['modelo'],
             'num_serie' => $request['num_serie'],

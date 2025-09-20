@@ -13,7 +13,7 @@
 		<link  rel="icon"   href="img/ico.png" type="image/png" />
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-			<a class="navbar-brand" href="/"> <img class="logo" src="{{ URL::to('/img/logo.png') }}" height="40"> </a>
+			<a class="navbar-brand" href="{{ url('home') }}"> <img class="logo" src="{{ URL::to('/img/logo.png') }}" height="40"> </a>
 			<div class="collapse navbar-collapse" id="navbar1">
 				<ul class="navbar-nav ml-auto"> &nbsp
 					<div id="notificacion_off" style="display: none">

@@ -97,7 +97,7 @@ class SolicitudController extends Controller{
         
 
         $solicitud = new Solicitud;
-        $solicitud->id = $aux+1;
+        //$solicitud->id = $aux+1;
         $solicitud->titulo = $request['titulo'];
         if($request['tipo_solicitud'] == 1){
             $solicitud->id_equipo = $request['equipo'];
@@ -113,7 +113,7 @@ class SolicitudController extends Controller{
         $solicitud->save();
 
         $historico_solicitud = new Historico_solicitudes;
-        $historico_solicitud->id_solicitud = $aux+1;
+        $historico_solicitud->id_solicitud = $solicitud->id;
         $historico_solicitud->id_estado = 1;
         $historico_solicitud->actual = 1;
         $historico_solicitud->descripcion = $request['descripcion'];

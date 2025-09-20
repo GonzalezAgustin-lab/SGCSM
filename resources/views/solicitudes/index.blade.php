@@ -296,6 +296,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 
 <script>
+
+  var url_getSolicitud = "{{ url('getSolicitud') }}";
+  var url_show_edit_solicitud = "{{ url('show_edit_solicitud') }}";
+  var url_show_store_solicitud = "{{ url('show_store_solicitud') }}";
+  var url_show_solicitud = "{{ url('show_solicitud') }}";
+  var url_show_update_solicitud = "{{ url('show_update_solicitud') }}";
+  var url_show_assing_solicitud = "{{ url('show_assing_solicitud') }}";
+  var url_show_reclamar_solicitud = "{{ url('show_reclamar_solicitud') }}";
+  var url_show_mostrar_equipos_mant_solicitudes = "{{ url('show_mostrar_equipos_mant_solicitudes') }}";
+  var url_getHistoricos = "{{ url('getHistoricos') }}";
+
   async function Report() {
     // Obtener todos los checkboxes seleccionados
     var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked:not(#checkAll)');
@@ -641,7 +652,7 @@
   function getSolicitud(idSolicitud) {
     return new Promise(function(resolve, reject) {
       $.ajax({
-        url: window.location.protocol + '//' + window.location.host + "/getSolicitud/" + idSolicitud,
+        url: url_getSolicitud + "/" + idSolicitud,
         method: 'GET',
         success: function(data) {
           resolve(data);
@@ -658,7 +669,7 @@
   async function fnOpenModalEdit(id) {
     var myModal = new bootstrap.Modal(document.getElementById('show4'));
     $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/show_edit_solicitud/" + id,
+      url: url_show_edit_solicitud + "/" + id,
       type: 'GET',
       success: function(data) {
         // Borrar contenido anterior
@@ -859,7 +870,7 @@
   function fnOpenModalShowEquipos() {
     var myModal3 = new bootstrap.Modal(document.getElementById('show3'));
     $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/show_mostrar_equipos_mant_solicitudes/",
+      url: url_show_mostrar_equipos_mant_solicitudes + "/",
       type: 'GET',
       success: function(data) {
         // Borrar contenido anterior
@@ -894,7 +905,7 @@
   //modal store
   function fnOpenModalStore() {
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
-    var url = window.location.origin + "/show_store_solicitud/";
+    var url = url_show_store_solicitud + "/";
     var closeButton2 = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>');
     $.get(url, function(data) {
       // Borrar contenido anterior
@@ -1083,7 +1094,7 @@
   function getHistoricos(id) {
     return new Promise(function(resolve, reject) {
       $.ajax({
-        url: window.location.protocol + '//' + window.location.host + "/getHistoricos/" + id,
+        url: url_getHistoricos + "/" + id,
         method: 'GET',
         success: function(data) {
           resolve(data);
@@ -1119,7 +1130,7 @@
   function fnOpenModalShow(id) {
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
     $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/show_solicitud/" + id,
+      url: url_show_solicitud + "/" + id,
       type: 'GET',
       success: function(data) {
         // Borrar contenido anterior
@@ -1148,7 +1159,7 @@
   function fnOpenModalUpdate(id){
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
     $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/show_update_solicitud/" + id,
+      url: url_show_update_solicitud + "/" + id,
       type: 'GET',
       success: function(data) {
         // Borrar contenido anterior
@@ -1199,7 +1210,7 @@
   function fnOpenModalAssing(id){
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
     $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/show_assing_solicitud/" + id,
+      url: url_show_assing_solicitud + "/" + id,
       type: 'GET',
       success: function(data) {
         // Borrar contenido anterior
@@ -1250,7 +1261,7 @@
   function fnOpenModalReclaim(id){
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
     $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/show_reclamar_solicitud/" + id,
+      url: url_show_reclamar_solicitud + "/" + id,
       type: 'GET',
       success: function(data) {
         // Borrar contenido anterior

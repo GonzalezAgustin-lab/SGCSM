@@ -70,46 +70,34 @@
 
 </div>
 <script> 
-  //Duracion de alerta (agregado, elimnado, editado)
-  $("localizacion").ready(function()
-  {
-    setTimeout(function()
-    {
+  //Duracion de alerta (agregado, eliminado, editado)
+  $(document).ready(function(){
+    setTimeout(function(){
       $("div.alert").fadeOut();
     }, 5000 ); // 5 secs
   });
-  </script> 
+</script> 
 
 <script> 
   var ruta_create = '{{ route('store_localizacion') }}';
   var ruta_update = '{{ route('update_localizacion') }}';
+  var ruta_show_store_localizacion = "{{ url('show_store_localizacion') }}";
+  var ruta_show_update_localizacion = "{{ url('show_update_localizacion') }}";
   var closeButton = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>');
   var saveButton = $('<button type="submit" class="btn btn-info">Guardar</button>');
+
   //modal store
   function fnOpenModalStore() {
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
-    var url = window.location.origin + "/show_store_localizacion/";
+    var url = ruta_show_store_localizacion + "/";
     $.get(url, function(data) {
-      // Borrar contenido anterior
       $("#modalshow").empty();
-
-      // Establecer el contenido del modal
       $("#modalshow").html(data);
-
-      // Borrar contenido anterior
       $("#modalfooter").empty();
-
-      // Agregar el botón "Cerrar y Guardar" al footer
       $("#modalfooter").append(closeButton);
       $("#modalfooter").append(saveButton);
-
-      // Cambiar la acción del formulario
       $('#myForm').attr('action', ruta_create);
-
-      // Mostrar el modal
       myModal.show();
-
-      // Cambiar el tamaño del modal a "modal-lg"
       var modalDialog = myModal._element.querySelector('.modal-dialog');
       modalDialog.classList.remove('modal-sm');
       modalDialog.classList.add('modal-lg');
@@ -117,47 +105,34 @@
   }
   
   //modal update
-  function fnOpenModalUpdate(id) 
-  {
+  function fnOpenModalUpdate(id) {
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
     $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/show_update_localizacion/" + id,
+      url: ruta_show_update_localizacion + "/" + id,
       type: 'GET',
       success: function(data) {
-        // Borrar contenido anterior
         $("#modalshow").empty();
-        // Establecer el contenido del modal
         $("#modalshow").html(data);
-
-        // Borrar contenido anterior
         $("#modalfooter").empty();
-
-        // Agregar el botón "Cerrar" al footer
         $("#modalfooter").append(closeButton);
         $("#modalfooter").append(saveButton);
-
-        //Cambiar la acción del formulario
         $('#myForm').attr('action', ruta_update);
-
-        // Mostrar el modal
         myModal.show();
-
-        // Cambiar el tamaño del modal a "modal-lg"
         var modalDialog = myModal._element.querySelector('.modal-dialog');
         modalDialog.classList.remove('modal-sm');
         modalDialog.classList.add('modal-lg');
       },
     });
   }
-  $('#show2').on('show.bs.modal', function (event) {
-      $.get('select_area/',function(data){
-        var html_select = '<option value="">Seleccione </option>'
 
-        for(var i = 0; i<data.length; i ++){
-          html_select += '<option value ="'+data[i].id_a+'">'+data[i].nombre_a+'</option>';
-        }
-        $('#area').html(html_select);
-      });
+  $('#show2').on('show.bs.modal', function (event) {
+    $.get('select_area/',function(data){
+      var html_select = '<option value="">Seleccione </option>'
+      for(var i = 0; i<data.length; i ++){
+        html_select += '<option value ="'+data[i].id_a+'">'+data[i].nombre_a+'</option>';
+      }
+      $('#area').html(html_select);
     });
+  });
 </script> 
 @stop

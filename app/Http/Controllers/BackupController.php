@@ -26,7 +26,7 @@ class BackupController extends Controller
             $username = config('database.connections.mysql.username');
             $password = config('database.connections.mysql.password');
             $host = config('database.connections.mysql.host');
-            
+
             if (empty($databaseName)) {
                 throw new \Exception('Nombre de base de datos no configurado');
             }
@@ -44,18 +44,28 @@ class BackupController extends Controller
             touch($filePath);
             chmod($filePath, 0777);
 
+            // Detectar sistema operativo
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                $mysqldump = 'C:\\xampp\\mysql\\bin\\mysqldump';
+            } else {
+                // Para XAMPP en Linux
+                $mysqldump = '/opt/lampp/bin/mysqldump';
+                // O simplemente 'mysqldump' si está en el PATH
+                // $mysqldump = 'mysqldump';
+            }
+
             $command = [
-                'C:\\xampp\\mysql\\bin\\mysqldump',
+                $mysqldump,
                 "-u{$username}",
-                "--databases",        // Incluye CREATE DATABASE y USE DATABASE
-                "--add-drop-database",// Agrega DROP DATABASE IF EXISTS
-                "--routines",         // Incluye procedimientos almacenados y funciones
-                "--triggers",         // Incluye triggers
-                "--events",           // Incluye eventos
-                "--add-drop-table",   // Agrega DROP TABLE IF EXISTS
-                "--create-options",   // Incluye opciones de CREATE TABLE
-                "--set-charset",      // Configura el charset
-                "--no-tablespaces"    // Evita problemas de permisos con tablespaces
+                "--databases",
+                "--add-drop-database",
+                "--routines",
+                "--triggers",
+                //"--events",
+                "--add-drop-table",
+                "--create-options",
+                "--set-charset",
+                "--no-tablespaces"
             ];
 
             if (!empty($password)) {
@@ -68,9 +78,8 @@ class BackupController extends Controller
 
             \Log::info('Comando a ejecutar: ' . implode(' ', $command));
 
-            $process = new Process($command);
+            $process = new \Symfony\Component\Process\Process($command);
             $process->setTimeout(3600);
-            
             $process->mustRun();
 
             if (file_exists($filePath) && filesize($filePath) > 0) {
@@ -86,7 +95,7 @@ class BackupController extends Controller
                 throw new \Exception('El archivo de backup no se generó correctamente');
             }
 
-        } catch (ProcessFailedException $exception) {
+        } catch (\Symfony\Component\Process\Exception\ProcessFailedException $exception) {
             \Log::error('Error en backup de base de datos: ' . $exception->getMessage());
             \Log::error('Comando intentado: ' . implode(' ', $command));
             \Log::error('Working directory: ' . getcwd());

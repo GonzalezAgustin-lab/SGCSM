@@ -50,6 +50,11 @@ class UsuarioController extends Controller
 
     public function destroy_usuario($id)
     {
+        $persona = DB::table('personas')
+        ->where('personas.usuario', $id) 
+        ->update([
+            'usuario' => null
+        ]);      
         $usuario = User::find($id);
         $usuario->delete();
 

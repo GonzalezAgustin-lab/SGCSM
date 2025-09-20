@@ -150,18 +150,20 @@
       $("div.alert").fadeOut();
     }, 5000 ); // 5 secs
   });
-  </script> 
+</script> 
 
-  <script> 
+<script> 
   var ruta_create = '{{ route('store_equipo_mant') }}';
   var ruta_update = '{{ route('update_equipo_mant') }}';
+  var ruta_show_store_equipo_mant = "{{ url('show_store_equipo_mant') }}";
+  var ruta_show_update_equipo_mant = "{{ url('show_update_equipo_mant') }}";
   var closeButton = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>');
   var saveButton = $('<button type="submit" class="btn btn-info">Guardar</button>');
   
   //modal store
   function fnOpenModalStore() {
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
-    var url = window.location.origin + "/show_store_equipo_mant/";
+    var url = ruta_show_store_equipo_mant + "/";
     $.get(url, function(data) {
       // Borrar contenido anterior
       $("#modalshow").empty();
@@ -234,7 +236,7 @@
     var area = document.getElementById('edit-' + id_e).getAttribute('data-area');
     var localizacion = document.getElementById('edit-' + id_e).getAttribute('data-localizacion');
     $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/show_update_equipo_mant/" + id_e,
+      url: ruta_show_update_equipo_mant + "/" + id_e,
       type: 'GET',
       success: function(data) {
         // Borrar contenido anterior

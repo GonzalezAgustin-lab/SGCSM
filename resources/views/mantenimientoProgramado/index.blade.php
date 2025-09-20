@@ -193,6 +193,10 @@
   var ruta = '{{ route('mostrar_equipos_mant') }}';
   var ruta_create = '{{ route('store_mant_prog') }}';
   var ruta_edit = '{{ route('edit_mant_prog') }}';
+  var ruta_show_store_mant_prog = "{{ url('show_store_mant_prog') }}";
+  var ruta_show_mostrar_equipos_mant_prog = "{{ url('show_mostrar_equipos_mant_prog') }}";
+  var ruta_getMantProg = "{{ url('getMantProg') }}";
+  var ruta_show_edit_mant_prog = "{{ url('show_edit_mant_prog') }}";
   var closeButton = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>');
   var saveButton = $('<button type="submit" class="btn btn-info" id="saveButton" onclick="fnSaveMantProg()">Guardar</button>');
   var saveButton2 = $('<button type="submit" class="btn btn-info" id="saveButton2" onclick="fnSaveMantProg2()">Guardar</button>');
@@ -207,106 +211,63 @@
     }
   }
 
-  /*function fnSaveMantProg2() {
-    var form = document.getElementById('myForm4');
-    if (form.checkValidity()) {
-      $('#saveButton2').prop('disabled', true);
-      $('#myForm4').submit();
-    } else {
-      console.log('El formulario no es válido. Completar los campos requeridos antes de enviar.');
-    }
-  }*/
-
   //modal store
   function fnOpenModalStore() {
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
-    var url = window.location.origin + "/show_store_mant_prog/";
+    var url = ruta_show_store_mant_prog + "/";
     $.get(url, function(data) {
-      // Borrar contenido anterior
       $("#modalshow").empty();
-
-      // Establecer el contenido del modal
       $("#modalshow").html(data);
-
-      // Borrar contenido anterior
       $("#modalfooter").empty();
-
-      // Agregar el botón "Cerrar y Guardar" al footer
       $("#modalfooter").append(closeButton);
       $("#modalfooter").append(saveButton);
-
-      // Cambiar la acción del formulario
       $('#myForm').attr('action', ruta_create);
-
-      // Mostrar el modal
       myModal.show();
-
-      // Cambiar el tamaño del modal a "modal-lg"
       var modalDialog = myModal._element.querySelector('.modal-dialog');
       modalDialog.classList.remove('modal-sm');
       modalDialog.classList.remove('modal-lg');
     });
 
     $('#show2').on('show.bs.modal', function (event){
-      // Obtener la fecha actual
       var today = new Date();
-      
-      // Sumar un día a la fecha actual
       today.setDate(today.getDate() + 1);
-      
-      // Formatear la fecha a YYYY-MM-DD
       var year = today.getFullYear();
       var month = (today.getMonth() + 1).toString().padStart(2, '0');
       var day = today.getDate().toString().padStart(2, '0');
       var minDate = `${year}-${month}-${day}`;
-      
-      // Establecer el valor mínimo en el campo de fecha
       $('#fecha_de_inicio').attr('min', minDate);
       $.get('select_tablas_mant_prog/',function(data){
         var htmlSelectFrecuencia = '<option value="">Seleccione </option>'
         var htmlSelectEquipo = '<option value="">Seleccione </option>'
-
         htmlSelectFrecuencia += data[0].map(item => `<option value="${item.id}">${item.nombre}</option>`).join('');
         htmlSelectEquipo += data[1].map(equipo => `<option value="${equipo.id}">${equipo.id}</option>`).join(''); 
-
         $('#equipo').html(htmlSelectEquipo);  
         $('#frecuencia').html(htmlSelectFrecuencia);   
       });
     });
   } 
 
-  //modal store
+  //modal show equipos
   function fnOpenModalShowEquipos() {
     var myModal3 = new bootstrap.Modal(document.getElementById('show3'));
     $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/show_mostrar_equipos_mant_prog/",
+      url: ruta_show_mostrar_equipos_mant_prog + "/",
       type: 'GET',
       success: function(data) {
-        // Borrar contenido anterior
         $("#modalshow3").empty();
-        // Establecer el contenido del modal
         $("#modalshow3").html(data);
-
-        // Borrar contenido anterior
         $("#modalfooter3").empty();
-
-        // Agregar el botón "Cerrar" al footer del modal interno
         $("#modalfooter3").append(closeButton);
-
-        // Agregar listener al botón "Cerrar" del modal secundario
         closeButton.click(function(event) {
           event.stopPropagation();
           myModal3.hide();
         });
-
-        // Mostrar el modal
         myModal3.show();
-
         var modalDialog = myModal3._element.querySelector('.modal-dialog');
         modalDialog.classList.remove('modal-sm');
         modalDialog.classList.add('modal-lg');
-        modalDialog.style.width = '90%'; // Añade esta línea
-        modalDialog.style.maxWidth = '90%'; // Añade esta línea
+        modalDialog.style.width = '90%';
+        modalDialog.style.maxWidth = '90%';
       },
     });
   }
@@ -314,7 +275,7 @@
   function getMantProg(idMantProg) {
     return new Promise(function(resolve, reject) {
       $.ajax({
-        url: window.location.protocol + '//' + window.location.host + "/getMantProg/" + idMantProg,
+        url: ruta_getMantProg + "/" + idMantProg,
         method: 'GET',
         success: function(data) {
           resolve(data);
@@ -331,27 +292,16 @@
   async function fnOpenModalEdit(id) {
     var myModal = new bootstrap.Modal(document.getElementById('show4'));
     $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/show_edit_mant_prog/" + id,
+      url: ruta_show_edit_mant_prog + "/" + id,
       type: 'GET',
       success: function(data) {
-        // Borrar contenido anterior
         $("#modalshow4").empty();
-        // Establecer el contenido del modal
         $("#modalshow4").html(data);
-
-        // Borrar contenido anterior
         $("#modalfooter4").empty();
-        // Agregar el botón "Cerrar y Guardar" al footer
         $("#modalfooter4").append(closeButton);
         $("#modalfooter4").append(saveButton2);
-
-        // Cambiar la acción del formulario
         $('#myForm4').attr('action', ruta_edit);
-
-        // Mostrar el modal
         myModal.show();
-
-        // Cambiar el tamaño del modal a "modal-lg"
         var modalDialog = myModal._element.querySelector('.modal-dialog');
         modalDialog.classList.remove('modal-sm');
         modalDialog.classList.remove('modal-lg');
@@ -365,19 +315,12 @@
   }
 
   $('#show4').on('show.bs.modal', function (event){
-    // Obtener la fecha actual
     var today = new Date();
-    
-    // Sumar un día a la fecha actual
     today.setDate(today.getDate() + 1);
-    
-    // Formatear la fecha a YYYY-MM-DD
     var year = today.getFullYear();
     var month = (today.getMonth() + 1).toString().padStart(2, '0');
     var day = today.getDate().toString().padStart(2, '0');
     var minDate = `${year}-${month}-${day}`;
-    
-    // Establecer el valor mínimo en el campo de fecha
     $('#fecha_de_inicio1').attr('min', minDate);
 
     $.get('select_tablas_mant_prog/',function(data){

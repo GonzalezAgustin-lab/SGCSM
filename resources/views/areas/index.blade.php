@@ -75,17 +75,19 @@
       $("div.alert").fadeOut();
     }, 5000 ); // 5 secs
   });
-  </script> 
+</script> 
 
 <script> 
   var ruta_create = '{{ route('store_area') }}'; 
   var ruta_update = '{{ route('update_area') }}';
+  var ruta_show_store_area = "{{ url('show_store_area') }}";
+  var ruta_show_update_area = "{{ url('show_update_area') }}";
   var closeButton = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>');
   var saveButton = $('<button type="submit" class="btn btn-info">Guardar</button>');
   //modal store
   function fnOpenModalStore() {
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
-    var url = window.location.origin + "/show_store_area/";
+    var url = ruta_show_store_area + "/";
     $.get(url, function(data) {
       // Borrar contenido anterior
       $("#modalshow").empty();
@@ -117,7 +119,7 @@
   {
     var myModal = new bootstrap.Modal(document.getElementById('show2'));
     $.ajax({
-      url: window.location.protocol + '//' + window.location.host + "/show_update_area/" + id_a,
+      url: ruta_show_update_area + "/" + id_a,
       type: 'GET',
       success: function(data) {
         // Borrar contenido anterior
