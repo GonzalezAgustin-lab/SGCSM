@@ -32,26 +32,23 @@ cd SGCSM
 ```
 
 2. **Instalar dependencias PHP**
-
 ```bash
 composer install
-(Con XAMPP: /opt/lampp/bin/php composer.phar install)
+# Con XAMPP en Linux:
+# /opt/lampp/bin/php composer.phar install
 ```
 
 3. **Instalar dependencias Node.js**
-
 ```bash
 npm install
 ```
 
 4. **Configurar variables de entorno**
-
 ```bash
 cp .env.example .env
 ```
 
 **Editar .env y actualizar la configuración de la base de datos segun corresponda:**
-
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -59,15 +56,31 @@ DB_DATABASE=sgcsm
 DB_USERNAME=usuario
 DB_PASSWORD=clave
 
+**Editar .env y actualizar la configuración del servidor de correo electronico segun corresponda:**
+MAIL_MAILER=log
+MAIL_HOST=127.0.0.1
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
+
 5. **Generar clave de la aplicación**
 
 ```bash
 php artisan key:generate
-(Con XAMPP: /opt/lampp/bin/php artisan key:generate)
+# con XAMPP en Linux:
+# /opt/lampp/bin/php artisan key:generate
 ```
 
 6. **Migrar y poblar la base de datos**
 
 ```bash
 php artisan migrate --seed
+```
+
+7. **Crear enlace a storage**
+```bash
+php artisan storage:link
 ```
