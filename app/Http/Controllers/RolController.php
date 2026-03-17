@@ -65,25 +65,42 @@ class RolController extends Controller{
         }
     }*/
 
-    public function asignar_permiso(Request $request){
+    public function asignar_permiso(Request $request)
+    {
         $rol = Role::find($request['id']);
+
+        if ($rol->name == 'Administrador') {
+            Session::flash('message','El rol Administrador ya posee todos los permisos.');
+            Session::flash('alert-class', 'alert-warning');
+            return redirect('/roles');
+        }
+
         $rol->givePermissionTo($request['permiso']);
 
         Session::flash('message','Permiso asignado con éxito');
         Session::flash('alert-class', 'alert-success');
 
         return redirect('/roles');
-
     }
 
-    public function revocar_permiso(Request $request){
-        // Encuentra el rol por su ID
+    public function revocar_permiso(Request $request)
+    {
         $rol = Role::find($request['id']);
-        
-        // Encuentra el permiso por su ID
+
+        if (!$rol) {
+            return redirect('/roles');
+        }
+
+        // Bloquear si es Administrador
+        if ($rol->name == 'Administrador') {
+
+            Session::flash('message','No se pueden revocar permisos al rol Administrador.');
+            Session::flash('alert-class', 'alert-danger');
+            return redirect('/roles');
+        }
+
         $permiso = Permission::findById($request['permiso']);
-        
-        // Revoca el permiso del rol
+
         $rol->revokePermissionTo($permiso);
 
         Session::flash('message','Permiso revocado con éxito');
@@ -91,7 +108,6 @@ class RolController extends Controller{
 
         return redirect('/roles');
     }
-
 
     public function select_permiso($id){
         $aux1 = DB::table('permissions')

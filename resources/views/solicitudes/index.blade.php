@@ -175,9 +175,11 @@
                   <div class="btn-container">
                     <i id="detalle" class="fa-solid fa-circle-info detalle" onclick='fnOpenModalShow({{$solicitud->id}})' title="Detalle"></i>
                   </div>
-                  <div class="btn-container">
-                    <i id="actualizar" class="fa-solid fa-arrow-up-from-bracket actualizar-editar" onclick='fnOpenModalUpdate({{$solicitud->id}})' title="Actualizar"></i>
-                  </div>
+                  @unlessrole('Empleado')
+                    <div class="btn-container">
+                      <i id="actualizar" class="fa-solid fa-arrow-up-from-bracket actualizar-editar" onclick='fnOpenModalUpdate({{$solicitud->id}})' title="Actualizar"></i>
+                    </div>
+                  @endunlessrole
                   @if(!$solicitud->nombre_encargado)
                     <div class="btn-container">
                       <i id="asignar" class="fa-solid fa-user-plus asignar" onclick='fnOpenModalAssing({{$solicitud->id}})' title="Asignar"></i>

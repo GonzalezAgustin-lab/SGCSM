@@ -13,14 +13,17 @@ use App\Http\Controllers\Tipo_EquipoController;
 use App\Http\Controllers\Equipo_mantController;
 use App\Http\Controllers\LocalizacionController;
 use App\Http\Controllers\Tipo_SolicitudController;
+use App\Http\Controllers\HelpController;
 use App\Http\Controllers\MantenimientoProgramadoController;
 
 //****************Rutas de Autenticación**********************
 Auth::routes();
 
 //****************Rutas del Menú Inicial**********************
-Route::get('/home', [HomeController::class, 'index']);
-Route::get('/', [HomeController::class, 'index']);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', [HomeController::class, 'index']);
+    Route::get('/', [HomeController::class, 'index']);
+});
 
 //****************Solicitudes**********************
 Route::get('mantenimiento', [HomeController::class, 'mantenimiento']);
@@ -129,27 +132,28 @@ Route::middleware(['auth'])->group(function () {
 //****************Empleados**********************
 Route::middleware(['auth'])->group(function () {
     Route::resource('empleado', EmpleadoController::class);
-    Route::get('selectAreaEmpleados', [EmpleadoController::class, 'selectAreaEmpleados'])->name('selectAreaEmpleados');;
+    Route::get('selectAreaEmpleados', [EmpleadoController::class, 'selectAreaEmpleados'])->name('selectAreaEmpleados');
+    ;
     Route::get('show_store_empleado', [EmpleadoController::class, 'show_store_empleado'])->name('show_store_empleado');
     Route::post('store', [EmpleadoController::class, 'store'])->name('store');
     Route::get('show_update_empleado/{id_e}', [EmpleadoController::class, 'show_update_empleado'])->name('show_update_empleado');
     Route::post('update_empleado', [EmpleadoController::class, 'update_empleado'])->name('update_empleado');
-  });
+});
 
-  
+
 //****************Usuarios**********************
 Route::middleware(['auth'])->group(function () {
     Route::resource('usuarios', UsuarioController::class)->middleware('role:Administrador');
     Route::get('create_usuario', [UsuarioController::class, 'create_usuario'])->middleware('role:Administrador');
-    Route::get('destroy_usuario/{id}',[UsuarioController::class, 'destroy_usuario'])->name('destroy_usuario');
+    Route::get('destroy_usuario/{id}', [UsuarioController::class, 'destroy_usuario'])->name('destroy_usuario');
     Route::post('asignar_rol', [UsuarioController::class, 'asignar_rol'])->middleware('role:Administrador');
     Route::post('revocar_rol', [UsuarioController::class, 'revocar_rol'])->middleware('role:Administrador');
     Route::get('select_roles/{id}', [UsuarioController::class, 'select_roles'])->name('select_roles');
-    Route::get('select_revocar_roles/{id}',[UsuarioController::class, 'select_revocar_roles'])->name('select_revocar_roles');
+    Route::get('select_revocar_roles/{id}', [UsuarioController::class, 'select_revocar_roles'])->name('select_revocar_roles');
     Route::get('select_personas', [UsuarioController::class, 'select_personas'])->name('select_personas');
     Route::post('store_usuario', [UsuarioController::class, 'store_usuario'])->middleware('role:Administrador');
 });
-  
+
 //****************Roles**********************
 Route::middleware(['auth'])->group(function () {
     Route::resource('roles', RolController::class)->middleware('role:Administrador');
@@ -158,7 +162,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('asignar_permiso', [RolController::class, 'asignar_permiso'])->middleware('role:Administrador');
     Route::post('revocar_permiso', [RolController::class, 'revocar_permiso'])->middleware('role:Administrador');
     Route::get('select_permiso/{id}', [RolController::class, 'select_permiso'])->name('select_permiso');
-    Route::get('select_revocar_permiso/{id}',[RolController::class, 'select_revocar_permiso'])->name('select_revocar_permiso');
+    Route::get('select_revocar_permiso/{id}', [RolController::class, 'select_revocar_permiso'])->name('select_revocar_permiso');
 });
 
 //****************Mantenimiento programado**********************
@@ -182,12 +186,18 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('dashboard', DashboardController::class);
 });
 
-//********************Back up*********************
+//****************Ayuda**********************
 Route::middleware(['auth'])->group(function () {
-    Route::get('/backup', [BackupController::class, 'indexBackup']);
-    Route::post('/export-backup', [BackupController::class, 'exportBackup'])->name('backup.export');
+    Route::get('/ayuda', [HelpController::class, 'index'])->name('ayuda');
 });
 
-//********************Restore Back up*********************
-Route::get('/restore', [BackupController::class, 'indexRestore'])->name('restore');
-Route::post('/import-backup', [BackupController::class, 'importBackup'])->name('backup.import');
+//******************** Backup y Restore *********************
+Route::middleware(['auth', 'role:Administrador'])->group(function () {
+    // Backup
+    Route::get('/backup', [App\Http\Controllers\BackupController::class, 'indexBackup']);
+    Route::post('/export-backup', [App\Http\Controllers\BackupController::class, 'exportBackup'])->name('backup.export');
+
+    // Restore
+    Route::get('/restore', [App\Http\Controllers\BackupController::class, 'indexRestore'])->name('restore');
+    Route::post('/import-backup', [App\Http\Controllers\BackupController::class, 'importBackup'])->name('backup.import');
+});

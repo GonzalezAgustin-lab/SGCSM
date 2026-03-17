@@ -6,31 +6,33 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('mantenimientos_programados', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
+            $table->string('equipo', 7); // Campo faltante
             $table->integer('frecuencia');
             $table->text('descripcion')->nullable();
             $table->boolean('activo')->default(true);
-            $table->date('ultima_fecha_mantenimiento');
+            $table->date('ultima_fecha_mantenimiento')->nullable();
             $table->date('fecha_de_inicio');
             $table->timestamps();
 
             $table->foreign('frecuencia')
-                ->references('id')
-                ->on('frecuencias')
-                ->onDelete('restrict');
+                  ->references('id')
+                  ->on('frecuencias')
+                  ->onDelete('restrict');
+                  
+            $table->foreign('equipo')
+                  ->references('id')
+                  ->on('equipos_mant')
+                  ->onDelete('restrict');
+                  
+            $table->index('equipo');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('mantenimientos_programados');

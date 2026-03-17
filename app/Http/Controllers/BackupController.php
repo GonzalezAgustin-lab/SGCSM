@@ -3,235 +3,149 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class BackupController extends Controller
 {
-    public function indexBackup(Request $request)
+    public function __construct()
+    {
+        try {
+            if (Schema::hasTable('users')) {
+                $this->middleware(['auth', 'role:Administrador']);
+            }
+        } catch (\Exception $e) {
+            // Si falla conexión DB → modo instalación
+        }
+    }
+
+    public function indexBackup()
     {
         return view('backup.index');
     }
 
-    public function indexRestore(Request $request)
+    public function indexRestore()
     {
         return view('restore.index');
     }
 
+    // ==============================
+    // EXPORTAR BACKUP
+    // ==============================
     public function exportBackup()
     {
         try {
-            $databaseName = config('database.connections.mysql.database');
+            $database = config('database.connections.mysql.database');
             $username = config('database.connections.mysql.username');
             $password = config('database.connections.mysql.password');
-            $host = config('database.connections.mysql.host');
+            $host     = config('database.connections.mysql.host');
 
-            if (empty($databaseName)) {
-                throw new \Exception('Nombre de base de datos no configurado');
-            }
+            $mysqldump = env('MYSQLDUMP_PATH', 'mysqldump');
 
             $backupPath = storage_path('app/backups');
             if (!file_exists($backupPath)) {
-                mkdir($backupPath, 0777, true);
-            } else {
-                chmod($backupPath, 0777);
+                mkdir($backupPath, 0755, true);
             }
 
-            $filename = "{$databaseName}_" . date('Y_m_d_His') . ".sql";
-            $filePath = str_replace('\\', '/', $backupPath . '/' . $filename);
-
-            touch($filePath);
-            chmod($filePath, 0777);
-
-            // Detectar sistema operativo
-            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                $mysqldump = 'C:\\xampp\\mysql\\bin\\mysqldump';
-            } else {
-                // Para XAMPP en Linux
-                $mysqldump = '/opt/lampp/bin/mysqldump';
-                // O simplemente 'mysqldump' si está en el PATH
-                // $mysqldump = 'mysqldump';
-            }
+            $filename = "{$database}_" . date('Y_m_d_His') . ".sql";
+            $filePath = $backupPath . '/' . $filename;
 
             $command = [
                 $mysqldump,
+                "-h{$host}",
                 "-u{$username}",
-                "--databases",
-                "--add-drop-database",
-                "--routines",
-                "--triggers",
-                //"--events",
-                "--add-drop-table",
-                "--create-options",
-                "--set-charset",
-                "--no-tablespaces"
             ];
 
             if (!empty($password)) {
                 $command[] = "-p{$password}";
             }
 
-            $command[] = "-h{$host}";
-            $command[] = $databaseName;
+            $command[] = $database;
             $command[] = "--result-file={$filePath}";
 
-            \Log::info('Comando a ejecutar: ' . implode(' ', $command));
-
-            $process = new \Symfony\Component\Process\Process($command);
+            $process = new Process($command);
             $process->setTimeout(3600);
             $process->mustRun();
 
-            if (file_exists($filePath) && filesize($filePath) > 0) {
-                $header = "-- Base de datos: `{$databaseName}`\n";
-                $header .= "-- Fecha de exportación: " . date('Y-m-d H:i:s') . "\n";
-                $header .= "-- Servidor: {$host}\n\n";
-                
-                $content = file_get_contents($filePath);
-                file_put_contents($filePath, $header . $content);
+            return response()->download($filePath)->deleteFileAfterSend(true);
 
-                return response()->download($filePath)->deleteFileAfterSend(true);
-            } else {
-                throw new \Exception('El archivo de backup no se generó correctamente');
-            }
-
-        } catch (\Symfony\Component\Process\Exception\ProcessFailedException $exception) {
-            \Log::error('Error en backup de base de datos: ' . $exception->getMessage());
-            \Log::error('Comando intentado: ' . implode(' ', $command));
-            \Log::error('Working directory: ' . getcwd());
-            return back()->with('error', 'Error al exportar la base de datos: ' . $exception->getMessage());
-        } catch (\Exception $e) {
-            \Log::error('Error general en backup: ' . $e->getMessage());
-            return back()->with('error', 'Error inesperado: ' . $e->getMessage());
+        } catch (ProcessFailedException $e) {
+            return back()->with('error', 'Error al exportar: ' . $e->getMessage());
         }
     }
-    
+
+    // ==============================
+    // IMPORTAR BACKUP
+    // ==============================
     public function importBackup(Request $request)
     {
         $request->validate([
-            'backup_file' => [
-                'required',
-                'file',
-                function ($attribute, $value, $fail) {
-                    if (strtolower($value->getClientOriginalExtension()) !== 'sql') {
-                        $fail('El archivo debe ser un archivo SQL válido.');
-                    }
-                },
-            ]
-        ], [
-            'backup_file.required' => 'Por favor, selecciona un archivo de respaldo.',
-            'backup_file.file' => 'Debe ser un archivo.',
+            'backup_file' => 'required|file'
         ]);
 
         try {
-            $databaseName = config('database.connections.mysql.database');
+
+            $database = config('database.connections.mysql.database');
             $username = config('database.connections.mysql.username');
             $password = config('database.connections.mysql.password');
-            $host = config('database.connections.mysql.host');
+            $host     = config('database.connections.mysql.host');
 
-            if (empty($databaseName)) {
-                throw new \Exception('Nombre de base de datos no configurado');
+            $mysql = env('MYSQL_PATH', 'mysql');
+
+            // Guardar archivo temporalmente
+            $file = $request->file('backup_file');
+            $path = $file->store('backups');
+            $fullPath = storage_path('app/' . $path);
+
+            // ==============================
+            // 1️⃣ BORRAR TODAS LAS TABLAS
+            // ==============================
+
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
+            $tables = DB::select('SHOW TABLES');
+            $databaseKey = 'Tables_in_' . $database;
+
+            foreach ($tables as $table) {
+                $tableName = $table->$databaseKey;
+                DB::statement("DROP TABLE IF EXISTS `$tableName`");
             }
 
-            // Almacena el archivo
-            $originalName = $request->file('backup_file')->getClientOriginalName();
-            $filename = 'import_' . time() . '_' . preg_replace('/[^a-zA-Z0-9.]/', '_', $originalName);
-            $filePath = $request->file('backup_file')->storeAs('backups', $filename);
-            $fullPath = storage_path('app/' . $filePath);
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
-            if (!file_exists($fullPath) || !is_readable($fullPath)) {
-                throw new \Exception('No se puede acceder al archivo de respaldo');
+            // ==============================
+            // 2️⃣ IMPORTAR BACKUP
+            // ==============================
+
+            $command = [
+                $mysql,
+                "-h{$host}",
+                "-u{$username}",
+            ];
+
+            if (!empty($password)) {
+                $command[] = "-p{$password}";
             }
 
-            // Leer el contenido del archivo SQL
-            $sqlContent = file_get_contents($fullPath);
-            
-            // Dividir el contenido en declaraciones SQL individuales
-            $statements = $this->splitSqlFile($sqlContent);
-            
-            // Crear la base de datos si no existe
-            $createDbCommand = sprintf(
-                '"C:\\xampp\\mysql\\bin\\mysql.exe" --user=%s --host=%s %s -e "CREATE DATABASE IF NOT EXISTS %s"',
-                escapeshellarg($username),
-                escapeshellarg($host),
-                !empty($password) ? '--password=' . escapeshellarg($password) : '',
-                escapeshellarg($databaseName)
-            );
+            $command[] = $database;
 
-            exec($createDbCommand, $output, $returnVar);
-            if ($returnVar !== 0) {
-                throw new \Exception('No se pudo crear la base de datos');
-            }
+            $process = new Process($command);
+            $process->setInput(file_get_contents($fullPath));
+            $process->setTimeout(3600);
+            $process->mustRun();
 
-            // Conexión PDO para ejecutar las consultas
-            $dsn = "mysql:host=$host;dbname=$databaseName;charset=utf8mb4";
-            $pdo = new \PDO($dsn, $username, $password, [
-                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-                \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4"
-            ]);
+            // borrar archivo temporal
+            Storage::delete($path);
 
-            // Desactivar restricciones de llaves foráneas
-            $pdo->exec('SET FOREIGN_KEY_CHECKS=0');
-            
-            // Ejecutar cada declaración SQL por separado
-            foreach ($statements as $index => $statement) {
-                try {
-                    if (trim($statement) != '') {
-                        $pdo->exec($statement);
-                    }
-                } catch (\PDOException $e) {
-                    $lineNumber = $index + 1;
-                    \Log::error("Error en la línea $lineNumber: " . $e->getMessage());
-                    \Log::error("SQL problemático: " . $statement);
-                    throw new \Exception("Error en la línea $lineNumber: " . $e->getMessage() . "\nSQL: " . substr($statement, 0, 100) . "...");
-                }
-            }
+            return redirect()->route('restore')
+                ->with('success', 'Base de datos restaurada correctamente.');
 
-            // Reactivar restricciones de llaves foráneas
-            $pdo->exec('SET FOREIGN_KEY_CHECKS=1');
+        } catch (ProcessFailedException $e) {
 
-            // Elimina el archivo temporal
-            Storage::delete($filePath);
-
-            return redirect()->route('restore')->with('success', 'Base de datos restaurada exitosamente');
-
-        } catch (\Exception $e) {
-            \Log::error('Error en restauración: ' . $e->getMessage());
-            return redirect()->route('restore')->with('error', 'Error: ' . $e->getMessage());
+            return back()->with('error', 'Error al restaurar: ' . $e->getMessage());
         }
-    }
-
-    private function splitSqlFile($sql) {
-        $lines = explode("\n", $sql);
-        $statements = [];
-        $currentStatement = '';
-
-        foreach ($lines as $line) {
-            // Ignorar comentarios
-            if (preg_match('/^--/', trim($line)) || preg_match('/^\/\*/', trim($line))) {
-                continue;
-            }
-
-            // Añadir la línea al statement actual
-            $currentStatement .= $line . "\n";
-
-            // Si encontramos un punto y coma al final de la línea (ignorando espacios y comentarios)
-            if (preg_match('/;\s*$/', trim($line))) {
-                // Limpiar el statement y añadirlo al array si no está vacío
-                $statement = trim($currentStatement);
-                if (!empty($statement)) {
-                    $statements[] = $statement;
-                }
-                $currentStatement = '';
-            }
-        }
-
-        // Añadir el último statement si existe
-        if (trim($currentStatement) != '') {
-            $statements[] = trim($currentStatement);
-        }
-
-        return $statements;
     }
 }

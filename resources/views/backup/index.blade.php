@@ -14,7 +14,7 @@
       <form id="backupForm" action="{{ route('backup.export') }}" method="POST">
           @csrf
           <a href="#" class="button" onclick="event.preventDefault(); document.getElementById('backupForm').submit();">
-              <img src="{{ URL::to('/img/downloadDB.png') }}" height="140">
+              <img src="{{ asset('/img/downloadDB.png') }}" height="140">
           </a>
           <h3 style="color: #3b557a">Descargar back up de datos</h3>
       </form>

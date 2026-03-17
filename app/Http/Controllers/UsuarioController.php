@@ -50,15 +50,33 @@ class UsuarioController extends Controller
 
     public function destroy_usuario($id)
     {
-        $persona = DB::table('personas')
-        ->where('personas.usuario', $id) 
-        ->update([
-            'usuario' => null
-        ]);      
         $usuario = User::find($id);
+
+        if (!$usuario) {
+            return redirect('/usuarios');
+        }
+
+        // Si el usuario tiene rol Administrador
+        if ($usuario->hasRole('Administrador')) {
+
+            // Contar cuantos administradores hay
+            $cantidadAdmins = User::role('Administrador')->count();
+
+            if ($cantidadAdmins <= 1) {
+                Session::flash('message','No se puede eliminar el último administrador del sistema.');
+                Session::flash('alert-class', 'alert-danger');
+                return redirect('/usuarios');
+            }
+        }
+
+        // Desvincular persona
+        DB::table('personas')
+            ->where('usuario', $id)
+            ->update(['usuario' => null]);
+
         $usuario->delete();
 
-        Session::flash('message','Usuario elimando con exito');
+        Session::flash('message','Usuario eliminado con éxito');
         Session::flash('alert-class', 'alert-success');
 
         return redirect('/usuarios');
@@ -89,21 +107,31 @@ class UsuarioController extends Controller
     public function revocar_rol(Request $request)
     {
         $usuario = User::find($request['id']);
-
-        // Buscar el rol por su ID
         $rol = Role::find($request['rol']);
 
-        if ($rol) {
-            // Revocar el rol al usuario
-            $usuario->removeRole($rol->name);
-
-            Session::flash('message','Rol revocado con éxito');
-            Session::flash('alert-class', 'alert-success');
-        } else {
-            // Manejar el caso cuando el rol no existe
+        if (!$rol) {
             Session::flash('message','El rol no existe');
             Session::flash('alert-class', 'alert-danger');
+            return redirect('/usuarios');
         }
+
+        // Si el rol a revocar es Administrador
+        if ($rol->name == 'Administrador' && $usuario->hasRole('Administrador')) {
+
+            $cantidadAdmins = User::role('Administrador')->count();
+
+            if ($cantidadAdmins <= 1) {
+                Session::flash('message','No se puede revocar el rol al único administrador del sistema.');
+                Session::flash('alert-class', 'alert-danger');
+                return redirect('/usuarios');
+            }
+        }
+
+        $usuario->removeRole($rol->name);
+
+        Session::flash('message','Rol revocado con éxito');
+        Session::flash('alert-class', 'alert-success');
+
         return redirect('/usuarios');
     }
 
